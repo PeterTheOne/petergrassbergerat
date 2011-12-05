@@ -1,6 +1,6 @@
 <?php
 
-function sanitizeFilter($str) {
+function sanitize($str) {
 	return htmlspecialchars($str, ENT_QUOTES, "UTF-8");
 }
 
@@ -10,19 +10,27 @@ function getLang() {
 	} else {
 		$lang = 'de-AT';
 	}
+	return $lang;
 }
 
-function buildTranslateURL($currentLang) {
+function getLangNot() {
+	if (getLang() === 'en') {
+		return 'de-AT';
+	}
+	return 'en';
+}
+
+function buildTranslateURL($currentLang, $site, $subsite) {
 	$translateURL = 'http://petergrassberger.';
 	if ($currentLang == 'en') {
 		$translateURL .= 'at';
 	} else {
 		$translateURL .= 'com';
 	}
-	if (isset($_GET['site']) && sanitizeFilter($_GET['site']) !== '') {
-		$translateURL .= '/' . sanitizeFilter($_GET['site']) . '/';
-		if (isset($_GET['subsite']) && sanitizeFilter($_GET['subsite']) !== '') {
-			$translateURL .= sanitizeFilter($_GET['subsite']) . '/';
+	if (isset($_GET['site']) && $site !== '') {
+		$translateURL .= '/' . $site . '/';
+		if (isset($_GET['subsite']) && sanitize($_GET['subsite']) !== '') {
+			$translateURL .= $subsite . '/';
 		}
 	}
 	return $translateURL;

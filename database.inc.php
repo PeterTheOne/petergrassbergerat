@@ -12,7 +12,7 @@ function db_connect() {
 	return $db_con;
 }
 
-function db_getPage($db_con, $title_clean, $lang) {
+function db_getPage($db_con, $lang, $title_clean) {
 	$query = "SELECT * FROM pages WHERE lang = '$lang' AND title_clean = '$title_clean'";
 	$success = mysqli_query($db_con, $query);
 	if (!$success) {
@@ -21,7 +21,7 @@ function db_getPage($db_con, $title_clean, $lang) {
 	return mysqli_fetch_array($success);
 }
 
-function db_getProject($db_con, $title_clean, $lang) {
+function db_getProject($db_con, $lang, $title_clean) {
 	$query = "SELECT * FROM projects WHERE lang = '$lang' AND title_clean = '$title_clean'";
 	$success = mysqli_query($db_con, $query);
 	if (!$success) {
@@ -54,6 +54,20 @@ function db_getProjectList($db_con, $lang) {
 		$projectlist[$project['year']][] = $project;
 	}	
 	return $projectlist;
+}
+
+function checkExists($db_con, $langNot, $site, $subsite) {
+	if ($site === 'portfolio' && 
+			$subsite === '') {
+		$result = db_getProjectList($db_con, $langNot);
+	} else {
+		if ($subsite === '') {
+			$result = db_getPage($db_con, $langNot, $site);
+		} else {
+			$result = db_getProject($db_con, $langNot, $subsite);
+		}
+	}
+	return $result;
 }
 
 ?>

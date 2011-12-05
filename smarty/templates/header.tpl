@@ -1,16 +1,24 @@
 			<header>
 				<nav id="top-nav">
 					<ul>
-{if $lang eq 'de-AT'}
+{if $lang == 'de-AT'}
 						<li>
-						<a rel="me" hreflang="en" href="{$translateURL}">en</a>
+{if isset($translateURL)}
+							<a rel="me" hreflang="en" href="{$translateURL}">en</a>
+{else}
+							<a class="broken" rel="me" hreflang="en" href="http://petergrassberger.com">en</a>
+{/if}
 						</li>
 						<li>
 							<a href="/about/">impressum</a>
 						</li>
 {else}
 						<li>
-						<a rel="me" hreflang="de-AT" href="{$translateURL}">de</a>
+{if isset($translateURL)}
+							<a rel="me" hreflang="de-AT" href="{$translateURL}">de</a>
+{else}
+							<a class="broken" rel="me" hreflang="en" href="http://petergrassberger.at">de</a>
+{/if}
 						</li>
 						<li>
 							<a href="/about/">about</a>
