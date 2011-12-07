@@ -5,7 +5,7 @@
 {include file="nav.tpl"}
 			<div id="content">
 				<article>
-					<h2>{$title}</h2>
+					<h2>{$title}{if isset($downloadLink)}<span class="page-download"> - <a href="{$downloadLink}">Download</a></span>{/if}</h2>
 					{$content}
 				</article>
 			</div>

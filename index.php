@@ -41,6 +41,10 @@ if ($site === 'portfolio' &&
 } else {
 	if ($subsite === '') {
 		$result = db_getPage($db_con, $lang, $site);
+		if (isset($result['downloadlink']) && 
+				$result['downloadlink'] != '') {
+			$smarty->assign('downloadLink', $result['downloadlink']);
+		}
 	} else {
 		$result = db_getProject($db_con, $lang, $subsite);
 	}
