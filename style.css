@@ -159,7 +159,7 @@ div#content dt {
 	clear: left;
 	float: left;
 	display: block;
-	min-width: 250px;
+	min-width: 240px;
 	font-weight: bold;
 }
 
@@ -194,13 +194,13 @@ div#content ul.time {
 	list-style-type: none;
 }
 
-div#content ul.time a {
+div#content ul.time li > a {
 	display: block;
 	text-decoration: none;
 	color: #000000;
 }
 
-div#content ul.time a:hover {
+div#content ul.time li > a:hover {
 	background-color: #eeeeee;
 }
 

@@ -7,13 +7,13 @@
 {include file="nav.tpl"}
 			<div id="content">
 				<article>
-					{if $lang eq 'de-AT'}
+{if $lang eq 'de-AT'}
 					<h2>404 - Nicht Gefunden</h2>
 					<p>Diese Seite konnte nicht gefunden werden.</p>
-					{else}
+{else}
 					<h2>404 - Not Found</h2>
 					<p>This Page could not be found.</p>
-					{/if}
+{/if}
 				</article>
 			</div>
 {include file="aside.tpl"}
