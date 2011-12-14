@@ -1,0 +1,20 @@
+petergrassbergerat
+
+petergrassbergerat is the Portfolio Website by Peter Grassberger.
+
+Created by:
+Peter Grassberger (PeterTheOne)
+
+Install:
+1. download and copy dependencies (see below) to root directory.
+2. rename sample-config.inc.php to config.inc.php .
+3. add MySql-server connection constants in config.inc.php .
+4. upload to webserver or use xampp on local machine.
+5. create tables (sry creation file).
+
+Dependencies:
+- Smarty-3.1.3:
+	Site: http://www.smarty.net/
+- syntachighlighter_3.0.83
+	Site: http://alexgorbatchev.com/SyntaxHighlighter/
+	Source: http://github.com/alexgorbatchev/SyntaxHighlighter
