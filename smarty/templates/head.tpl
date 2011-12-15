@@ -11,13 +11,21 @@
 		<meta name="author" content="Peter Grassberger" />
 		<link rel="stylesheet" type="text/css" href="http://petergrassberger.at/style.css" />
 		
+		<!--
+			Using rel="profile" to add xhtml meta data profiles (XMDP)
+			to this HTML5 document as recomended here: 
+			http://microformats.org/wiki/rel-profile
+			http://microformats.org/wiki/profile-uris#.28X.29HTML_5_.2F_XHTML_2
+		-->
+		<link rel="profile" href="http://gmpg.org/xfn/11" />
+		
 {if $lang eq 'de-AT'}
 		<link rel="me" hreflang="en" href="http://petergrassberger.com/" />
 		<meta name="google-site-verification" content="c921Y27A8rKcXqF4SX7ezQcQwMtMM0pMQxUJQLL3Se0" />
 {else}
 		<link rel="me" hreflang="de-AT" href="http://petergrassberger.at/" />
 		<meta name="google-site-verification" content="F8q0FAvDVXjAwv7N7Xe4N5H5LLA6Hnznw20uoe0Ehqs" />
-{/if}
+{/if}		
 		
 		<!--
 			SyntaxHighlighter by: Alex Gorbatchev
