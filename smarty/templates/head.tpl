@@ -18,6 +18,7 @@
 			http://microformats.org/wiki/profile-uris#.28X.29HTML_5_.2F_XHTML_2
 		-->
 		<link rel="profile" href="http://gmpg.org/xfn/11" />
+		<link rel="profile" href="http://microformats.org/profile/rel-license" />
 		
 {if $lang eq 'de-AT'}
 		<link rel="me" hreflang="en" href="http://petergrassberger.com/" />
