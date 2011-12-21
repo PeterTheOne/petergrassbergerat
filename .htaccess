@@ -1,7 +1,8 @@
 Options +FollowSymlinks
 DirectoryIndex index.php index.html
+ErrorDocument 404 /404
 RewriteEngine on
 RewriteRule ^portfolio/([a-z0-9-]*)/?$ ?site=portfolio&subsite=$1 [NC]
 RewriteRule ^proj/?$ http://petergrassberger.at/portfolio/ [R=301,NC]
-RewriteRule ^([a-z]+)/?$ ?site=$1&subsite=$2 [NC]
+RewriteRule ^([a-z0-9-]+)/?$ ?site=$1&subsite=$2 [NC]
 RewriteRule ^googleaefd8488cd9789be.html$ ?

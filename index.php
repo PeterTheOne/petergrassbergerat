@@ -28,7 +28,10 @@ if (checkExists($db_con, $langNot, $site, $subsite)) {
 }
 
 // display site
-if ($site === 'portfolio' && 
+if ($site === '404') {
+	header('HTTP/1.0 404 Not Found');
+	$smarty->display('404.tpl');
+} else if ($site === 'portfolio' && 
 		$subsite === '') {
 	$projectlist = db_getProjectList($db_con, $lang);
 	if ($projectlist) {
