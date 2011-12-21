@@ -2,12 +2,12 @@ petergrassbergerat
 ==================
 
 petergrassbergerat is the Portfolio Website by Peter Grassberger. You can find 
-the site on www.petergrassberger.at or www.petergrassberger.com for the english 
-version.
+the site on http://petergrassberger.at or http://petergrassberger.com for the 
+english version.
 
 Created by:
 -----------
-Peter Grassberger (PeterTheOne)
+- [Peter Grassberger (PeterTheOne)](http://petergrassberger.com)
 
 Install:
 --------
