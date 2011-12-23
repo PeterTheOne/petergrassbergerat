@@ -6,4 +6,8 @@
 	define('DB_PASSWD', '');
 	define('DB_DBNAME', '');
 	
+	/* ADMIN MENU CONFIG */
+	define('ADMIN_USER', '');
+	define('ADMIN_PASS', '');
+	
 ?>

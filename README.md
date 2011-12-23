@@ -22,6 +22,17 @@ Dependencies:
 -------------
 - Smarty-3.1.3:
 	- Site: http://www.smarty.net/
+	- Path: /Smarty-3.1.3/libs/Smarty.class.php
 - syntachighlighter_3.0.83
+	- Author: [Alex Gorbatchev](http://alexgorbatchev.com)
 	- Site: http://alexgorbatchev.com/SyntaxHighlighter/
 	- Source: http://github.com/alexgorbatchev/SyntaxHighlighter
+	- Path: /syntaxhighlighter_3.0.83/scripts/
+- jQuery 1.7.1:
+	- Site: http://jquery.com/
+	- Source: http://github.com/jquery/jquery
+	- Path: /jquery-1.7.1/jquery-1.7.1.min.js
+- Tabby jQuery plugin version 0.12
+	- Author: [Ted Devito](http://teddevito.com)
+	- Site: http://teddevito.com/demos/textarea.html
+	- Path: /jquery.textarea/jquery.textarea.js

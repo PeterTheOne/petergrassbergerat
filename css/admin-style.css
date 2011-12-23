@@ -1,0 +1,209 @@
+/*
+Theme Name: -
+Theme URI: -
+Description: -
+Version: -
+Author: Peter Grassberger
+Author URI: http://petergrassberger.at
+Tags: -
+*/
+
+@import "reset.css";
+@import "typography.css";
+@import "layout.css";
+
+/* GLOBAL */
+
+/* moz scrollbar fix */
+html {
+	overflow: -moz-scrollbars-vertical !important;
+}
+
+body {
+	overflow: auto;
+	font-size: 62.5%; 		/* sets medium size from 16px to 10px, 1em is 10px now. */
+	font-family: Georgia, Verdana, Arial, serif;
+	font-size: 1em;
+}
+
+a {
+	color: #777777;
+	text-decoration: none;
+}
+
+a:hover {
+	color: #555555;
+	text-decoration: underline;
+}
+
+a.broken {
+	color: #aaaaaa !important;
+	text-decoration: line-through !important;
+}
+
+/* HEADER */
+
+h1 {
+	font-style: italic;
+	font-weight: normal;
+	font-size: 3.3em;
+	display: block;
+	width: 500px;
+	margin: 0 0px 50px 200px;
+	padding: 90px 0 0 0;
+}
+
+h1 a {
+	color: #000000;
+	text-decoration: none;
+}
+
+h1 a:hover {
+	color: #000000;
+	text-decoration: none;
+}
+
+/* CONTENT */
+
+div#content {
+	width: 100%;
+	margin: 0 auto 0 auto;
+	font-size: 1.15em;
+	line-height: 1.5em;
+}
+
+div#form {
+	float: left;
+	width: 650px;
+	margin: 0 10px 0 10px;
+	/*background-color: #00ff00;*/
+}
+
+div#preview {
+	float: left;
+	width: 570px;
+	margin: 0 10px 0 10px;
+	/*background-color: #ff0000;*/
+}
+
+div#content h2 {
+	font-weight: normal;
+	font-size: 2.3em;
+	margin: 0 0 30px 0;
+	line-height: normal;
+}
+
+div#content h2 span.page-download {
+	font-size: 0.45em;
+	color: #cccccc;
+}
+
+div#content h2 span.page-download a {
+	color: #cccccc;
+}
+
+div#content h2 span.page-download a:hover {
+	color: #999999;
+}
+
+div#content h3 {
+	font-weight: normal;
+	font-size: 1.5em;
+	margin: 50px 0 20px 0;
+}
+
+div#content h2 + h3 { /*TODO: fix this simpler*/
+	margin-top: 0;
+}
+
+div#content p {
+	margin: 10px 0 40px 0;
+}
+
+div#content ul {
+	list-style-position: inside;
+	margin: 10px 0 40px 0;
+}
+
+div#content dl {
+	overflow: auto;
+	margin: 0 0 50px 0;
+}
+
+div#content dt {
+	clear: left;
+	float: left;
+	display: block;
+	min-width: 240px;
+	font-weight: bold;
+}
+
+div#content dl.info.line dt {
+	min-width: 140px;
+}
+
+div#content dl.info dt:after {
+	content: ":";
+}
+
+div#content dl.info.line dd ul li {
+	float: left;
+	margin: 0 5px 0 5px;
+}
+
+div#content dd {
+	float: left;
+	margin: 0 0 12px 0;
+}
+
+div#content dd ul {
+	float: right;
+	margin: 0;
+}
+
+div#content dd ul {
+	list-style-type: none;
+}
+
+div#content ul.time {
+	list-style-type: none;
+}
+
+div#content ul.time li > a {
+	display: block;
+	text-decoration: none;
+	color: #000000;
+}
+
+div#content ul.time li > a:hover {
+	background-color: #eeeeee;
+}
+
+div#content ul.time > li {
+	margin: 0 0 30px 0;
+}
+
+div#content ul.time  h4{
+	display: inline;
+}
+
+div#content ul.time span {
+	float: right;
+	font-size: 0.8em;
+	font-weight: bold;
+	color: #aaaaaa;
+	display: block;
+}
+
+div#content ul.time p {
+	font-size: 0.8em;
+	margin: 0 0 0 0;
+}
+
+/* FORM */
+
+textarea.content {
+	width: 100%;
+}
+
+
