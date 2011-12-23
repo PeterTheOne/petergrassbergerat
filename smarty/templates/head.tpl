@@ -21,6 +21,7 @@
 		<link rel="profile" href="http://microformats.org/profile/rel-license" />
 		
 		<link rel="me" href="https://profiles.google.com/114748353184495722818" />
+		<link type="text/plain" rel="author" href="/humans.txt" />
 		<link rel="me" hreflang="de-AT" href="http://petergrassberger.at" />
 		<link rel="me" hreflang="en" href="http://petergrassberger.com" />
 		

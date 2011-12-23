@@ -1,0 +1,20 @@
+/* the humans responsible & colophon */
+/* humanstxt.org */
+
+/* TEAM */
+	Web Developer: Peter Grassberger
+	Site: http://petergrassberger.com/
+	Contact: petertheone@gmail.com
+	Twitter: @PeterTheOne
+	From: Klagenfurt, Austria
+
+/* THANKS */
+	To my family and friends!
+
+/* SITE */
+	Last update: 2011
+	Language: English / German-AT
+	Doctype: HTML5
+	Components: PHP, MySQL, jQuery, SyntaxHighlighter
+	Description: Portfolio Website by Peter Grassberger
+	IDE: Notepad++, Photoshop, Pen and Paper
