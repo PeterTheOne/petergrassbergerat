@@ -48,7 +48,7 @@ if ($site === '404') {
 				$result['downloadlink'] != '') {
 			$smarty->assign('downloadLink', $result['downloadlink']);
 		}
-	} else {
+	} else if ($site === 'portfolio') {
 		$result = db_getProject($db_con, $lang, $subsite);
 	}
 	if ($result) {
