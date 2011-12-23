@@ -1,8 +1,9 @@
 <?php
 
-	define("HOST", "");
-	define("USERNAME", "");
-	define("PASSWD", "");
-	define("DBNAME", "");
-
+	/* DATABASE CONFIG */
+	define('DB_HOST', '');
+	define('DB_USERNAME', '');
+	define('DB_PASSWD', '');
+	define('DB_DBNAME', '');
+	
 ?>
