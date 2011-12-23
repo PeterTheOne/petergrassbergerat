@@ -15,7 +15,8 @@ Install:
 2. rename sample-config.inc.php to config.inc.php .
 3. add MySql-server connection constants in config.inc.php .
 4. upload to webserver or use xampp on local machine.
-5. create tables, sry there is no automatic creation file yet.
+5. create tables by running install.php
+6. have fun!
 
 Dependencies:
 -------------
