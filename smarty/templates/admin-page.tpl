@@ -33,20 +33,29 @@
 		<div id="content">
 			<div id="form">
 				<h2>form</h2>
-				<form>
+				<form method="get" action="admin.php">
+{if $state === 'edit'}
+					<input class="state" name="state" type="hidden" value="update" />
+{elseif $state === 'create'}
+					<input class="state" name="state" type="hidden" value="insert" />
+{/if}
 					<input class="title" name="title" type="text" value="{$data.title}" placeholder="Title" required />
 					<input class="title_clean" name="title_clean" type="text" value="{$data.title_clean}" placeholder="title_clean" required />
 					<input class="lang" name="lang" type="text" value="{$data.lang}" placeholder="lang" required />
-{if isset($page)}
+{if $type === 'page'}
+					<input class="type" name="type" type="hidden" value="page" />
 					<input class="downloadlink" name="downloadlink" type="text" value="{$data.downloadlink}" placeholder="downloadlink" />
 {else}
+					<input class="type" name="type" type="hidden" value="project" />
 					<input class="year" name="year" type="text" value="{$data.year}" placeholder="year" required />
 					<input class="wip" name="wip" type="text" value="{$data.wip}" placeholder="wip" required />
 					<input class="tags" name="tags" type="text" value="{$data.tags}" placeholder="tags" required />
 					<input class="description" name="description" type="text" value="{$data.description}" placeholder="description" required />
 {/if}
 					<textarea class="content" name="content" 
-							rows="30" placeholder="type here" required autofocus>{$data.content}</textarea>
+							rows="18" placeholder="type here" required autofocus>{$data.content}</textarea>
+							
+					<button type="submit">submit</button>
 				</form>
 			</div>
 			<div id="preview">

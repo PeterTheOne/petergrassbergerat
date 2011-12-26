@@ -2,6 +2,8 @@
 
 include_once("config.inc.php");
 
+//TODO: error handling!
+
 function db_connect() {
 	$db_con = mysqli_connect(DB_HOST, DB_USERNAME, DB_PASSWD, DB_DBNAME);
 		//TODO: error handling..
@@ -16,6 +18,17 @@ function db_getPage($db_con, $lang, $title_clean) {
 	$lang = mysqli_real_escape_string($db_con, $lang);
 	$title_clean = mysqli_real_escape_string($db_con, $title_clean);
 	$query = "SELECT * FROM pages WHERE lang = '$lang' AND title_clean = '$title_clean'";
+	$success = mysqli_query($db_con, $query);
+	if (!$success) {
+		return false;
+	}
+	return mysqli_fetch_array($success);
+}
+
+function db_getProject($db_con, $lang, $title_clean) {
+	$lang = mysqli_real_escape_string($db_con, $lang);
+	$title_clean = mysqli_real_escape_string($db_con, $title_clean);
+	$query = "SELECT * FROM projects WHERE lang = '$lang' AND title_clean = '$title_clean'";
 	$success = mysqli_query($db_con, $query);
 	if (!$success) {
 		return false;
@@ -41,22 +54,10 @@ function db_getPageList($db_con, $lang = '') {
 	return $pagelist;
 }
 
-function db_getProject($db_con, $lang, $title_clean) {
-	$lang = mysqli_real_escape_string($db_con, $lang);
-	$title_clean = mysqli_real_escape_string($db_con, $title_clean);
-	$query = "SELECT * FROM projects WHERE lang = '$lang' AND title_clean = '$title_clean'";
-	$success = mysqli_query($db_con, $query);
-	if (!$success) {
-		echo "Error message = ".mysqli_error($db_con); 
-		return false;
-	}
-	return mysqli_fetch_array($success);
-}
-
 function db_getProjectList($db_con, $lang = '') {
 	$query = 'SELECT * FROM projects ';
 	if ($lang !== '') {
-	$lang = mysqli_real_escape_string($db_con, $lang);
+		$lang = mysqli_real_escape_string($db_con, $lang);
 		$query .= "WHERE lang = '$lang' ";
 	}
 	$query .= 'ORDER BY year DESC, title';
@@ -77,6 +78,46 @@ function db_getProjectList($db_con, $lang = '') {
 		}
 	}	
 	return $projectlist;
+}
+
+function db_updatePage($db_con, $lang, $title_clean, $title, 
+		$downloadlink, $content) {
+	// sanitize
+	$lang = mysqli_real_escape_string($db_con, $lang);
+	$title_clean = mysqli_real_escape_string($db_con, $title_clean);
+	$title = mysqli_real_escape_string($db_con, $title);
+	$downloadlink = mysqli_real_escape_string($db_con, $downloadlink);
+	$content = mysqli_real_escape_string($db_con, $content);
+	
+	// write query
+	$query = 'UPDATE pages ';
+	$query .= "SET title='$title', downloadlink='$downloadlink', content='$content' ";
+	$query .= "WHERE title_clean='$title_clean' AND lang='$lang'";
+	
+	// send query
+	return mysqli_query($db_con, $query);
+}
+
+function db_updateProject($db_con, $lang, $title_clean, $title, 
+		$year, $wip, $tags, $description, $content) {
+	// sanitize
+	$lang = mysqli_real_escape_string($db_con, $lang);
+	$title_clean = mysqli_real_escape_string($db_con, $title_clean);
+	$title = mysqli_real_escape_string($db_con, $title);
+	$year = mysqli_real_escape_string($db_con, $year);
+	$wip = mysqli_real_escape_string($db_con, $wip);
+	$tags = mysqli_real_escape_string($db_con, $tags);
+	$description = mysqli_real_escape_string($db_con, $description);
+	$content = mysqli_real_escape_string($db_con, $content);
+	
+	// write query
+	$query = 'UPDATE projects ';
+	$query .= "SET title='$title', year='$year', wip='$wip', tags='$tags', ";
+	$query .= "description='$description', content='$content' ";
+	$query .= "WHERE title_clean='$title_clean' AND lang='$lang'";
+	
+	// send query
+	return mysqli_query($db_con, $query);
 }
 
 function checkExists($db_con, $langNot, $site, $subsite) {

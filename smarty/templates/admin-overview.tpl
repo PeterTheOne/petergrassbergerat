@@ -32,12 +32,21 @@
 		
 		<div id="content">
 			<article>
+{if isset($info)}
+				<p>
+					{$info}
+				</p>
+{/if}
 				<h2>Pages</h2>
 				<ul>
 {foreach $pagelist as $page}
 					<li>
-						<a href="?site={$page.title_clean}&lang={$page.lang}">
+						<a href="?state=edit&amp;type=page&amp;title_clean={$page.title_clean}&amp;lang={$page.lang}">
 							{$page.title} ({$page.lang})
+						</a>
+						- 
+						<a href="?state=delete&amp;type=page&amp;title_clean={$page.title_clean}&amp;lang={$page.lang}">
+							delete
 						</a>
 					</li>
 {foreachelse}
@@ -55,8 +64,12 @@
 {foreach $years as $project}
 {strip}
 							<li>
-								<a href="?site=portfolio&subsite={$project.title_clean}&lang={$project.lang}">
+								<a href="?state=edit&amp;type=project&amp;title_clean={$project.title_clean}&amp;lang={$project.lang}">
 									{$project.title} ({$project.lang})
+								</a>
+								- 
+								<a href="?state=delete&amp;type=project&amp;title_clean={$project.title_clean}&amp;lang={$project.lang}">
+									delete
 								</a>
 							</li>
 {/strip}
