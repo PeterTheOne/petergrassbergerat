@@ -6,10 +6,44 @@ include_once("functions.inc.php");
 include_once("smarty.inc.php");
 include_once("database.inc.php");
 
+// REDIRECT TO HTTPS
+
+redirectToHTTPS();
+
 // INIT
 
+session_start();
 $smarty = s_init();
 $db_con = db_connect();
+
+// CHECK LOGIN
+
+// TODO: refresh problem
+// TODO: session timeout
+if (isset($_GET['state'])) {
+	if ($_GET['state'] === 'logout') {
+		$_SESSION = array();
+		session_destroy();
+	} else if ($_GET['state'] === 'login') {
+		$username = sanitize($_POST['username']);
+		$password = sanitize($_POST['password']);
+		if ($username === ADMIN_USER && sha1(PASSWORD_SALT . $password) === ADMIN_PASS) {
+			session_regenerate_id();
+			$_SESSION['login'] = true;
+			$_SESSION['HTTP_USER_AGENT'] = sha1(SESSION_SALT . $_SERVER['HTTP_USER_AGENT']);
+		} else {
+			$smarty->assign('info', 'wrong login data');
+		}
+	}
+}
+
+if (!isset($_SESSION['login']) || $_SESSION['login'] !== true || 
+		!isset($_SESSION['HTTP_USER_AGENT']) || 
+		$_SESSION['HTTP_USER_AGENT'] != 
+		sha1(SESSION_SALT . $_SERVER['HTTP_USER_AGENT'])) {
+	$smarty->display('admin-login.tpl');
+	exit;
+}
 
 // DISPLAY
 
@@ -43,7 +77,7 @@ if ($state === 'edit' || $state === 'create') {
 	// TODO: insert
 	$success = true;
 	if ($success) {
-		$smarty->assign('info', 'insert was success');
+		$smarty->assign('info', 'insert was successful');
 	} else {
 		$smarty->assign('info', 'insert failed');
 	}
@@ -54,23 +88,27 @@ if ($state === 'edit' || $state === 'create') {
 			$db_con, 
 			$lang, 
 			$title_clean, 
-			sanitize($_GET['title']), 
-			sanitize($_GET['downloadlink']), 
-			$_GET['content']);
+			sanitize($_POST['lang']),
+			sanitize($_POST['title_clean']),
+			sanitize($_POST['title']), 
+			sanitize($_POST['downloadlink']), 
+			$_POST['content']);
 	} else {
 		$result = db_updateProject(
 			$db_con, 
 			$lang, 
 			$title_clean, 
-			sanitize($_GET['title']), 
-			sanitize($_GET['year']), 
-			sanitize($_GET['wip']), 
-			sanitize($_GET['tags']), 
-			sanitize($_GET['description']), 
-			$_GET['content']);
+			sanitize($_POST['lang']),
+			sanitize($_POST['title_clean']),
+			sanitize($_POST['title']), 
+			sanitize($_POST['year']), 
+			sanitize($_POST['wip']), 
+			sanitize($_POST['tags']), 
+			sanitize($_POST['description']), 
+			$_POST['content']);
 	}
 	if ($result) {
-		$smarty->assign('info', 'update was success');
+		$smarty->assign('info', 'update was successful');
 	} else {
 		$smarty->assign('info', 'update failed');
 	}
@@ -79,7 +117,7 @@ if ($state === 'edit' || $state === 'create') {
 	// TODO: delete
 	$success = true;
 	if ($success) {
-		$smarty->assign('info', 'delete was success');
+		$smarty->assign('info', 'delete was successful');
 	} else {
 		$smarty->assign('info', 'delete failed');
 	}

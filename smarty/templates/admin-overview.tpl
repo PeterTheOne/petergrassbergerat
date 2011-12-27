@@ -37,6 +37,7 @@
 					{$info}
 				</p>
 {/if}
+				<a href="?state=logout">logout</a>
 				<h2>Pages</h2>
 				<ul>
 {foreach $pagelist as $page}

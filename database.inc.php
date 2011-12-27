@@ -80,29 +80,43 @@ function db_getProjectList($db_con, $lang = '') {
 	return $projectlist;
 }
 
-function db_updatePage($db_con, $lang, $title_clean, $title, 
-		$downloadlink, $content) {
+function db_updatePage($db_con, $lang, $title_clean, $newlang, $newtitle_clean, 
+		$title, $downloadlink, $content) {
 	// sanitize
 	$lang = mysqli_real_escape_string($db_con, $lang);
 	$title_clean = mysqli_real_escape_string($db_con, $title_clean);
+	$newlang = mysqli_real_escape_string($db_con, $newlang);
+	$newtitle_clean = mysqli_real_escape_string($db_con, $newtitle_clean);
 	$title = mysqli_real_escape_string($db_con, $title);
 	$downloadlink = mysqli_real_escape_string($db_con, $downloadlink);
 	$content = mysqli_real_escape_string($db_con, $content);
 	
 	// write query
-	$query = 'UPDATE pages ';
-	$query .= "SET title='$title', downloadlink='$downloadlink', content='$content' ";
-	$query .= "WHERE title_clean='$title_clean' AND lang='$lang'";
+	$query = "
+		UPDATE 
+			pages 
+		SET 
+			lang='$newlang', 
+			title_clean='$newtitle_clean', 
+			title='$title', 
+			downloadlink='$downloadlink', 
+			content='$content' 
+		WHERE 
+			title_clean='$title_clean' AND 
+			lang='$lang'
+	";
 	
 	// send query
 	return mysqli_query($db_con, $query);
 }
 
-function db_updateProject($db_con, $lang, $title_clean, $title, 
-		$year, $wip, $tags, $description, $content) {
+function db_updateProject($db_con, $lang, $title_clean, $newlang, 
+		$newtitle_clean, $title, $year, $wip, $tags, $description, $content) {
 	// sanitize
 	$lang = mysqli_real_escape_string($db_con, $lang);
 	$title_clean = mysqli_real_escape_string($db_con, $title_clean);
+	$newlang = mysqli_real_escape_string($db_con, $newlang);
+	$newtitle_clean = mysqli_real_escape_string($db_con, $newtitle_clean);
 	$title = mysqli_real_escape_string($db_con, $title);
 	$year = mysqli_real_escape_string($db_con, $year);
 	$wip = mysqli_real_escape_string($db_con, $wip);
@@ -111,10 +125,22 @@ function db_updateProject($db_con, $lang, $title_clean, $title,
 	$content = mysqli_real_escape_string($db_con, $content);
 	
 	// write query
-	$query = 'UPDATE projects ';
-	$query .= "SET title='$title', year='$year', wip='$wip', tags='$tags', ";
-	$query .= "description='$description', content='$content' ";
-	$query .= "WHERE title_clean='$title_clean' AND lang='$lang'";
+	$query = "
+		UPDATE 
+			projects 
+		SET 
+			lang='$newlang', 
+			title_clean='$newtitle_clean', 
+			title='$title', 
+			year='$year', 
+			wip='$wip', 
+			tags='$tags', 
+			description='$description', 
+			content='$content' 
+		WHERE 
+			title_clean='$title_clean' AND 
+			lang='$lang'
+	";
 	
 	// send query
 	return mysqli_query($db_con, $query);
