@@ -96,6 +96,7 @@ function db_updatePage($db_con, $lang, $title_clean, $newlang, $newtitle_clean,
 		UPDATE 
 			pages 
 		SET 
+			last_change=NOW(), 
 			lang='$newlang', 
 			title_clean='$newtitle_clean', 
 			title='$title', 
@@ -129,6 +130,7 @@ function db_updateProject($db_con, $lang, $title_clean, $newlang,
 		UPDATE 
 			projects 
 		SET 
+			last_change=NOW(), 
 			lang='$newlang', 
 			title_clean='$newtitle_clean', 
 			title='$title', 
