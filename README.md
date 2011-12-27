@@ -23,7 +23,7 @@ Dependencies:
 - Smarty-3.1.3:
 	- Site: http://www.smarty.net/
 	- Path: /Smarty-3.1.3/libs/Smarty.class.php
-- syntachighlighter_3.0.83
+- syntaxhighlighter_3.0.83
 	- Author: [Alex Gorbatchev](http://alexgorbatchev.com)
 	- Site: http://alexgorbatchev.com/SyntaxHighlighter/
 	- Source: http://github.com/alexgorbatchev/SyntaxHighlighter
