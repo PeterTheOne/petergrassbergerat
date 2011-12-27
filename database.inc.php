@@ -60,7 +60,7 @@ function db_getProjectList($db_con, $lang = '') {
 		$lang = mysqli_real_escape_string($db_con, $lang);
 		$query .= "WHERE lang = '$lang' ";
 	}
-	$query .= 'ORDER BY year DESC, title';
+	$query .= 'ORDER BY wip DESC, year DESC, title';
 	$success = mysqli_query($db_con, $query);
 	if (!$success) {
 		return false;
