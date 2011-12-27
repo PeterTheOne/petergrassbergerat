@@ -14,4 +14,7 @@
 	define('SESSION_SALT',	'');
 	define('PASSWORD_SALT',	'');
 	
+	/* OPTIONS */
+	define('HTTPS_REDIRECT', true);
+	
 ?>

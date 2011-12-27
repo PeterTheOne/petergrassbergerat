@@ -8,7 +8,9 @@ include_once("database.inc.php");
 
 // REDIRECT TO HTTPS
 
-redirectToHTTPS();
+if (HTTPS_REDIRECT) {
+	redirectToHTTPS();
+}
 
 // INIT
 
