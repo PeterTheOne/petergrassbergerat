@@ -30,7 +30,7 @@ if (isset($_GET['state'])) {
 	} else if ($_GET['state'] === 'login' && isTokenValid()) {
 		$smarty->assign('token', createToken());
 		$username = sanitize($_POST['username']);
-		$password = sanitize($_POST['password']);
+		$password = sanitize($_POST['password']); //TODO: no sanitize? html tags in password?
 		if ($username === ADMIN_USER && sha1(PASSWORD_SALT . $password) === ADMIN_PASS) {
 			session_regenerate_id();
 			$_SESSION['login'] = true;
@@ -43,7 +43,7 @@ if (isset($_GET['state'])) {
 
 if (!isset($_SESSION['login']) || $_SESSION['login'] !== true || 
 		!isset($_SESSION['HTTP_USER_AGENT']) || 
-		$_SESSION['HTTP_USER_AGENT'] != 
+		$_SESSION['HTTP_USER_AGENT'] !== 
 		sha1(SESSION_SALT . $_SERVER['HTTP_USER_AGENT'])) {
 	$smarty->assign('token', createToken());
 	$smarty->display('admin-login.tpl');
