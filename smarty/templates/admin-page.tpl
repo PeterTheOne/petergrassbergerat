@@ -54,7 +54,7 @@
 					<input class="description" name="description" type="text" value="{$data.description}" placeholder="description" required />
 {/if}
 					<textarea class="content" name="content" 
-							rows="18" placeholder="type here" required autofocus>{$data.content}</textarea>
+							rows="18" placeholder="type here" required>{$data.content}</textarea>
 							
 					<button type="submit">submit</button>
 				</form>

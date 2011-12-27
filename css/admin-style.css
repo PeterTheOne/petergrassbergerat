@@ -74,7 +74,7 @@ div#content {
 
 div#form {
 	float: left;
-	width: 650px;
+	width: 600px;
 	margin: 0 10px 0 10px;
 	/*background-color: #00ff00;*/
 }
@@ -84,6 +84,11 @@ div#preview {
 	width: 570px;
 	margin: 0 10px 0 10px;
 	/*background-color: #ff0000;*/
+}
+
+div#preview-content {
+	overflow: auto;
+	height: 400px;
 }
 
 div#content h2 {
