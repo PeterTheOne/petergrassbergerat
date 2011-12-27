@@ -37,16 +37,16 @@
 					{$info}
 				</p>
 {/if}
-				<a href="?state=logout">logout</a>
+				<a href="?state=logout&amp;token={$token}">logout</a>
 				<h2>Pages</h2>
 				<ul>
 {foreach $pagelist as $page}
 					<li>
-						<a href="?state=edit&amp;type=page&amp;title_clean={$page.title_clean}&amp;lang={$page.lang}">
+						<a href="?state=edit&amp;type=page&amp;token={$token}&amp;title_clean={$page.title_clean}&amp;lang={$page.lang}">
 							{$page.title} ({$page.lang})
 						</a>
 						- 
-						<a href="?state=delete&amp;type=page&amp;title_clean={$page.title_clean}&amp;lang={$page.lang}">
+						<a href="?state=delete&amp;type=page&amp;token={$token}&amp;title_clean={$page.title_clean}&amp;lang={$page.lang}">
 							delete
 						</a>
 					</li>
@@ -65,11 +65,11 @@
 {foreach $years as $project}
 {strip}
 							<li>
-								<a href="?state=edit&amp;type=project&amp;title_clean={$project.title_clean}&amp;lang={$project.lang}">
+								<a href="?state=edit&amp;type=project&amp;token={$token}&amp;title_clean={$project.title_clean}&amp;lang={$project.lang}">
 									{$project.title} ({$project.lang})
 								</a>
 								- 
-								<a href="?state=delete&amp;type=project&amp;title_clean={$project.title_clean}&amp;lang={$project.lang}">
+								<a href="?state=delete&amp;type=project&amp;token={$token}&amp;title_clean={$project.title_clean}&amp;lang={$project.lang}">
 									delete
 								</a>
 							</li>

@@ -34,13 +34,13 @@
 			<div id="form">
 				<h2>form</h2>
 {if $state === 'edit' && $type === 'page'}
-				<form method="post" action="?title_clean={$data.title_clean}&lang={$data.lang}&state=update&type=page">
+				<form method="post" action="?title_clean={$data.title_clean}&lang={$data.lang}&state=update&type=page&amp;token={$token}">
 {elseif $state === 'edit' && $type === 'project'}
-				<form method="post" action="?title_clean={$data.title_clean}&lang={$data.lang}&state=update&type=project">
+				<form method="post" action="?title_clean={$data.title_clean}&lang={$data.lang}&state=update&type=project&amp;token={$token}">
 {elseif $state === 'create' && $type === 'page'}
-				<form method="post" action="?title_clean={$data.title_clean}&lang={$data.lang}&state=insert&type=page">
+				<form method="post" action="?title_clean={$data.title_clean}&lang={$data.lang}&state=insert&type=page&amp;token={$token}">
 {elseif $state === 'create' && $type === 'project'}
-				<form method="post" action="?title_clean={$data.title_clean}&lang={$data.lang}&state=insert&type=project">
+				<form method="post" action="?title_clean={$data.title_clean}&lang={$data.lang}&state=insert&type=project&amp;token={$token}">
 {/if}
 					<input class="title" name="title" type="text" value="{$data.title}" placeholder="Title" required />
 					<input class="title_clean" name="title_clean" type="text" value="{$data.title_clean}" placeholder="title_clean" required />

@@ -12,6 +12,20 @@ function redirectToHTTPS() {
 	}
 }
 
+function createToken() {
+	$token = session_id() . time() . mt_rand();
+	$_SESSION['token'] = $token;
+	return $token;
+}
+
+function isTokenValid() {
+	return (
+		isset($_GET['token']) &&
+		isset($_SESSION['token']) &&
+		sanitize($_GET['token']) === $_SESSION['token']
+	);
+}
+
 function getLang() {
 	if(substr($_SERVER['HTTP_HOST'], -4) === '.com') {
 		$lang = 'en';

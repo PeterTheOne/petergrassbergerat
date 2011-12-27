@@ -18,13 +18,15 @@ $db_con = db_connect();
 
 // CHECK LOGIN
 
-// TODO: refresh problem
+// TODO: cleanup!!
 // TODO: session timeout
 if (isset($_GET['state'])) {
-	if ($_GET['state'] === 'logout') {
+	if ($_GET['state'] === 'logout' && isTokenValid()) {
+		$smarty->assign('token', createToken());
 		$_SESSION = array();
 		session_destroy();
-	} else if ($_GET['state'] === 'login') {
+	} else if ($_GET['state'] === 'login' && isTokenValid()) {
+		$smarty->assign('token', createToken());
 		$username = sanitize($_POST['username']);
 		$password = sanitize($_POST['password']);
 		if ($username === ADMIN_USER && sha1(PASSWORD_SALT . $password) === ADMIN_PASS) {
@@ -41,6 +43,7 @@ if (!isset($_SESSION['login']) || $_SESSION['login'] !== true ||
 		!isset($_SESSION['HTTP_USER_AGENT']) || 
 		$_SESSION['HTTP_USER_AGENT'] != 
 		sha1(SESSION_SALT . $_SERVER['HTTP_USER_AGENT'])) {
+	$smarty->assign('token', createToken());
 	$smarty->display('admin-login.tpl');
 	exit;
 }
@@ -60,6 +63,7 @@ if (isset($_GET['state']) && isset($_GET['type'])) {
 
 // state switch
 if ($state === 'edit' || $state === 'create') {
+	$smarty->assign('token', createToken());
 	$smarty->assign('state', $state);
 	if ($type === 'page') {
 		$result = db_getPage($db_con, $lang, $title_clean);
@@ -73,7 +77,8 @@ if ($state === 'edit' || $state === 'create') {
 		$smarty->assign('info', 'page or project not found');
 		$state = 'overview';
 	}
-} else if ($state === 'insert') {
+} else if ($state === 'insert' && isTokenValid()) {
+	$smarty->assign('token', createToken());
 	// TODO: insert
 	$success = true;
 	if ($success) {
@@ -82,7 +87,8 @@ if ($state === 'edit' || $state === 'create') {
 		$smarty->assign('info', 'insert failed');
 	}
 	$state = 'overview';
-} else if ($state === 'update') {
+} else if ($state === 'update' && isTokenValid()) {
+	$smarty->assign('token', createToken());
 	if ($type === 'page') {
 		$result = db_updatePage(
 			$db_con, 
@@ -113,7 +119,8 @@ if ($state === 'edit' || $state === 'create') {
 		$smarty->assign('info', 'update failed');
 	}
 	$state = 'overview';
-} else if ($state === 'delete') {
+} else if ($state === 'delete' && isTokenValid()) {
+	$smarty->assign('token', createToken());
 	// TODO: delete
 	$success = true;
 	if ($success) {
@@ -121,6 +128,8 @@ if ($state === 'edit' || $state === 'create') {
 	} else {
 		$smarty->assign('info', 'delete failed');
 	}
+	$state = 'overview';
+} else {
 	$state = 'overview';
 }
 
@@ -132,6 +141,7 @@ if ($state === 'overview') {
 	$projectlist = db_getProjectList($db_con);
 	$smarty->assign('projectlist', $projectlist);
 	
+	$smarty->assign('token', createToken());
 	$smarty->display('admin-overview.tpl');
 }
 

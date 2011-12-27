@@ -37,7 +37,7 @@
 			</p>
 {/if}
 			<h2>form</h2>
-			<form method="post" action="admin.php?state=login">
+			<form method="post" action="admin.php?state=login&amp;token={$token}">
 				<input class="username" name="username" type="text" placeholder="username" required />
 				<input class="password" name="password" type="password" placeholder="password" required />
 				<button type="submit">submit</button>
