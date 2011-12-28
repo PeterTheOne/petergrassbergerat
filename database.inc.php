@@ -49,6 +49,7 @@ function db_getPageList($db_con, $lang = '') {
 	}
 	$pagelist = array();
 	while($page = mysqli_fetch_array($success)) {
+		$page['last_change_date'] = substr($page['last_change'], 0, 10);
 		$pagelist[] = $page;
 	}	
 	return $pagelist;
@@ -67,6 +68,7 @@ function db_getProjectList($db_con, $lang = '') {
 	}
 	$projectlist = array();
 	while($project = mysqli_fetch_array($success)) {
+		$project['last_change_date'] = substr($project['last_change'], 0, 10);
 		if ($project['wip']) {
 			if ($lang == 'de-AT') {
 				$projectlist['Laufende Arbeiten'][] = $project;
