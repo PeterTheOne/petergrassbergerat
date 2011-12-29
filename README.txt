@@ -16,7 +16,8 @@ Install:
 3. add MySql-server connection constants in config.inc.php .
 4. upload to webserver or use xampp on local machine.
 5. create tables by running install.php
-6. have fun!
+6. remove install.php and other unused files from production server.
+7. have fun!
 
 Dependencies:
 -------------
