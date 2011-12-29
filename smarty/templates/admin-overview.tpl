@@ -39,6 +39,7 @@
 {/if}
 				<a href="?state=logout&amp;token={$token}">logout</a>
 				<h2>Pages</h2>
+				<a href="?state=create&amp;type=page&amp;token={$token}">create</a>
 				<ul>
 {foreach $pagelist as $page}
 					<li>
@@ -56,6 +57,7 @@
 				</ul>
 				
 				<h2>Portfolio</h2>
+				<a href="?state=create&amp;type=project&amp;token={$token}">create</a>
 				<ul>
 {foreach $projectlist as $years}
 {strip}

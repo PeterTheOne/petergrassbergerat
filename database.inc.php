@@ -70,6 +70,7 @@ function db_getProjectList($db_con, $lang = '') {
 	while($project = mysqli_fetch_array($success)) {
 		$project['last_change_date'] = substr($project['last_change'], 0, 10);
 		if ($project['wip']) {
+			// TODO: move this to template
 			if ($lang == 'de-AT') {
 				$projectlist['Laufende Arbeiten'][] = $project;
 			} else {
@@ -144,6 +145,83 @@ function db_updateProject($db_con, $lang, $title_clean, $newlang,
 		WHERE 
 			title_clean='$title_clean' AND 
 			lang='$lang'
+	";
+	
+	// send query
+	return mysqli_query($db_con, $query);
+}
+
+function db_insertPage($db_con, $lang, $title_clean, $title, $downloadlink, 
+		$content) {
+	// sanitize
+	$lang = mysqli_real_escape_string($db_con, $lang);
+	$title_clean = mysqli_real_escape_string($db_con, $title_clean);
+	$title = mysqli_real_escape_string($db_con, $title);
+	$downloadlink = mysqli_real_escape_string($db_con, $downloadlink);
+	$content = mysqli_real_escape_string($db_con, $content);
+	
+	// write query
+	$query = "
+		INSERT INTO 
+			pages (
+				last_change, 
+				lang, 
+				title_clean, 
+				title, 
+				downloadlink, 
+				content
+			)
+		VALUES (
+			NOW(), 
+			'$lang', 
+			'$title_clean', 
+			'$title', 
+			'$downloadlink', 
+			'$content'
+		)
+	";
+	
+	// send query
+	return mysqli_query($db_con, $query);
+}
+
+function db_insertProject($db_con, $lang, $title_clean, $title, $year, $wip, 
+		$tags, $description, $content) {
+	// sanitize
+	$lang = mysqli_real_escape_string($db_con, $lang);
+	$title_clean = mysqli_real_escape_string($db_con, $title_clean);
+	$title = mysqli_real_escape_string($db_con, $title);
+	$year = mysqli_real_escape_string($db_con, $year);
+	$wip = mysqli_real_escape_string($db_con, $wip);
+	$tags = mysqli_real_escape_string($db_con, $tags);
+	$description = mysqli_real_escape_string($db_con, $description);
+	$content = mysqli_real_escape_string($db_con, $content);
+	
+	// write query
+	$query = "
+		INSERT INTO 
+			projects (
+				last_change, 
+				lang, 
+				title_clean, 
+				title, 
+				year, 
+				wip, 
+				tags, 
+				description, 
+				content
+			)
+		VALUES (
+			NOW(), 
+			'$lang', 
+			'$title_clean', 
+			'$title', 
+			'$year', 
+			'$wip', 
+			'$tags', 
+			'$description', 
+			'$content'
+		)
 	";
 	
 	// send query

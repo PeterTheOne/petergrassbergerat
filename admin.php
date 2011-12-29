@@ -22,6 +22,7 @@ $db_con = db_connect();
 
 // TODO: cleanup!!
 // TODO: session timeout
+// TODO: split admin.php up in multiple files
 if (isset($_GET['state'])) {
 	if ($_GET['state'] === 'logout' && isTokenValid()) {
 		$smarty->assign('token', createToken());
@@ -64,7 +65,7 @@ if (isset($_GET['state']) && isset($_GET['type'])) {
 }
 
 // state switch
-if ($state === 'edit' || $state === 'create') {
+if ($state === 'edit') {
 	$smarty->assign('token', createToken());
 	$smarty->assign('state', $state);
 	if ($type === 'page') {
@@ -79,11 +80,33 @@ if ($state === 'edit' || $state === 'create') {
 		$smarty->assign('info', 'page or project not found');
 		$state = 'overview';
 	}
+} else if ($state === 'create') {
+	$smarty->assign('token', createToken());
+	$smarty->assign('state', $state);
+	$smarty->display('admin-page.tpl');
 } else if ($state === 'insert' && isTokenValid()) {
 	$smarty->assign('token', createToken());
-	// TODO: insert
-	$success = true;
-	if ($success) {
+	if ($type === 'page') {
+		$result = db_insertPage(
+			$db_con, 
+			sanitize($_POST['lang']),
+			sanitize($_POST['title_clean']),
+			sanitize($_POST['title']), 
+			sanitize($_POST['downloadlink']), 
+			$_POST['content']);
+	} else {
+		$result = db_insertProject(
+			$db_con, 
+			sanitize($_POST['lang']),
+			sanitize($_POST['title_clean']),
+			sanitize($_POST['title']), 
+			sanitize($_POST['year']), 
+			sanitize($_POST['wip']), 
+			sanitize($_POST['tags']), 
+			sanitize($_POST['description']), 
+			$_POST['content']);
+	}
+	if ($result) {
 		$smarty->assign('info', 'insert was successful');
 	} else {
 		$smarty->assign('info', 'insert failed');
