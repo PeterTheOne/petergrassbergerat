@@ -46,6 +46,10 @@ a.broken {
 	text-decoration: line-through !important;
 }
 
+.hidden {
+	display: none !important;
+}
+
 /* HEADER */
 
 h1 {

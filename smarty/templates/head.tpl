@@ -19,14 +19,14 @@
 		<link rel="profile" href="http://gmpg.org/xfn/11" />
 		<link rel="profile" href="http://microformats.org/profile/rel-license" />
 		
-		<!-- sitemp -->
+		<!-- sitemp http://microformats.org/wiki/rel-sitemap -->
 		<link rel="sitemap" type="application/xml" href="http://petergrassberger.at/sitemap.php" /> 
 		<link rel="sitemap" type="application/xml" href="http://petergrassberger.com/sitemap.php" /> 
 		
 		<!-- author/me -->
-		<meta name="author" content="Peter Grassberger" />
 		<link rel="me" href="http://profiles.google.com/114748353184495722818" />
-		<link type="text/plain" rel="author" href="/humans.txt" />
+		<meta name="author" content="Peter Grassberger" />
+		<link rel="author" type="text/plain" href="/humans.txt" />
 		<link rel="me" hreflang="de-AT" href="http://petergrassberger.at" />
 		<link rel="me" hreflang="en" href="http://petergrassberger.com" />
 		
