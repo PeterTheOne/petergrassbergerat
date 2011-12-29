@@ -8,7 +8,6 @@
 {/if}
 		
 		<meta charset="utf-8" />
-		<meta name="author" content="Peter Grassberger" />
 		<link rel="stylesheet" type="text/css" href="http://petergrassberger.at/css/style.css" />
 		
 		<!--
@@ -20,6 +19,12 @@
 		<link rel="profile" href="http://gmpg.org/xfn/11" />
 		<link rel="profile" href="http://microformats.org/profile/rel-license" />
 		
+		<!-- sitemp -->
+		<link rel="sitemap" type="application/xml" href="http://petergrassberger.at/sitemap.php" /> 
+		<link rel="sitemap" type="application/xml" href="http://petergrassberger.com/sitemap.php" /> 
+		
+		<!-- author/me -->
+		<meta name="author" content="Peter Grassberger" />
 		<link rel="me" href="http://profiles.google.com/114748353184495722818" />
 		<link type="text/plain" rel="author" href="/humans.txt" />
 		<link rel="me" hreflang="de-AT" href="http://petergrassberger.at" />
