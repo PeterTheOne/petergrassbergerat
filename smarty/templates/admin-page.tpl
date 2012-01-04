@@ -51,10 +51,11 @@
 					<input class="year" name="year" type="text" value="{$data.year}" placeholder="year" required />
 					<input class="wip" name="wip" type="text" value="{$data.wip}" placeholder="wip" required />
 					<input class="tags" name="tags" type="text" value="{$data.tags}" placeholder="tags" required />
-					<input class="description" name="description" type="text" value="{$data.description}" placeholder="description" required />
+					<input class="description" name="description" type="text" value="{$data.description}" placeholder="description" lang="{$data.lang}" required />
 {/if}
-					<textarea class="content" name="content" 
-							rows="18" placeholder="type here" required>{$data.content}</textarea>
+					<textarea class="content" name="content" rows="18" 
+							placeholder="type here" 
+							lang="{$data.lang}" required>{$data.content}</textarea>
 							
 					<button type="submit">submit</button>
 				</form>
