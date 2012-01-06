@@ -15,7 +15,7 @@
 {foreach $years as $project}
 	<url>
 		<loc>{$url}/portfolio/{$project.title_clean}</loc>
-		<lastmod>{$page.last_change_date}</lastmod>
+		<lastmod>{$project.last_change_date}</lastmod>
 		<priority>0.5</priority>
 	</url>
 {/foreach}
