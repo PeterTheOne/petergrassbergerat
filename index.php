@@ -16,9 +16,8 @@ header("Content-language: $lang");
 
 // DISPLAY
 
-$site = sanitize($_GET['site']);
-$site = $site === '' ? 'bio' : $site;
-$subsite = sanitize($_GET['subsite']);
+$site = isset($_GET['site']) ? sanitize($_GET['site']) : 'bio';
+$subsite = isset($_GET['subsite']) ? sanitize($_GET['subsite']) : '';
 
 // translateURL
 $smarty->assign('lang', $lang);
