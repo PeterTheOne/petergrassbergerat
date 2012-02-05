@@ -22,7 +22,7 @@ html {
 body {
 	overflow: auto;
 	font-size: 62.5%; 		/* sets medium size from 16px to 10px, 1em is 10px now. */
-	font-family: Georgia, Verdana, Arial, serif;
+	font-family: Georgia, Century Schoolbook L, Verdana, Arial, serif;
 	font-size: 1em;
 }
 
