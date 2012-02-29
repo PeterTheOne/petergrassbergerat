@@ -2,8 +2,6 @@
 
 include_once("config.inc.php");
 
-//TODO: error handling!
-
 function db_connect() {
 	$db_con = mysqli_connect(DB_HOST, DB_USERNAME, DB_PASSWD, DB_DBNAME);
 		//TODO: error handling..
@@ -14,29 +12,39 @@ function db_connect() {
 	return $db_con;
 }
 
+function db_hasErrors($db_con, $result) {
+	if(!$result){
+		if (PRINT_DB_ERRORS) {
+			echo "<p>error: " . mysqli_error($db_con) . "</p>";
+		}
+		return true;
+	}
+	return false;
+}
+
 function db_getPage($db_con, $lang, $title_clean) {
 	$lang = mysqli_real_escape_string($db_con, $lang);
 	$title_clean = mysqli_real_escape_string($db_con, $title_clean);
 	$query = "SELECT * FROM pages WHERE lang = '$lang' AND title_clean = '$title_clean'";
-	$success = mysqli_query($db_con, $query);
-	if (!$success) {
+	$result = mysqli_query($db_con, $query);
+	if (db_hasErrors($db_con, $result)) {
 		return false;
 	}
-	return mysqli_fetch_array($success);
+	return mysqli_fetch_array($result);
 }
 
 function db_getProject($db_con, $lang, $title_clean) {
 	$lang = mysqli_real_escape_string($db_con, $lang);
 	$title_clean = mysqli_real_escape_string($db_con, $title_clean);
 	$query = "SELECT * FROM projects WHERE lang = '$lang' AND title_clean = '$title_clean'";
-	$success = mysqli_query($db_con, $query);
-	if (!$success) {
+	$result = mysqli_query($db_con, $query);
+	if (db_hasErrors($db_con, $result)) {
 		return false;
 	}
-	return mysqli_fetch_array($success);
+	return mysqli_fetch_array($result);
 }
 
-function db_getPageList($db_con, $lang = '') {
+function db_getPageList($db_con, $lang = '', $order = '') {
 	$lang = mysqli_real_escape_string($db_con, $lang);
 	$query = '
 		SELECT 
@@ -51,22 +59,32 @@ function db_getPageList($db_con, $lang = '') {
 				lang = '$lang' 
 		";
 	}
-	$query .= '
-		ORDER BY 
-			title
-	';	
-	$success = mysqli_query($db_con, $query);
-	if (!$success) {
+	if ($order == '') {
+		$query .= '
+			ORDER BY 
+				title
+		';
+	} else {
+		$query .= 'ORDER BY ';
+		for ($i = 0; $i < sizeof($order); $i++) {
+			if ($i != 0) {
+				$query .= ", ";
+			}
+			$query .= $order[$i];
+		}
+	}
+	$result = mysqli_query($db_con, $query);
+	if (db_hasErrors($db_con, $result)) {
 		return false;
 	}
 	$pagelist = array();
-	while($page = mysqli_fetch_array($success)) {
+	while($page = mysqli_fetch_array($result)) {
 		$pagelist[] = $page;
-	}	
+	}
 	return $pagelist;
 }
 
-function db_getProjectList($db_con, $lang = '') {
+function db_getProjectList($db_con, $lang = '', $order = '') {
 	$lang = mysqli_real_escape_string($db_con, $lang);
 	$query = '
 		SELECT 
@@ -81,25 +99,102 @@ function db_getProjectList($db_con, $lang = '') {
 				lang = '$lang' 
 		";
 	}
-	$query .= '
-		ORDER BY 
-			wip DESC, 
-			year DESC, 
-			title
-	';
-	$success = mysqli_query($db_con, $query);
-	if (!$success) {
+	if ($order == '') {	
+		$query .= '
+			ORDER BY 
+				wip DESC, 
+				year DESC, 
+				title
+		';
+	} else {
+		$query .= 'ORDER BY ';
+		for ($i = 0; $i < sizeof($order); $i++) {
+			if ($i != 0) {
+				$query .= ", ";
+			}
+			$query .= $order[$i];
+		}
+	}
+	$result = mysqli_query($db_con, $query);
+	if (db_hasErrors($db_con, $result)) {
 		return false;
 	}
 	$projectlist = array();
-	while($project = mysqli_fetch_array($success)) {
+	while($project = mysqli_fetch_array($result)) {
 		if ($project['wip']) {
 			$projectlist['wip'][] = $project;
 		} else {
 			$projectlist[$project['year']][] = $project;
 		}
-	}	
+	}
 	return $projectlist;
+}
+
+function db_getPageProjectList($db_con, $lang = '', $order = '') {
+	$lang = mysqli_real_escape_string($db_con, $lang);
+	$query = "
+		SELECT 
+			id, 
+			last_change, 
+			title, 
+			title_clean, 
+			lang, 
+			content, 
+			'page' as type, 
+			DATE(last_change) as last_change_date
+		FROM 
+			pages
+	";
+	if ($lang !== '') {
+		$query .= "
+			WHERE 
+				lang = '$lang' 
+		";
+	}
+	$query .= "
+		UNION ALL 
+		SELECT 
+			id, 
+			last_change, 
+			title, 
+			title_clean, 
+			lang, 
+			content, 
+			'project' as type, 
+			DATE(last_change) as last_change_date
+		FROM 
+			projects
+	";
+	if ($lang !== '') {
+		$query .= "
+			WHERE 
+				lang = '$lang' 
+		";
+	}
+	if ($order == '') {
+		$query .= '
+			ORDER BY 
+				title, 
+				title
+		';
+	} else {
+		$query .= 'ORDER BY ';
+		for ($i = 0; $i < sizeof($order); $i++) {
+			if ($i != 0) {
+				$query .= ", ";
+			}
+			$query .= $order[$i];
+		}
+	}
+	$result = mysqli_query($db_con, $query);
+	if (db_hasErrors($db_con, $result)) {
+		return false;
+	}
+	$pagelist = array();
+	while($page = mysqli_fetch_array($result)) {
+		$pagelist[] = $page;
+	}
+	return $pagelist;
 }
 
 function db_updatePage($db_con, $lang, $title_clean, $newlang, $newtitle_clean, 
@@ -130,7 +225,11 @@ function db_updatePage($db_con, $lang, $title_clean, $newlang, $newtitle_clean,
 	";
 	
 	// send query
-	return mysqli_query($db_con, $query);
+	$result = mysqli_query($db_con, $query);
+	if(db_hasErrors($db_con, $result)) {
+		return false;
+	}
+	return $result;
 }
 
 function db_updateProject($db_con, $lang, $title_clean, $newlang, 
@@ -167,7 +266,11 @@ function db_updateProject($db_con, $lang, $title_clean, $newlang,
 	";
 	
 	// send query
-	return mysqli_query($db_con, $query);
+	$result = mysqli_query($db_con, $query);
+	if(db_hasErrors($db_con, $result)) {
+		return false;
+	}
+	return $result;
 }
 
 function db_insertPage($db_con, $lang, $title_clean, $title, $downloadlink, 
@@ -201,7 +304,11 @@ function db_insertPage($db_con, $lang, $title_clean, $title, $downloadlink,
 	";
 	
 	// send query
-	return mysqli_query($db_con, $query);
+	$result = mysqli_query($db_con, $query);
+	if(db_hasErrors($db_con, $result)) {
+		return false;
+	}
+	return $result;
 }
 
 function db_insertProject($db_con, $lang, $title_clean, $title, $year, $wip, 
@@ -244,7 +351,11 @@ function db_insertProject($db_con, $lang, $title_clean, $title, $year, $wip,
 	";
 	
 	// send query
-	return mysqli_query($db_con, $query);
+	$result = mysqli_query($db_con, $query);
+	if(db_hasErrors($db_con, $result)) {
+		return false;
+	}
+	return $result;
 }
 
 function checkExists($db_con, $langNot, $site, $subsite) {

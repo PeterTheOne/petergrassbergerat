@@ -15,6 +15,7 @@
 	define('PASSWORD_SALT',	'');
 	
 	/* OPTIONS */
+	define("PRINT_DB_ERRORS", true);
 	define('HTTPS_REDIRECT', true);
 	
 ?>
