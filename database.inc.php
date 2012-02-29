@@ -37,45 +37,64 @@ function db_getProject($db_con, $lang, $title_clean) {
 }
 
 function db_getPageList($db_con, $lang = '') {
-	$query = 'SELECT * FROM pages ';
+	$lang = mysqli_real_escape_string($db_con, $lang);
+	$query = '
+		SELECT 
+			*, 
+			DATE(last_change) as last_change_date
+		FROM 
+			pages 
+	';
 	if ($lang !== '') {
-		$lang = mysqli_real_escape_string($db_con, $lang);
-		$query .= "WHERE lang = '$lang' ";
+		$query .= "
+			WHERE 
+				lang = '$lang' 
+		";
 	}
-	$query .= 'ORDER BY title';	
+	$query .= '
+		ORDER BY 
+			title
+	';	
 	$success = mysqli_query($db_con, $query);
 	if (!$success) {
 		return false;
 	}
 	$pagelist = array();
 	while($page = mysqli_fetch_array($success)) {
-		$page['last_change_date'] = substr($page['last_change'], 0, 10);
 		$pagelist[] = $page;
 	}	
 	return $pagelist;
 }
 
 function db_getProjectList($db_con, $lang = '') {
-	$query = 'SELECT * FROM projects ';
+	$lang = mysqli_real_escape_string($db_con, $lang);
+	$query = '
+		SELECT 
+			*, 
+			DATE(last_change) as last_change_date
+		FROM 
+			projects 
+	';
 	if ($lang !== '') {
-		$lang = mysqli_real_escape_string($db_con, $lang);
-		$query .= "WHERE lang = '$lang' ";
+		$query .= "
+			WHERE 
+				lang = '$lang' 
+		";
 	}
-	$query .= 'ORDER BY wip DESC, year DESC, title';
+	$query .= '
+		ORDER BY 
+			wip DESC, 
+			year DESC, 
+			title
+	';
 	$success = mysqli_query($db_con, $query);
 	if (!$success) {
 		return false;
 	}
 	$projectlist = array();
 	while($project = mysqli_fetch_array($success)) {
-		$project['last_change_date'] = substr($project['last_change'], 0, 10);
 		if ($project['wip']) {
-			// TODO: move this to template
-			if ($lang == 'de-AT') {
-				$projectlist['Laufende Arbeiten'][] = $project;
-			} else {
-				$projectlist['Work in Progress'][] = $project;
-			}
+			$projectlist['wip'][] = $project;
 		} else {
 			$projectlist[$project['year']][] = $project;
 		}

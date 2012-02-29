@@ -9,7 +9,13 @@
 					
 					{foreach $projectlist as $years}
 					{strip}
+					{if $years@key == 'wip' && $lang == 'de-AT'}
+					<h3>Laufende Arbeiten</h3>
+					{else if $years@key == 'wip' && $lang == 'en'}
+					<h3>Work in Progress</h3>
+					{else}
 					<h3>{$years@key}</h3>
+					{/if}
 					<ul class="time">
 					{foreach $years as $project}
 					{strip}
