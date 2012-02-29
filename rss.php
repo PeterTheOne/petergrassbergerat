@@ -11,7 +11,7 @@ include_once("database.inc.php");
 $smarty = s_init();
 $db_con = db_connect();
 $lang = getLang();
-header("Content-Type:text/xml");
+header("Content-Type:application/rss+xml; charset=utf-8");
 
 // FETCH DATA
 

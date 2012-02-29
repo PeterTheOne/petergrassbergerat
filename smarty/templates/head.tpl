@@ -23,6 +23,9 @@
 		<link rel="sitemap" type="application/xml" href="http://petergrassberger.at/sitemap.php" /> 
 		<link rel="sitemap" type="application/xml" href="http://petergrassberger.com/sitemap.php" /> 
 		
+		<link rel="alternate" type="application/rss+xml" title="Seiten und Portfolio updates" href="http://petergrassberger.at/rss.php" />
+		<link rel="alternate" type="application/rss+xml" title="Seiten and Portfolio updates" href="http://petergrassberger.com/rss.php" />
+		
 		<!-- author/me -->
 		<link rel="me" href="http://profiles.google.com/114748353184495722818" />
 		<meta name="author" content="Peter Grassberger" />
