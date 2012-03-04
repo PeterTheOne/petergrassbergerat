@@ -42,6 +42,15 @@ function getLangNot() {
 	return 'en';
 }
 
+function getURL($lang) {
+	if ($lang === 'de-AT') {
+		$url = 'http://petergrassberger.at';
+	} else {
+		$url = 'http://petergrassberger.com';
+	}
+	return $url;
+}
+
 function buildTranslateURL($currentLang, $site, $subsite) {
 	$translateURL = 'http://petergrassberger.';
 	if ($currentLang == 'en') {

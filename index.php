@@ -12,6 +12,7 @@ $smarty = s_init();
 $db_con = db_connect();
 $lang = getLang();
 $langNot = getLangNot();
+$url = getURL($lang);
 header("Content-language: $lang");
 
 // DISPLAY
@@ -21,6 +22,7 @@ $subsite = isset($_GET['subsite']) ? sanitize($_GET['subsite']) : '';
 
 // translateURL
 $smarty->assign('lang', $lang);
+$smarty->assign('url', $url);
 if (checkExists($db_con, $langNot, $site, $subsite)) {
 	$translateURL = buildTranslateURL($lang, $site, $subsite);
 	$smarty->assign('translateURL', $translateURL);
