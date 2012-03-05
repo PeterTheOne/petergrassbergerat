@@ -215,4 +215,11 @@ textarea.content {
 	width: 100%;
 }
 
+/* ADMIN */
+
+table.admin_overview, 
+table.admin_overview tr, 
+table.admin_overview td {
+	padding: 5px 10px;
+}
 

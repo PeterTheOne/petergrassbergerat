@@ -23,7 +23,7 @@ if (userLoginValid()) {
 	if (isset($_POST['username']) && isset($_POST['password']) && isTokenValid()) {
 		$smarty->assign('token', createToken());
 		$username = sanitize($_POST['username']);
-		$password = sanitize($_POST['password']); //TODO: no sanitize? html tags in password?
+		$password = $_POST['password']; // no sanitize: html tags in password..
 		if ($username === ADMIN_USER && sha1(PASSWORD_SALT . $password) === ADMIN_PASS) {
 			session_regenerate_id();
 			$_SESSION['login'] = true;
@@ -32,11 +32,11 @@ if (userLoginValid()) {
 			exit;
 		} else {
 			$smarty->assign('info', 'wrong login data');
-			$smarty->display('admin-login.tpl');
+			$smarty->display('admin_login.tpl');
 		}
 	} else {
 		$smarty->assign('token', createToken());
-		$smarty->display('admin-login.tpl');
+		$smarty->display('admin_login.tpl');
 	}
 }
 

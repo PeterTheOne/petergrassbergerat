@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 	<head>
-		<title>admin - {$data.title}</title>
+		<title>admin - edit: {$data.title}</title>
 		
 		<meta charset="utf-8" />
 		<meta name="author" content="Peter Grassberger" />
@@ -27,21 +27,14 @@
 	</head>
 	<body>
 		<header>
-			<h1>admin - {$data.title}</h1>
+			<h1>admin - edit: {$data.title}</h1>
+			<a href="admin.php">back to overview</a>
 		</header>
 		
 		<div id="content">
 			<div id="form">
 				<h2>form</h2>
-{if $state === 'edit' && $type === 'page'}
-				<form method="post" action="?title_clean={$data.title_clean}&lang={$data.lang}&state=update&type=page&amp;token={$token}">
-{elseif $state === 'edit' && $type === 'project'}
-				<form method="post" action="?title_clean={$data.title_clean}&lang={$data.lang}&state=update&type=project&amp;token={$token}">
-{elseif $state === 'create' && $type === 'page'}
-				<form method="post" action="?title_clean={$data.title_clean}&lang={$data.lang}&state=insert&type=page&amp;token={$token}">
-{elseif $state === 'create' && $type === 'project'}
-				<form method="post" action="?title_clean={$data.title_clean}&lang={$data.lang}&state=insert&type=project&amp;token={$token}">
-{/if}
+				<form method="post" action="admin_{$state}.php?type={$type}&title_clean={$data.title_clean}&lang={$data.lang}">
 					<input class="title" name="title" type="text" value="{$data.title}" placeholder="Title" required />
 					<input class="title_clean" name="title_clean" type="text" value="{$data.title_clean}" placeholder="title_clean" required />
 					<input class="lang" name="lang" type="text" value="{$data.lang}" placeholder="lang" required />
@@ -56,7 +49,7 @@
 					<textarea class="content" name="content" rows="18" 
 							placeholder="type here" 
 							lang="{$data.lang}" required>{$data.content}</textarea>
-							
+					<input class="token" name="token" type="hidden" value="{$token}" />
 					<button type="submit">submit</button>
 				</form>
 			</div>

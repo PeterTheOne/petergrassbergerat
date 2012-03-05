@@ -32,59 +32,72 @@
 		
 		<div id="content">
 			<article>
+{if isset($error)}
+				<p class="error">
+					{$error}
+				</p>
+{/if}
 {if isset($info)}
-				<p>
+				<p class="info">
 					{$info}
 				</p>
 {/if}
 				<a href="admin_logout.php">logout</a>
 				<h2>Pages</h2>
-				<a href="?state=create&amp;type=page&amp;token={$token}">create</a>
-				<ul>
+				<a href="admin_create.php?type=page">create</a>
+				<table class="admin_overview">
 {foreach $pagelist as $page}
-					<li>
-						<a href="?state=edit&amp;type=page&amp;token={$token}&amp;title_clean={$page.title_clean}&amp;lang={$page.lang}">
-							{$page.title} ({$page.lang})
-						</a>
-						- 
-						<a href="?state=delete&amp;type=page&amp;token={$token}&amp;title_clean={$page.title_clean}&amp;lang={$page.lang}">
-							delete
-						</a>
-					</li>
+					<tr>
+						<td>
+							<a href="admin_edit.php?type=page&amp;title_clean={$page.title_clean}&amp;lang={$page.lang}">
+								{$page.title}
+							</a>
+						</td>
+						<td>
+							<a href="admin_edit.php?type=page&amp;title_clean={$page.title_clean}&amp;lang={$page.lang}">
+								{$page.lang}
+							</a>
+						</td>
+						<td>
+							<a href="admin_delete.php?type=page&amp;title_clean={$page.title_clean}&amp;lang={$page.lang}">
+								delete
+							</a>
+						</td>
+					</tr>
 {foreachelse}
-					<li>no entries</li>
+					<tr>no entries</tr>
 {/foreach}
-				</ul>
+				</table>
 				
 				<h2>Portfolio</h2>
-				<a href="?state=create&amp;type=project&amp;token={$token}">create</a>
-				<ul>
+				<a href="admin_create.php?type=project">create</a>
+				<table class="admin_overview">
 {foreach $projectlist as $years}
-{strip}
-					<li>
-						{$years@key}
-						<ul>
+					<tr><td>{$years@key}</td></tr>
 {foreach $years as $project}
-{strip}
-							<li>
-								<a href="?state=edit&amp;type=project&amp;token={$token}&amp;title_clean={$project.title_clean}&amp;lang={$project.lang}">
-									{$project.title} ({$project.lang})
-								</a>
-								- 
-								<a href="?state=delete&amp;type=project&amp;token={$token}&amp;title_clean={$project.title_clean}&amp;lang={$project.lang}">
-									delete
-								</a>
-							</li>
-{/strip}
+					<tr>
+						<td>
+							<a href="admin_edit.php?type=project&amp;title_clean={$project.title_clean}&amp;lang={$project.lang}">
+								{$project.title}
+							</a>
+						</td>
+						<td>
+							<a href="admin_edit.php?type=project&amp;title_clean={$project.title_clean}&amp;lang={$project.lang}">
+								{$project.lang}
+							</a>
+						</td>
+						<td>
+							<a href="admin_delete.php?type=project&amp;title_clean={$project.title_clean}&amp;lang={$project.lang}">
+								delete
+							</a>
+						</td>
+					</tr>
 {/foreach}
-						</ul>
-					</li>
-{/strip}
 {foreachelse}
-					<li>no entries</li>
+					<tr>no entries</tr>
 {/foreach}
-				</ul>
+				</table>
 			</article>
 		</div>
-	</body>	
+	</body>
 </html>
