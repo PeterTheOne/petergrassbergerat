@@ -37,7 +37,7 @@
 					{$info}
 				</p>
 {/if}
-				<a href="?state=logout&amp;token={$token}">logout</a>
+				<a href="admin_logout.php">logout</a>
 				<h2>Pages</h2>
 				<a href="?state=create&amp;type=page&amp;token={$token}">create</a>
 				<ul>

@@ -2,9 +2,11 @@
 
 // INCLUDES
 
+include_once("config.inc.php");
 include_once("functions.inc.php");
 include_once("smarty.inc.php");
 include_once("database.inc.php");
+include_once("admin_functions.inc.php");
 
 // REDIRECT TO HTTPS
 
@@ -23,31 +25,9 @@ $db_con = db_connect();
 // TODO: cleanup!!
 // TODO: session timeout
 // TODO: split admin.php up in multiple files
-if (isset($_GET['state'])) {
-	if ($_GET['state'] === 'logout' && isTokenValid()) {
-		$smarty->assign('token', createToken());
-		$_SESSION = array();
-		session_destroy();
-	} else if ($_GET['state'] === 'login' && isTokenValid()) {
-		$smarty->assign('token', createToken());
-		$username = sanitize($_POST['username']);
-		$password = sanitize($_POST['password']); //TODO: no sanitize? html tags in password?
-		if ($username === ADMIN_USER && sha1(PASSWORD_SALT . $password) === ADMIN_PASS) {
-			session_regenerate_id();
-			$_SESSION['login'] = true;
-			$_SESSION['HTTP_USER_AGENT'] = sha1(SESSION_SALT . $_SERVER['HTTP_USER_AGENT']);
-		} else {
-			$smarty->assign('info', 'wrong login data');
-		}
-	}
-}
 
-if (!isset($_SESSION['login']) || $_SESSION['login'] !== true || 
-		!isset($_SESSION['HTTP_USER_AGENT']) || 
-		$_SESSION['HTTP_USER_AGENT'] !== 
-		sha1(SESSION_SALT . $_SERVER['HTTP_USER_AGENT'])) {
-	$smarty->assign('token', createToken());
-	$smarty->display('admin-login.tpl');
+if (!userLoginValid()) {
+	header('Location: admin_login.php');
 	exit;
 }
 
