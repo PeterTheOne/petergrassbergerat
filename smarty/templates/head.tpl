@@ -50,17 +50,23 @@
 		<!-- google site verification for petergrassberger.com -->
 		<meta name="google-site-verification" content="F8q0FAvDVXjAwv7N7Xe4N5H5LLA6Hnznw20uoe0Ehqs" />
 		
+		<!-- TODO: load js at the end of the page? -->
+		
 		<!--
 			SyntaxHighlighter by: Alex Gorbatchev
 			http://alexgorbatchev.com/SyntaxHighlighter/
 		-->
-		<script type="text/javascript" src="syntaxhighlighter_3.0.83/scripts/shCore.js"></script>
-		<script type="text/javascript" src="syntaxhighlighter_3.0.83/scripts/shBrushJava.js"></script>
+		<script type="text/javascript" src="js/lib/shCore.js"></script>
+		<script type="text/javascript" src="js/lib/shBrushJava.js"></script>
 		
-		<link href="syntaxhighlighter_3.0.83/styles/shCore.css" rel="stylesheet" type="text/css" />
-		<link href="syntaxhighlighter_3.0.83/styles/shThemeDefault.css" rel="stylesheet" type="text/css" />
+		<link href="css/lib/shCore.css" rel="stylesheet" type="text/css" />
+		<link href="css/lib/shThemeDefault.css" rel="stylesheet" type="text/css" />
 		
 		<script type="text/javascript">
 			SyntaxHighlighter.all();
 		</script>
+		
+		<!-- jQuery from google api with local fallback -->
+		<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+		<script>window.jQuery || document.write('<script src="js/lib/jquery-1.7.1.min.js"><\/script>')</script>
 	</head>

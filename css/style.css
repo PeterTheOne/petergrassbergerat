@@ -1,16 +1,16 @@
 /*
-Theme Name: -
-Theme URI: -
+Theme Name: petergrassberger.at-georgia-theme
+Theme URI: http://petergrassberger.at/portfolio/petergrassbergerat/
 Description: -
 Version: -
 Author: Peter Grassberger
 Author URI: http://petergrassberger.at
-Tags: -
+Tags: georgia
 */
 
-@import "reset.css";
-@import "typography.css";
-@import "layout.css";
+@import "lib/reset.css";
+@import "lib/typography.css";
+@import "lib/layout.css";
 
 /* GLOBAL */
 

@@ -19,11 +19,6 @@
 		<link rel="me" href="https://profiles.google.com/114748353184495722818" />
 		<link rel="me" hreflang="de-AT" href="http://petergrassberger.at" />
 		<link rel="me" hreflang="en" href="http://petergrassberger.com" />
-		
-		<script src="jquery-1.7.1/jquery-1.7.1.min.js" type="text/javascript"></script>
-		<!-- plugin by Ted Devito: http://teddevito.com/demos/textarea.html -->
-		<script src="jquery.textarea/jquery.textarea.js" type="text/javascript"></script>
-		<script src="js/script.js" type="text/javascript"></script>
 	</head>
 	<body>
 		<header>

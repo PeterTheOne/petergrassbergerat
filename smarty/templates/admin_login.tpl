@@ -20,10 +20,12 @@
 		<link rel="me" hreflang="de-AT" href="http://petergrassberger.at" />
 		<link rel="me" hreflang="en" href="http://petergrassberger.com" />
 		
-		<script src="jquery-1.7.1/jquery-1.7.1.min.js" type="text/javascript"></script>
+		<!-- jQuery from google api with local fallback -->
+		<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+		<script>window.jQuery || document.write('<script src="js/lib/jquery-1.7.1.min.js"><\/script>')</script>
 		<!-- plugin by Ted Devito: http://teddevito.com/demos/textarea.html -->
-		<script src="jquery.textarea/jquery.textarea.js" type="text/javascript"></script>
-		<script src="js/script.js" type="text/javascript"></script>
+		<script src="js/lib/jquery.textarea.js" type="text/javascript"></script>
+		<script src="js/admin_script.js" type="text/javascript"></script>
 	</head>
 	<body>
 		<header>
