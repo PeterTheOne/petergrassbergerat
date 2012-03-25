@@ -18,7 +18,7 @@
 {if $pageproject.type == 'page'}
 		<item>
 			<title>{$pageproject.title}</title>
-			<link>{$url}/{$pageproject.title_clean}</link>
+			<link>{$url}/{$pageproject.title_clean}/</link>
 			<guid isPermaLink="true">{$url}/{$pageproject.title_clean}</guid>
 		</item>
 {else}

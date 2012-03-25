@@ -6,7 +6,7 @@
 	</url>
 {foreach $pagelist as $page}
 	<url>
-		<loc>{$url}/{$page.title_clean}</loc>
+		<loc>{$url}/{$page.title_clean}/</loc>
 		<lastmod>{$page.last_change_date}</lastmod>
 		<priority>0.7</priority>
 	</url>
