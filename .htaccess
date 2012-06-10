@@ -4,6 +4,8 @@ ErrorDocument 404 /404
 RewriteEngine on
 RewriteRule ^bio/([a-z0-9-]*)/?$ ?site=bio&subsite=$1 [NC]
 RewriteRule ^vita/([a-z0-9-]*)/?$ ?site=vita&subsite=$1 [NC]
+RewriteRule ^about/([a-z0-9-]*)/?$ ?site=about&subsite=$1 [NC]
+RewriteRule ^rss/?$ rss.php [NC]
 RewriteRule ^portfolio/([a-z0-9-]*)/?$ ?site=portfolio&subsite=$1 [NC]
 RewriteRule ^proj/rosenball_2008-8c/index.html$ http://petergrassberger.at/portfolio/rosenball-dreams/ [R=301,NC]
 RewriteRule ^proj/rosenball_2008-8c/$ http://petergrassberger.at/portfolio/rosenball-dreams/ [R=301,NC]
