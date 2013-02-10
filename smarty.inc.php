@@ -1,6 +1,6 @@
 <?php
 
-include_once('Smarty-3.1.3/libs/Smarty.class.php');
+include_once('Smarty-3.1.13/libs/Smarty.class.php');
 
 function s_init() {
 	$smarty = new Smarty;

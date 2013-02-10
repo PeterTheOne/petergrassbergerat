@@ -22,9 +22,9 @@ Install:
 
 Dependencies:
 -------------
-- Smarty-3.1.3:
+- Smarty-3.*.*:
 	- Site: http://www.smarty.net/
-	- Path: /Smarty-3.1.3/libs/Smarty.class.php
+	- Path: /Smarty-3.1.13/libs/Smarty.class.php
 - syntaxhighlighter_3.0.83 (allready in repository):
 	- Author: [Alex Gorbatchev](http://alexgorbatchev.com)
 	- Site: http://alexgorbatchev.com/SyntaxHighlighter/
