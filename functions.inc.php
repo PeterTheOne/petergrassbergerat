@@ -105,6 +105,20 @@ function endswithCrop($string, $substring) {
     return $string;
 }
 
+function getJsonFromUrl($url, $parameters) {
+    $ch = curl_init();
+    $header = array('HTTP_ACCEPT: application/json', 'HTTP_ACCEPT_LANGUAGE: fr, en, da, nl', 'HTTP_CONNECTION: Something');
+    curl_setopt($ch, CURLOPT_URL, $url);
+    curl_setopt($ch, CURLOPT_POST, true);
+    curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($parameters));
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($ch, CURLOPT_HTTPHEADER, $header );
+    $fileContents = curl_exec($ch);
+    curl_close($ch);
+
+    return json_decode($fileContents, true);
+}
+
 function getLang() {
 	if(substr($_SERVER['HTTP_HOST'], -4) === '.com') {
 		$lang = 'en';

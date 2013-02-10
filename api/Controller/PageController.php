@@ -6,7 +6,6 @@
  * @author Peter Grassberger <petertheone@gmail.com>
  */
 
-
 class PageController extends AbstractDatabaseController {
 
     public function  __construct() {

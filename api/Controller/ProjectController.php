@@ -6,7 +6,6 @@
  * @author Peter Grassberger <petertheone@gmail.com>
  */
 
-
 class ProjectController extends AbstractDatabaseController {
 
     public function  __construct() {

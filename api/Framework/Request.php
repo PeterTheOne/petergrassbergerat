@@ -50,7 +50,7 @@ class Request
         // for now you can only get data.
         $this->method = 'GET';
         //$this->method = strtoupper($_SERVER['REQUEST_METHOD']);
-        $this->parameters = isset($_GET) ? $_GET : $_POST;
+        $this->parameters = isset($_GET) && count($_GET) != 0 ? $_GET : $_POST;
 
         /* $_SERVER['REQUEST_METHOD'] doesn't have anything to do with $_GET und $_POST */
         /*switch ($this->method) {

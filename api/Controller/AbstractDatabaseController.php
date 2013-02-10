@@ -55,7 +55,12 @@ abstract class AbstractDatabaseController {
         $parameters = whitelist($request->parameters, $this->allowedParameters);
 
         $db_con = $this->db_connect();
-        $query = "SELECT * FROM " . $this->table;
+        $query = "
+            SELECT
+                *,
+			    DATE(last_change) as last_change_date
+			FROM
+			    $this->table";
         $query_where = array();
         $query_order = "";
 
@@ -87,9 +92,10 @@ abstract class AbstractDatabaseController {
 
             $tempArray = array();
             foreach ($orderArray as $key => $value) {
-                $value = endswithCrop($value, ' ASC');
-                $value = endswithCrop($value, ' DSC');
-                if (isset($this->allowedParameters[$value])) {
+                $value = trim($value);
+                $valueTemp = endswithCrop($value, ' ASC');
+                $valueTemp = endswithCrop($valueTemp, ' DESC');
+                if (isset($this->allowedParameters[$valueTemp])) {
                     $tempArray[$key] = $value;
                 }
             }
@@ -107,7 +113,7 @@ abstract class AbstractDatabaseController {
             return false;
         }
         $resultArray = array();
-        while($column = mysqli_fetch_array($result)) {
+        while($column = mysqli_fetch_array($result, MYSQLI_ASSOC)) {
             $resultArray[] = $column;
         }
         return $resultArray;
