@@ -31,5 +31,6 @@
 
     /* BaseUrl */
     define('BASEURL', 		'http://' . $_SERVER['HTTP_HOST'] . '/');
+    define('API_PATH',      BASEURL . 'api');
 
 ?>

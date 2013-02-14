@@ -5,7 +5,6 @@
 include_once("../config.inc.php");
 include_once("../functions.inc.php");
 include_once("smarty.inc.php");
-include_once("../database.inc.php");
 include_once("admin_functions.inc.php");
 
 // REDIRECT TO HTTPS
@@ -18,7 +17,7 @@ if (HTTPS_REDIRECT) {
 
 session_start();
 $smarty = s_init();
-$db_con = db_connect();
+$smarty->assign('baseUrl', BASEURL);
 
 // CHECK LOGIN
 
@@ -44,15 +43,65 @@ if (isset($_GET['error'])) {
 	}
 }
 
-$smarty->assign('baseUrl', BASEURL);
 
-$pagelist = db_getPageList($db_con);
-$smarty->assign('pagelist', $pagelist);
+$site = isset($_GET['site']) ? sanitize($_GET['site']) : 'overview';
 
-$projectlist = db_getProjectList($db_con);
-$smarty->assign('projectlist', $projectlist);
+if ($site === 'overview') {
+    assignPages($smarty);
+    assignProjects($smarty);
+    assignBlogPosts($smarty);
 
-$smarty->assign('token', createToken());
-$smarty->display('admin_overview.tpl');
+    $smarty->assign('token', createToken());
+    $smarty->display('admin_overview.tpl');
+} else if ($site === 'page') {
+    assignPages($smarty);
+
+    $smarty->assign('token', createToken());
+    $smarty->display('admin_overview.tpl');
+} else if ($site === 'project') {
+    assignProjects($smarty);
+
+    $smarty->assign('token', createToken());
+    $smarty->display('admin_overview.tpl');
+} else if ($site === 'post') {
+    assignBlogPosts($smarty);
+
+    $smarty->assign('token', createToken());
+    $smarty->display('admin_overview.tpl');
+} else {
+    header('HTTP/1.0 404 Not Found');
+    $smarty->display('404.tpl');
+}
+
+function assignPages($smarty) {
+    $parameters = array(
+        'orderby' => 'title_clean,lang'
+    );
+    $pageList = getJsonFromUrl(API_PATH . '/page', $parameters);
+    $smarty->assign('pageList', $pageList);
+}
+
+function assignProjects($smarty) {
+    $parameters = array(
+        'wip' => 1,
+        'orderby' => 'wip DESC,year DESC,title_clean,lang'
+    );
+    $wipProjectList = getJsonFromUrl(API_PATH . '/project', $parameters);
+    $parameters = array(
+        'wip' => 0,
+        'orderby' => 'year DESC,title_clean,lang'
+    );
+    $yearsProjectList = getJsonFromUrl(API_PATH . '/project', $parameters);
+    $smarty->assign('wipProjectList', $wipProjectList);
+    $smarty->assign('yearsProjectList', $yearsProjectList);
+}
+
+function assignBlogPosts($smarty) {
+    $parameters = array(
+        'orderby' => 'datetimeCreated DESC,title_clean,lang'
+    );
+    $blogPostList = getJsonFromUrl(API_PATH . '/post', $parameters);
+    $smarty->assign('blogPostList', $blogPostList);
+}
 
 ?>

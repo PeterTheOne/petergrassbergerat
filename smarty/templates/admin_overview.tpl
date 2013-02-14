@@ -38,10 +38,12 @@
 				</p>
 {/if}
 				<a href="admin_logout.php">logout</a>
+
+{if isset($pageList)}
 				<h2>Pages</h2>
 				<a href="admin_create.php?type=page">create</a>
 				<table class="admin_overview">
-{foreach $pagelist as $page}
+{foreach $pageList as $page}
 					<tr>
 						<td>
 							<a href="admin_edit.php?type=page&amp;title_clean={$page.title_clean}&amp;lang={$page.lang}">
@@ -61,33 +63,80 @@
 					<tr>no entries</tr>
 {/foreach}
 				</table>
-				
+{/if}
+
+{if (isset($wipProjectList) && isset($yearsProjectList))}
 				<h2>Portfolio</h2>
 				<a href="admin_create.php?type=project">create</a>
 				<table class="admin_overview">
-{foreach $projectlist as $years}
-					<tr><td>{$years@key}</td></tr>
-{foreach $years as $project}
-					<tr>
-						<td>
-							<a href="admin_edit.php?type=project&amp;title_clean={$project.title_clean}&amp;lang={$project.lang}">
-								{$project.title}
-							</a>
-						</td>
-						<td>
-							{$project.lang}
-						</td>
-						<td>
-							<a href="admin_delete.php?type=project&amp;title_clean={$project.title_clean}&amp;lang={$project.lang}">
-								delete
-							</a>
-						</td>
-					</tr>
+                    <tr><td>Work in Progress</td></tr>
+{foreach $wipProjectList as $project}
+                    <tr>
+                        <td>
+                            <a href="admin_edit.php?type=project&amp;title_clean={$project.title_clean}&amp;lang={$project.lang}">
+                                {$project.title}
+                            </a>
+                        </td>
+                        <td>
+                            {$project.lang}
+                        </td>
+                        <td>
+                            <a href="admin_delete.php?type=project&amp;title_clean={$project.title_clean}&amp;lang={$project.lang}">
+                                delete
+                            </a>
+                        </td>
+                    </tr>
 {/foreach}
-{foreachelse}
-					<tr>no entries</tr>
+
+{$lastYear = -9999}
+{foreach $yearsProjectList as $project}
+{if $lastYear != $project.year}
+                    <tr><td>{$project.year}</td></tr>
+{/if}
+{$lastYear = $project.year}
+                    <tr>
+                        <td>
+                            <a href="admin_edit.php?type=project&amp;title_clean={$project.title_clean}&amp;lang={$project.lang}">
+                                {$project.title}
+                            </a>
+                        </td>
+                        <td>
+                            {$project.lang}
+                        </td>
+                        <td>
+                            <a href="admin_delete.php?type=project&amp;title_clean={$project.title_clean}&amp;lang={$project.lang}">
+                                delete
+                            </a>
+                        </td>
+                    </tr>
 {/foreach}
 				</table>
+{/if}
+
+{if isset($blogPostList)}
+                <h2>Posts</h2>
+                <a href="admin_create.php?type=post">create</a>
+                <table class="admin_overview">
+{foreach $blogPostList as $post}
+                    <tr>
+                        <td>
+                            <a href="admin_edit.php?type=post&amp;title_clean={$post.title_clean}&amp;lang={$post.language}">
+                                {$post.title}
+                            </a>
+                        </td>
+                        <td>
+                            {$post.language}
+                        </td>
+                        <td>
+                            <a href="admin_delete.php?type=post&amp;title_clean={$post.title_clean}&amp;lang={$post.language}">
+                                delete
+                            </a>
+                        </td>
+                    </tr>
+{foreachelse}
+                    <tr>no entries</tr>
+{/foreach}
+{/if}
 			</article>
 		</div>
 	</body>

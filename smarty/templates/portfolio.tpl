@@ -8,11 +8,11 @@
 					<h2>Portfolio</h2>
 
                 {if $wipProjectList}
-                {if $lang == 'de-AT'}
-                    <h3>Laufende Arbeiten</h3>
-                {else $lang == 'en'}
-                    <h3>Work in Progress</h3>
-                {/if}
+                    {if $lang == 'de-AT'}
+                        <h3>Laufende Arbeiten</h3>
+                        {else $lang == 'en'}
+                        <h3>Work in Progress</h3>
+                    {/if}
                 {/if}
 
                 <ul class="time">

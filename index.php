@@ -13,9 +13,6 @@ $lang = getLang();
 $langNot = getLangNot();
 header("Content-language: $lang");
 
-// TODO: make url nonstatic
-define('API_PATH', 'http://localhost/petergrassbergerat/api');
-
 // DISPLAY
 
 $site = isset($_GET['site']) ? sanitize($_GET['site']) : 'bio';

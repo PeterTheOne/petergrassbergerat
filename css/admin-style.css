@@ -220,7 +220,7 @@ textarea.content {
 table.admin_overview, 
 table.admin_overview tr, 
 table.admin_overview td {
-	padding: 5px 10px;
+    padding: 5px 10px 5px 0;
 }
 
 article.adminOverview {
