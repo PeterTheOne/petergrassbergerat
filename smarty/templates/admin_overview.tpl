@@ -26,7 +26,7 @@
 		</header>
 		
 		<div id="content">
-			<article>
+			<article class="adminOverview">
 {if isset($error)}
 				<p class="error">
 					{$error}
@@ -49,9 +49,7 @@
 							</a>
 						</td>
 						<td>
-							<a href="admin_edit.php?type=page&amp;title_clean={$page.title_clean}&amp;lang={$page.lang}">
-								{$page.lang}
-							</a>
+							{$page.lang}
 						</td>
 						<td>
 							<a href="admin_delete.php?type=page&amp;title_clean={$page.title_clean}&amp;lang={$page.lang}">
@@ -77,9 +75,7 @@
 							</a>
 						</td>
 						<td>
-							<a href="admin_edit.php?type=project&amp;title_clean={$project.title_clean}&amp;lang={$project.lang}">
-								{$project.lang}
-							</a>
+							{$project.lang}
 						</td>
 						<td>
 							<a href="admin_delete.php?type=project&amp;title_clean={$project.title_clean}&amp;lang={$project.lang}">

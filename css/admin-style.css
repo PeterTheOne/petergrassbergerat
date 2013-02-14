@@ -223,3 +223,8 @@ table.admin_overview td {
 	padding: 5px 10px;
 }
 
+article.adminOverview {
+    width: 1000px;
+    margin: 0 auto;
+}
+
