@@ -1,6 +1,6 @@
 <?php
 
-include_once("functions.inc.php");
+include_once("../functions.inc.php");
 
 function redirectToHTTPS() {
 	if(!isset($_SERVER["HTTPS"]) || 

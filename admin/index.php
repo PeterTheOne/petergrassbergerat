@@ -2,10 +2,10 @@
 
 // INCLUDES
 
-include_once("config.inc.php");
-include_once("functions.inc.php");
+include_once("../config.inc.php");
+include_once("../functions.inc.php");
 include_once("smarty.inc.php");
-include_once("database.inc.php");
+include_once("../database.inc.php");
 include_once("admin_functions.inc.php");
 
 // REDIRECT TO HTTPS
@@ -43,6 +43,8 @@ if (isset($_GET['error'])) {
 		$smarty->assign('info', 'insert was successful');
 	}
 }
+
+$smarty->assign('baseUrl', BASEURL);
 
 $pagelist = db_getPageList($db_con);
 $smarty->assign('pagelist', $pagelist);

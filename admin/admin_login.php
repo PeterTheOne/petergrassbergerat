@@ -2,8 +2,8 @@
 
 // INCLUDES
 
-include_once("config.inc.php");
-include_once("functions.inc.php");
+include_once("../config.inc.php");
+include_once("../functions.inc.php");
 include_once("admin_functions.inc.php");
 include_once("smarty.inc.php");
 
@@ -16,10 +16,11 @@ if (HTTPS_REDIRECT) {
 }
 
 if (userLoginValid()) {
-	header('Location: admin.php');
+	header('Location: index.php');
 	exit;
 } else {
 	$smarty = s_init();
+    $smarty->assign('baseUrl', BASEURL);
 	if (isset($_POST['username']) && isset($_POST['password']) && isTokenValid()) {
 		$smarty->assign('token', createToken());
 		$username = sanitize($_POST['username']);
@@ -28,7 +29,7 @@ if (userLoginValid()) {
 			session_regenerate_id();
 			$_SESSION['login'] = true;
 			$_SESSION['HTTP_USER_AGENT'] = sha1(SESSION_SALT . $_SERVER['HTTP_USER_AGENT']);
-			header('Location: admin.php');
+			header('Location: index.php');
 			exit;
 		} else {
 			$smarty->assign('info', 'wrong login data');

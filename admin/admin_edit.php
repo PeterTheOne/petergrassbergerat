@@ -2,11 +2,11 @@
 
 // INCLUDES
 
-include_once("config.inc.php");
-include_once("functions.inc.php");
+include_once("../config.inc.php");
+include_once("../functions.inc.php");
 include_once("admin_functions.inc.php");
 include_once("smarty.inc.php");
-include_once("database.inc.php");
+include_once("../database.inc.php");
 
 // LOGIC
 
@@ -28,11 +28,12 @@ if (isset($_GET['type']) &&
 	$title_clean = sanitize($_GET['title_clean']);
 	$lang = sanitize($_GET['lang']);
 } else {
-	header('Location: admin.php');
+	header('Location: index.php');
 	exit;
 }
 
 $smarty = s_init();
+$smarty->assign('baseUrl', BASEURL);
 $smarty->assign('type', $type);
 $db_con = db_connect();
 
@@ -66,7 +67,7 @@ if (isset($_POST['title']) &&
 			$_POST['content']);
 	}
 	if ($result) {
-		header('Location: admin.php?info=update_success');
+		header('Location: index.php?info=update_success');
 		exit;
 	} else {
 		$smarty->assign('info', 'update failed');
@@ -84,7 +85,7 @@ if ($result) {
 	$smarty->assign('data', $result);
 	$smarty->display('admin_page.tpl');
 } else {
-	header('Location: admin.php?error=404');
+	header('Location: index.php?error=404');
 }
 
 ?>

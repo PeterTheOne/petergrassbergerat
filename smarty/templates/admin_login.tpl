@@ -5,7 +5,7 @@
 		
 		<meta charset="utf-8" />
 		<meta name="author" content="Peter Grassberger" />
-		<link rel="stylesheet" type="text/css" href="css/admin-style.css" />
+		<link rel="stylesheet" type="text/css" href="{$baseUrl}css/admin-style.css" />
 		
 		<!--
 			Using rel="profile" to add xhtml meta data profiles (XMDP)

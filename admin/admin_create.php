@@ -2,11 +2,11 @@
 
 // INCLUDES
 
-include_once("config.inc.php");
-include_once("functions.inc.php");
+include_once("../config.inc.php");
+include_once("../functions.inc.php");
 include_once("admin_functions.inc.php");
 include_once("smarty.inc.php");
-include_once("database.inc.php");
+include_once("../database.inc.php");
 
 // LOGIC
 
@@ -24,11 +24,12 @@ if (!userLoginValid()) {
 if (isset($_GET['type'])) {
 	$type = sanitize($_GET['type']);
 } else {
-	header('Location: admin.php');
+	header('Location: index.php');
 	exit;
 }
 
 $smarty = s_init();
+$smarty->assign('baseUrl', BASEURL);
 $smarty->assign('type', $type);
 $db_con = db_connect();
 
@@ -59,7 +60,7 @@ if (isset($_POST['title']) &&
 	}
 	if ($result) {
 		$smarty->assign('info', 'insert was successful');
-		header('Location: admin.php?info=insert_success');
+		header('Location: index.php?info=insert_success');
 		exit;
 	} else {
 		$smarty->assign('info', 'insert failed');

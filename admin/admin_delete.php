@@ -6,4 +6,4 @@
 
 <p>TODO: write delete functions..</p>
 
-<a href="admin.php">back to overview</a>
+<a href="index.php">back to overview</a>

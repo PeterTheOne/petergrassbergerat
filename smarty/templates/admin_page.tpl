@@ -9,7 +9,7 @@
 		
 		<meta charset="utf-8" />
 		<meta name="author" content="Peter Grassberger" />
-		<link rel="stylesheet" type="text/css" href="css/admin-style.css" />
+		<link rel="stylesheet" type="text/css" href="{$baseUrl}css/admin-style.css" />
 		
 		<!--
 			Using rel="profile" to add xhtml meta data profiles (XMDP)
@@ -28,8 +28,8 @@
 		<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
 		<script>window.jQuery || document.write('<script src="js/lib/jquery-1.7.1.min.js"><\/script>')</script>
 		<!-- plugin by Ted Devito: http://teddevito.com/demos/textarea.html -->
-		<script src="js/lib/jquery.textarea.js" type="text/javascript"></script>
-		<script src="js/admin_script.js" type="text/javascript"></script>
+		<script src="{$baseUrl}js/lib/jquery.textarea.js" type="text/javascript"></script>
+		<script src="{$baseUrl}js/admin_script.js" type="text/javascript"></script>
 	</head>
 	<body>
 		<header>
@@ -38,27 +38,27 @@
 {else}
 			<h1>admin - create</h1>
 {/if}
-			<a href="admin.php">back to overview</a>
+			<a href="index.php">back to overview</a>
 		</header>
 		
 		<div id="content">
 			<div id="form">
 				<h2>form</h2>
 				<form method="post" action="admin_{$state}.php?type={$type}&title_clean={$data.title_clean}&lang={$data.lang}">
-					<input class="title" name="title" type="text" value="{$data.title}" placeholder="Title" required />
-					<input class="title_clean" name="title_clean" type="text" value="{$data.title_clean}" placeholder="title_clean" required />
-					<input class="lang" name="lang" type="text" value="{$data.lang}" placeholder="lang" required />
+					<input class="title" name="title" type="text" value="{$data.title|default:''}" placeholder="Title" required />
+					<input class="title_clean" name="title_clean" type="text" value="{$data.title_clean|default:''}" placeholder="title_clean" required />
+					<input class="lang" name="lang" type="text" value="{$data.lang|default:''}" placeholder="lang" required />
 {if $type === 'page'}
-					<input class="downloadlink" name="downloadlink" type="text" value="{$data.downloadlink}" placeholder="downloadlink" />
+					<input class="downloadlink" name="downloadlink" type="text" value="{$data.downloadlink|default:''}" placeholder="downloadlink" />
 {else}
-					<input class="year" name="year" type="text" value="{$data.year}" placeholder="year" required />
-					<input class="wip" name="wip" type="text" value="{$data.wip}" placeholder="wip" required />
-					<input class="tags" name="tags" type="text" value="{$data.tags}" placeholder="tags" required />
-					<input class="description" name="description" type="text" value="{$data.description}" placeholder="description" lang="{$data.lang}" required />
+					<input class="year" name="year" type="text" value="{$data.year|default:''}" placeholder="year" required />
+					<input class="wip" name="wip" type="text" value="{$data.wip|default:''}" placeholder="wip" required />
+					<input class="tags" name="tags" type="text" value="{$data.tags|default:''}" placeholder="tags" required />
+					<input class="description" name="description" type="text" value="{$data.description|default:''}" placeholder="description" lang="{$data.lang|default:''}" required />
 {/if}
 					<textarea class="content" name="content" rows="18" 
 							placeholder="type here" 
-							lang="{$data.lang}" required>{$data.content}</textarea>
+							lang="{$data.lang|default:''}" required>{$data.content|default:''}</textarea>
 					<input class="token" name="token" type="hidden" value="{$token}" />
 					<button type="submit">submit</button>
 				</form>
