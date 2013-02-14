@@ -121,7 +121,7 @@ function displayProjectPage($smarty, $lang, $subsite) {
 function displayBlog($smarty, $lang) {
     $parameters = array(
         'lang' => $lang,
-        'orderby' => 'datetimeCreated,title'
+        'orderby' => 'datetimeCreated DESC,title'
     );
     $blogPostList = getJsonFromUrl(API_PATH . '/post', $parameters);
 
@@ -133,8 +133,8 @@ function displayBlogPost($smarty, $lang, $subsite) {
     $parameters = array(
         'lang' => $lang,
         'title_clean' => $subsite,
-        'orderby' => 'datetimeCreated,title'
     );
+
     $blogPost = getJsonFromUrl(API_PATH . '/post', $parameters);
 
     if ($blogPost) {

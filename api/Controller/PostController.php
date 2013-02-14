@@ -13,14 +13,25 @@ class PostController {
     protected $table;
     protected $allowedParameters = array();
 
+    // TODO: add content, description and tags with LIKE
     public function  __construct() {
         $this->table = 'posts';
         $this->allowedParameters = array(
             'id' => 'int',
-            'datetimeModified' => 'timestamp',
+            'published' => 'int',
+            'version' => 'int',
+            'isCurrentVersion' => 'int',
+
             'title' => 'string',
             'title_clean' => 'string',
-            'language' => 'string'
+
+            'language' => 'string',
+            'isFamilyFriendly' => 'int',
+            'datetimeModified' => 'timestamp',
+
+            'datetimeCreated' => 'timestamp',
+            'datetimeModified' => 'timestamp',
+            'datetimePublished' => 'timestamp'
         );
     }
 
@@ -132,11 +143,7 @@ class PostController {
             }
             $orderArray = $tempArray;
 
-            $query_order = implode(', ', $orderArray);
-        }
-
-        if (!empty($query_order)) {
-            $query .= ' ORDER BY ' . $query_order;
+            $query .= ' ORDER BY ' . implode(', ', $orderArray);
         }
 
         $result = mysqli_query($db_con, $query);
