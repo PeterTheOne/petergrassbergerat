@@ -20,11 +20,7 @@ $pageprojectlist = db_getPageProjectList($db_con, $lang, $pageOrder);
 
 // DISPLAY
 $smarty->assign('lang', $lang);
-if ($lang === 'de-AT') {
-	$smarty->assign('url', 'http://petergrassberger.at');
-} else {
-	$smarty->assign('url', 'http://petergrassberger.com');
-}
+$smarty->assign('baseUrl', BASEURL);
 $smarty->assign('pageprojectlist', $pageprojectlist);
 $smarty->display('rss.tpl');
 

@@ -11,7 +11,6 @@ include_once("smarty.inc.php");
 $smarty = s_init();
 $lang = getLang();
 $langNot = getLangNot();
-$url = getURL($lang);
 header("Content-language: $lang");
 
 // TODO: make url nonstatic
@@ -24,11 +23,10 @@ $subsite = isset($_GET['subsite']) ? sanitize($_GET['subsite']) : '';
 
 // translateURL
 $smarty->assign('lang', $lang);
-$smarty->assign('url', $url);
+$smarty->assign('baseUrl', BASEURL);
 $translateURL = buildTranslateURL($lang, $site, $subsite);
 $smarty->assign('translateURL', $translateURL);
 
-$smarty->assign('baseUrl', BASEURL);
 
 // display site
 switch ($site) {
