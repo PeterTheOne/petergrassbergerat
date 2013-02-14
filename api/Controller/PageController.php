@@ -18,5 +18,7 @@ class PageController extends AbstractDatabaseController {
             'lang' => 'string'
         );
     }
+
+    // TODO: create function that calculates the absolute url to content
 }
 ?>

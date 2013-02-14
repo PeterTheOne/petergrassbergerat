@@ -36,9 +36,17 @@ switch ($site) {
 
     case 'portfolio':
         if (empty($subsite)) {
-            displayPortfolioOverview($smarty, $lang);
+            displayPortfolio($smarty, $lang);
         } else {
-            displayProjectPage($smarty, $subsite, $lang);
+            displayProjectPage($smarty, $lang, $subsite);
+        }
+        break;
+
+    case 'blog':
+        if (empty($subsite)) {
+            displayBlog($smarty, $lang);
+        } else {
+            displayBlogPost($smarty, $lang, $subsite);
         }
         break;
 
@@ -70,7 +78,7 @@ function displayPage($smarty, $site, $subsite, $lang) {
     }
 }
 
-function displayPortfolioOverview($smarty, $lang) {
+function displayPortfolio($smarty, $lang) {
     $parameters = array(
         'lang' => $lang,
         'wip' => 1,
@@ -94,7 +102,7 @@ function displayPortfolioOverview($smarty, $lang) {
     }
 }
 
-function displayProjectPage($smarty, $subsite, $lang) {
+function displayProjectPage($smarty, $lang, $subsite) {
     $parameters = array(
         'lang' => $lang,
         'title_clean' => $subsite
@@ -105,6 +113,33 @@ function displayProjectPage($smarty, $subsite, $lang) {
         $smarty->assign('title', $result[0]['title']);
         $smarty->assign('content', $result[0]['content']);
         $smarty->display('page.tpl');
+    } else {
+        display404($smarty);
+    }
+}
+
+function displayBlog($smarty, $lang) {
+    $parameters = array(
+        'lang' => $lang,
+        'orderby' => 'datetimeCreated,title'
+    );
+    $blogPostList = getJsonFromUrl(API_PATH . '/post', $parameters);
+
+    $smarty->assign('blogPostList', $blogPostList);
+    $smarty->display('blog.tpl');
+}
+
+function displayBlogPost($smarty, $lang, $subsite) {
+    $parameters = array(
+        'lang' => $lang,
+        'title_clean' => $subsite,
+        'orderby' => 'datetimeCreated,title'
+    );
+    $blogPost = getJsonFromUrl(API_PATH . '/post', $parameters);
+
+    if ($blogPost) {
+        $smarty->assign('blogPostList', $blogPost);
+        $smarty->display('blog.tpl');
     } else {
         display404($smarty);
     }

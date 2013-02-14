@@ -16,8 +16,8 @@ Install:
 3. add MySql-server connection constants in config.inc.php .
 4. upload to webserver or use xampp on local machine.
 5. set read permissions for smarty/cache and smarty/templates_c
-6. create tables by running install.php
-7. remove install.php and other unused files from production server.
+6. create tables by running install/index.php
+7. remove install/index.php and other unused files from production server.
 8. have fun!
 
 Dependencies:
