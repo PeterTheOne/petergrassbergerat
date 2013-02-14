@@ -10,7 +10,7 @@
 {/if}
 						</li>
 						<li>
-							<a href="/about/">impressum</a>
+							<a href="{$baseUrl}about/">impressum</a>
 						</li>
 {else}
 						<li>
@@ -21,10 +21,10 @@
 {/if}
 						</li>
 						<li>
-							<a href="/about/">about</a>
+							<a href="{$baseUrl}about/">about</a>
 						</li>
 {/if}
 					</ul>
 				</nav>
-				<h1><a href="/">Peter Grassberger</a></h1>
+				<h1><a href="{$baseUrl}">Peter Grassberger</a></h1>
 			</header>
