@@ -229,6 +229,40 @@ div#content ul.time p {
 	margin: 0 0 0 0;
 }
 
+/* BLOG */
+
+div#content .blogPost {
+    margin: 0 0 120px;
+}
+
+div#content .blogPost h3 {
+    margin: 35px 0 0;
+}
+
+div#content .blogPost h3 a {
+    text-decoration: none;
+    color: #000000;
+}
+
+div#content .blogPost h3 a:hover {
+    text-decoration: underline;
+    color: #555555;
+}
+
+div#content .blogPost span.metaData {
+    font-size: 0.7em;
+    color: #808080;
+}
+
+div#content .blogPost p.description {
+    font-weight: bold;
+    color: #303030;
+}
+
+div#content .blogPost div.articleBody {
+
+}
+
 /* NAV */
 
 nav#main-nav {
