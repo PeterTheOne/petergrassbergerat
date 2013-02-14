@@ -32,12 +32,12 @@ div#all {
 }
 
 a {
-	color: #777777;
+	color: #89408e;
 	text-decoration: none;
 }
 
 a:hover {
-	color: #555555;
+	color: #4c2582;
 	text-decoration: underline;
 }
 
@@ -68,7 +68,7 @@ h1 a {
 }
 
 h1 a:hover {
-	color: #000000;
+	color: #4c2582;
 	text-decoration: none;
 }
 
@@ -102,6 +102,7 @@ nav#top-nav a {
 }
 
 nav#top-nav a:hover {
+    color: #4c2582;
 	text-decoration: none;
 }
 
@@ -132,7 +133,7 @@ div#content h2 span.page-download a {
 }
 
 div#content h2 span.page-download a:hover {
-	color: #999999;
+	color: #89408E;
 }
 
 div#content h3 {
@@ -246,7 +247,7 @@ div#content .blogPost h3 a {
 
 div#content .blogPost h3 a:hover {
     text-decoration: underline;
-    color: #555555;
+    color: #4c2582;
 }
 
 div#content .blogPost span.metaData {
@@ -285,6 +286,7 @@ nav#main-nav a {
 
 nav#main-nav a:hover {
 	text-decoration: none;
+    color: #4c2582;
 }
 
 nav#main-nav a:after {
@@ -306,7 +308,7 @@ aside a {
 }
 
 aside a:hover {
-	color: #000000;
+	color: #4c2582;
 	text-decoration: none;
 }
 
