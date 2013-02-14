@@ -28,6 +28,8 @@ $smarty->assign('url', $url);
 $translateURL = buildTranslateURL($lang, $site, $subsite);
 $smarty->assign('translateURL', $translateURL);
 
+$smarty->assign('baseUrl', BASEURL);
+
 // display site
 switch ($site) {
     case '404':

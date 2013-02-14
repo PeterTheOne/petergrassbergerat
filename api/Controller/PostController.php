@@ -25,7 +25,7 @@ class PostController {
     }
 
     private function calculateAbsoluteUrl($data) {
-        $url = 'http://' . $_SERVER['HTTP_HOST'];
+        $url = BASEURL;
         $url .= '/blog/' . $data['title_clean'] . '/';
 
         return $url;

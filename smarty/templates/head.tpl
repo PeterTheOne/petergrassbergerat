@@ -8,7 +8,7 @@
 {/if}
 		
 		<meta charset="utf-8" />
-		<link rel="stylesheet" type="text/css" href="http://petergrassberger.at/css/style.css" />
+		<link rel="stylesheet" type="text/css" href="{$baseUrl}css/style.css" />
 		
 		<!--
 			Using rel="profile" to add xhtml meta data profiles (XMDP)
@@ -20,11 +20,9 @@
 		<link rel="profile" href="http://microformats.org/profile/rel-license" />
 		
 		<!-- sitemp http://microformats.org/wiki/rel-sitemap -->
-		<link rel="sitemap" type="application/xml" href="http://petergrassberger.at/sitemap.php" /> 
-		<link rel="sitemap" type="application/xml" href="http://petergrassberger.com/sitemap.php" /> 
+		<link rel="sitemap" type="application/xml" href="{$baseUrl}sitemap.php" />
 		
-		<link rel="alternate" type="application/rss+xml" title="Seiten und Portfolio updates" href="http://petergrassberger.at/rss.php" />
-		<link rel="alternate" type="application/rss+xml" title="Seiten and Portfolio updates" href="http://petergrassberger.com/rss.php" />
+		<link rel="alternate" type="application/rss+xml" title="Seiten und Portfolio updates" href="{$baseUrl}rss.php" />
 		
 		<!-- author/me -->
 		<link rel="me" href="http://profiles.google.com/114748353184495722818" />
@@ -56,11 +54,11 @@
 			SyntaxHighlighter by: Alex Gorbatchev
 			http://alexgorbatchev.com/SyntaxHighlighter/
 		-->
-		<script type="text/javascript" src="js/lib/shCore.js"></script>
-		<script type="text/javascript" src="js/lib/shBrushJava.js"></script>
+		<script type="text/javascript" src="{$baseUrl}js/lib/shCore.js"></script>
+		<script type="text/javascript" src="{$baseUrl}js/lib/shBrushJava.js"></script>
 		
-		<link href="css/lib/shCore.css" rel="stylesheet" type="text/css" />
-		<link href="css/lib/shThemeDefault.css" rel="stylesheet" type="text/css" />
+		<link href="{$baseUrl}css/lib/shCore.css" rel="stylesheet" type="text/css" />
+		<link href="{$baseUrl}css/lib/shThemeDefault.css" rel="stylesheet" type="text/css" />
 		
 		<script type="text/javascript">
 			SyntaxHighlighter.all();

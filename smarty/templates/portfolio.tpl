@@ -18,7 +18,7 @@
                 <ul class="time">
                 {foreach $wipProjectList as $project}
                         <li>
-                            <a href="/portfolio/{$project.title_clean}/">
+                            <a href="{$baseUrl}portfolio/{$project.title_clean}/">
                                 <h4>{$project.title}</h4>
                                 <span>{$project.tags}</span>
                                 <p>{$project.description}</p>
@@ -41,7 +41,7 @@
                 {/if}
                 {$lastYear = $project.year}
                         <li>
-                            <a href="/portfolio/{$project.title_clean}/">
+                            <a href="{$baseUrl}portfolio/{$project.title_clean}/">
                                 <h4>{$project.title}</h4>
                                 <span>{$project.tags}</span>
                                 <p>{$project.description}</p>
