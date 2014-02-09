@@ -33,6 +33,11 @@ $trackView = function(\Slim\Route $route) {
     $url .= $port . $_SERVER['REQUEST_URI'];
     $piwikTracker->setUrl($url);
 
+    // don't track when calling from local development
+    if (strpos($url, 'localhost') !== false) {
+        return;
+    }
+
     $piwikTracker->setIp($_SERVER['REMOTE_ADDR']);
 
     $piwikTracker->doTrackPageView($route->getName());
