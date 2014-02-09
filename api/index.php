@@ -1,6 +1,7 @@
 <?php
 
 require '../vendor/autoload.php';
+require_once "../includes/piwik/PiwikTracker.php";
 
 $app = new \Slim\Slim(array('debug' => false));
 
@@ -20,14 +21,31 @@ $app->error(function(\Exception $exception) use ($app) {
     $app->response->setBody(json_encode($result, JSON_PRETTY_PRINT));
 });
 
-$app->get('/', function() use($app) {
+$trackView = function(\Slim\Route $route) {
+    // todo: get siteId and url from config:
+    $piwikTracker = new PiwikTracker(2, 'http://petergrassberger.com/piwik/');
+
+    $ssl = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == 'on') ? true:false;
+    $url = $ssl ? 'https://' : 'http://';
+    $port = $_SERVER['SERVER_PORT'];
+    $port = ((!$ssl && $port=='80') || ($ssl && $port=='443')) ? '' : ':' . $port;
+    $url .= isset($_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : $_SERVER['SERVER_NAME'];
+    $url .= $port . $_SERVER['REQUEST_URI'];
+    $piwikTracker->setUrl($url);
+
+    $piwikTracker->setIp($_SERVER['REMOTE_ADDR']);
+
+    $piwikTracker->doTrackPageView($route->getName());
+};
+
+$app->get('/', $trackView, function() use($app) {
     $app->render('docs.php');
     $app->response->headers->set('Content-Type', 'text/html');
-});
+})->setName('docs');
 
-$app->get('/randomRequest(/)', function() use($app) {
+$app->get('/randomRequest(/)', $trackView, function() use($app) {
     $result = array('done' => 'done');
     $app->response->setBody(json_encode($result, JSON_PRETTY_PRINT));
-});
+})->setName('randomRequest');
 
 $app->run();
