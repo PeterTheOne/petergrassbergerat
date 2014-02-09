@@ -1,0 +1,22 @@
+{
+    "require": {
+        "slim/Slim": "2.*",
+        "twbs/bootstrap": "3.*",
+        "zircote/swagger-php": "*",
+        "robmorgan/phinx": "*"
+    },
+    "repositories": [
+        {
+            "type": "package",
+            "package": {
+                "name": "wordnik/swagger-ui",
+                "version": "master",
+                "source": {
+                    "type": "git",
+                    "url": "git@github.com:wordnik/swagger-ui.git",
+                    "reference": "master"
+                }
+            }
+        }
+    ]
+}
