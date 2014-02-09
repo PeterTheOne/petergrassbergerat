@@ -9,7 +9,7 @@
     <title>petergrassberger.at API documentation</title>
 
     <!-- Bootstrap core CSS -->
-    <link href="../vendor/twbs/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="../includes/bootstrap/css/bootstrap.min.css" rel="stylesheet">
 </head>
 
 <body>
