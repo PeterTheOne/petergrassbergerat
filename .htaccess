@@ -1,0 +1,4 @@
+<Files "phinx.yml">
+Order Allow,Deny
+Deny from all
+</Files>
