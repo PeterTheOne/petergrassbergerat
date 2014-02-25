@@ -23,7 +23,7 @@ $app->error(function(\Exception $exception) use ($app) {
 
 $trackView = function(\Slim\Route $route) {
     // todo: get siteId and url from config:
-    $piwikTracker = new PiwikTracker(2, 'http://petergrassberger.com/piwik/');
+    $piwikTracker = new PiwikTracker(2, 'http://piwik.petergrassberger.com/');
 
     $ssl = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == 'on') ? true:false;
     $url = $ssl ? 'https://' : 'http://';
