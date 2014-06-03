@@ -65,7 +65,7 @@ $app->get('/pages(/)', $trackView, function() use($app, $config, $pdo) {
     $pages = $pagesController->get();
 
     $app->response->setBody(json_encode($pages, JSON_PRETTY_PRINT));
-})->setName('randomRequest');
+})->setName('pages');
 
 // ...
 
