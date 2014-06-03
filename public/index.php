@@ -1,14 +1,8 @@
-<!doctype html>
-<html lang="en">
-    <head>
-        <meta charset="utf-8" />
-        <title>Peter Grassberger</title>
-    </head>
-    <body>
-        <h1>Peter Grassberger</h1>
-
 <?php
 
+require_once '../vendor/autoload.php';
+
+require_once '../libraries/piwik/PiwikTracker.php';
 require_once '../config.php';
 require_once '../application/repositories/PagesRepository.php';
 require_once '../application/controllers/PagesController.php';
@@ -21,12 +15,8 @@ $pdo->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_OBJ);
 $pagesController = new PagesController($config, $pdo);
 $pages = $pagesController->get();
 
-?>
-
-        <?php foreach($pages as $page) { ?>
-            <h2><?php echo $page->title; ?></h2>
-            <?php echo $page->content; ?>
-        <?php } ?>
-
-    </body>
-</html>
+$mustache = new Mustache_Engine(array(
+    'loader' => new Mustache_Loader_FilesystemLoader(dirname(__FILE__).'/templates')
+));
+$template = $mustache->loadTemplate('index');
+echo $template->render(array('pages' => $pages));

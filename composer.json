@@ -1,6 +1,7 @@
 {
     "require": {
         "slim/Slim": "2.*",
-        "robmorgan/phinx": "*"
+        "robmorgan/phinx": "*",
+        "mustache/mustache": "2.6"
     }
 }
