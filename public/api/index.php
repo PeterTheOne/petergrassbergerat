@@ -5,6 +5,7 @@ require_once '../../vendor/autoload.php';
 // todo: autoload
 require_once '../../libraries/piwik/PiwikTracker.php';
 require_once '../../config.php';
+require_once '../../application/repositories/PagesRepository.php';
 require_once '../../application/controllers/PagesController.php';
 
 $app = new \Slim\Slim(array(

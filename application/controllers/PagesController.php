@@ -1,8 +1,5 @@
 <?php
 
-// todo: autoload
-require_once '../../application/repositories/PagesRepository.php';
-
 class PagesController {
 
     /**

@@ -20,8 +20,22 @@ class PagesRepository {
     public function get() {
         // todo: this needs more thinking..
         $statement = $this->pdo->prepare('
-            SELECT * FROM pages INNER JOIN pagecontents ON pages.id = pagecontents.page_id;
+            SELECT * FROM pagecontents;
         ');
+        $statement->execute();
+        return $statement->fetchAll();
+    }
+
+    /**
+     * @param $pageId
+     * @return mixed
+     */
+    public function getOneByPageId($pageId) {
+        // todo: this needs more thinking..
+        $statement = $this->pdo->prepare('
+            SELECT * FROM pagecontents WHERE page_id = :pageId LIMIT 1;
+        ');
+        $statement->bindParam(':pageId', $pageId);
         $statement->execute();
         return $statement->fetch();
     }
