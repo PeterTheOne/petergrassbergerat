@@ -7,3 +7,4 @@ $config->databaseName = '';
 $config->databaseUser = '';
 $config->databasePassword = '';
 
+$config->sessionSalt = '';

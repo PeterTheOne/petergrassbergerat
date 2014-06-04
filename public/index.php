@@ -64,6 +64,41 @@ $app->get('/projects(/)', $trackView, function() use($app, $config, $pdo, $musta
     $app->response->setBody($projectsTemplate->render(array('projects' => $projects)));
 })->setName('portfolio');
 
+$app->get('/admin(/)', $trackView, function() use($app, $config, $pdo, $mustache) {
+    $app->add(new \Slim\Middleware\SessionCookie());
+    if (!isset($_SESSION['login']) ||
+            $_SESSION['login'] !== true ||
+            !isset($_SESSION['HTTP_USER_AGENT']) ||
+            $_SESSION['HTTP_USER_AGENT'] !== sha1($config->sessionSalt . $_SERVER['HTTP_USER_AGENT'])) {
+        $app->redirect('/admin/login/');
+    }
+
+    $adminTemplate = $mustache->loadTemplate('admin');
+    $app->response->setBody($adminTemplate->render());
+})->setName('admin');
+
+$app->get('/admin/login(/)', $trackView, function() use($app, $config, $pdo, $mustache) {
+    $app->add(new \Slim\Middleware\SessionCookie());
+    $loginTemplate = $mustache->loadTemplate('login');
+    $app->response->setBody($loginTemplate->render());
+})->setName('adminLogin');
+
+$app->post('/admin/login(/)', $trackView, function() use($app, $config, $pdo, $mustache) {
+    $app->add(new \Slim\Middleware\SessionCookie());
+    $params = (array) json_decode($app->request()->getBody());
+    if (!isset($params['username']) || $params['username'] == ''||
+        !isset($params['password']) || $params['password'] == ''){
+        throw new Exception('Not all params set.');
+    }
+
+
+    // todo: check if valid, set cookie, redirect.
+
+
+    $loginTemplate = $mustache->loadTemplate('login');
+    $app->response->setBody($loginTemplate->render());
+})->setName('adminLogin');
+
 $app->get('/blog(/)', $trackView, function() use($app, $config, $pdo, $mustache) {
     $pagesController = new PagesController($config, $pdo);
     $posts = $pagesController->getAllByType('post');
