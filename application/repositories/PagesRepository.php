@@ -39,4 +39,20 @@ class PagesRepository {
         $statement->execute();
         return $statement->fetch();
     }
+
+    /**
+     * @return mixed
+     */
+    public function getOneIndex() {
+        // todo: this needs more thinking..
+        $statement = $this->pdo->prepare('
+            SELECT * FROM pages
+            INNER JOIN pagecontents ON pages.id = pagecontents.page_id
+            WHERE pages.index = 1
+            LIMIT 1;
+        ');
+        $statement->execute();
+        return $statement->fetch();
+    }
+
 }

@@ -34,4 +34,11 @@ class PagesController {
         return $this->repository->get();
     }
 
+    /**
+     *
+     */
+    public function getOneIndex() {
+        return $this->repository->getOneIndex();
+    }
+
 }
