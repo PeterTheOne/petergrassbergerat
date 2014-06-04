@@ -58,10 +58,10 @@ $trackView = function(\Slim\Route $route) {
 
 $app->get('/', $trackView, function() use($app, $config, $pdo, $mustache) {
     $pagesController = new PagesController($config, $pdo);
-    $pages = $pagesController->getOneIndex();
+    $page = $pagesController->getOneIndex();
 
-    $template = $mustache->loadTemplate('index');
-    $app->response->setBody($template->render(array('pages' => $pages)));
+    $pageTemplate = $mustache->loadTemplate('page');
+    $app->response->setBody($pageTemplate->render(array('page' => $page)));
 })->setName('index');
 
 // ...
