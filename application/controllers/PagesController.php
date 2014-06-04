@@ -41,4 +41,15 @@ class PagesController {
         return $this->repository->getOneIndex();
     }
 
+    /**
+     *
+     */
+    public function getOneByTitle($pageTitle) {
+        $pageTitle = str_replace(' ', '', $pageTitle); // remove spaces
+        $pageTitle = str_replace('-', ' ', $pageTitle); // turn dash into space
+        return $this->repository->getOneByTitle($pageTitle);
+        // todo: redirect to root if is index page
+    }
+
+
 }

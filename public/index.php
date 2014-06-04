@@ -64,6 +64,14 @@ $app->get('/', $trackView, function() use($app, $config, $pdo, $mustache) {
     $app->response->setBody($pageTemplate->render(array('page' => $page)));
 })->setName('index');
 
+$app->get('/:pageTitle(/)', $trackView, function($pageTitle) use($app, $config, $pdo, $mustache) {
+    $pagesController = new PagesController($config, $pdo);
+    $page = $pagesController->getOneByTitle($pageTitle);
+
+    $pageTemplate = $mustache->loadTemplate('page');
+    $app->response->setBody($pageTemplate->render(array('page' => $page)));
+})->setName('pages');
+
 // ...
 
 $app->run();

@@ -55,4 +55,21 @@ class PagesRepository {
         return $statement->fetch();
     }
 
+    /**
+     * @param $pageTitle
+     * @return mixed
+     */
+    public function getOneByTitle($pageTitle) {
+        // todo: this needs more thinking..
+        $statement = $this->pdo->prepare('
+            SELECT * FROM pages
+            INNER JOIN pagecontents ON pages.id = pagecontents.page_id
+            WHERE pagecontents.title = :pageTitle
+            LIMIT 1;
+        ');
+        $statement->bindParam(':pageTitle', $pageTitle);
+        $statement->execute();
+        return $statement->fetch();
+    }
+
 }
