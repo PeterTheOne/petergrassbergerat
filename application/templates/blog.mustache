@@ -1,11 +1,9 @@
 {{> head}}
             <h2><a href="/blog/">Blog</a></h2>
-            <ul>
-                {{#posts}}
-                <article>
-                    <h3><a href="/blog/{{title_clean}}/">{{title}}</a></h3>
+            {{#posts}}
+            <article>
+                <h3><a href="/blog/{{title_clean}}/">{{title}}</a></h3>
 
-                </article>
-                {{/posts}}
-            </ul>
+            </article>
+            {{/posts}}
 {{> footer}}

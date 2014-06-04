@@ -1,14 +1,10 @@
 {{> head}}
             <h2><a href="/projects/">Projects</a></h2>
-            <ul>
-                {{#projects}}
-                <li>
-                    <a href="">
-                        <h4><a href="/projects/{{title_clean}}/">{{title}}</a></h4>
-                        <span></span>
-                        <p></p>
-                    </a>
-                </li>
-                {{/projects}}
-            </ul>
+            {{#projects}}
+            <article>
+                <h4><a href="/projects/{{title_clean}}/">{{title}}</a></h4>
+                <span></span>
+                <p></p>
+            </article>
+            {{/projects}}
 {{> footer}}
