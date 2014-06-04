@@ -17,6 +17,10 @@ $pdo = new PDO('mysql:host=' . $config->databaseHost . ';dbname=' . $config->dat
 $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 $pdo->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_OBJ);
 
+$mustache = new Mustache_Engine(array(
+    'loader' => new Mustache_Loader_FilesystemLoader(dirname(__FILE__) . '/../application/templates')
+));
+
 $app->error(function(\Exception $exception) use ($app) {
     $status = 400;
     $result = array(
@@ -52,14 +56,11 @@ $trackView = function(\Slim\Route $route) {
     $piwikTracker->doTrackPageView($route->getName());
 };
 
-$app->get('/', $trackView, function() use($app, $config, $pdo) {
-
+$app->get('/', $trackView, function() use($app, $config, $pdo, $mustache) {
     $pagesController = new PagesController($config, $pdo);
+    //todo: fetch indexpage
     $pages = $pagesController->get();
 
-    $mustache = new Mustache_Engine(array(
-        'loader' => new Mustache_Loader_FilesystemLoader(dirname(__FILE__).'/templates')
-    ));
     $template = $mustache->loadTemplate('index');
     $app->response->setBody($template->render(array('pages' => $pages)));
 })->setName('index');
