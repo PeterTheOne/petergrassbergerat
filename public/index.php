@@ -56,6 +56,22 @@ $app->get('/', $trackView, function() use($app, $config, $pdo, $mustache) {
     $app->response->setBody($pageTemplate->render(array('page' => $page)));
 })->setName('index');
 
+$app->get('/projects(/)', $trackView, function() use($app, $config, $pdo, $mustache) {
+    $pagesController = new PagesController($config, $pdo);
+    $projects = $pagesController->getAllByType('project');
+
+    $projectsTemplate = $mustache->loadTemplate('projects');
+    $app->response->setBody($projectsTemplate->render(array('projects' => $projects)));
+})->setName('portfolio');
+
+$app->get('/blog(/)', $trackView, function() use($app, $config, $pdo, $mustache) {
+    $pagesController = new PagesController($config, $pdo);
+    $posts = $pagesController->getAllByType('post');
+
+    $blogTemplate = $mustache->loadTemplate('blog');
+    $app->response->setBody($blogTemplate->render(array('posts' => $posts)));
+})->setName('portfolio');
+
 $app->get('/:pageTitle(/)', $trackView, function($pageTitle) use($app, $config, $pdo, $mustache) {
     $pagesController = new PagesController($config, $pdo);
     $page = $pagesController->getOneByTypeAndTitle('page', $pageTitle);
@@ -64,13 +80,21 @@ $app->get('/:pageTitle(/)', $trackView, function($pageTitle) use($app, $config, 
     $app->response->setBody($pageTemplate->render(array('page' => $page)));
 })->setName('pages');
 
-$app->get('/portfolio(/)', $trackView, function() use($app, $config, $pdo, $mustache) {
+$app->get('/projects/:projectTitle(/)', $trackView, function($projectTitle) use($app, $config, $pdo, $mustache) {
     $pagesController = new PagesController($config, $pdo);
-    $projects = $pagesController->getAllByType('project');
+    $project = $pagesController->getOneByTypeAndTitle('project', $projectTitle);
 
-    $projectsTemplate = $mustache->loadTemplate('portfolio');
-    $app->response->setBody($projectsTemplate->render(array('projects' => $projects)));
-})->setName('portfolio');
+    $projectTemplate = $mustache->loadTemplate('project');
+    $app->response->setBody($projectTemplate->render(array('project' => $project)));
+})->setName('projects');
+
+$app->get('/blog/:postTitle(/)', $trackView, function($postTitle) use($app, $config, $pdo, $mustache) {
+    $pagesController = new PagesController($config, $pdo);
+    $post = $pagesController->getOneByTypeAndTitle('post', $postTitle);
+
+    $postTemplate = $mustache->loadTemplate('post');
+    $app->response->setBody($postTemplate->render(array('post' => $post)));
+})->setName('projects');
 
 // ...
 

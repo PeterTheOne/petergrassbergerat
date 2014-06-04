@@ -31,7 +31,7 @@ class PagesController {
      * @return mixed
      */
     public function getAll() {
-        return $this->repository->get();
+        return $this->repository->getAll();
     }
 
     /**
@@ -47,14 +47,13 @@ class PagesController {
      * @return mixed
      */
     public function getOneByTypeAndTitle($pageType, $pageTitle) {
-        $pageTitle = str_replace(' ', '', $pageTitle); // remove spaces
-        $pageTitle = str_replace('-', ' ', $pageTitle); // turn dash into space
         return $this->repository->getOneByTypePageAndTitle($pageType, $pageTitle);
         // todo: redirect to root if is index page
     }
 
     /**
      * @param $pageType
+     * @return mixed
      */
     public function getAllByType($pageType) {
         return $this->repository->getAllByType($pageType);

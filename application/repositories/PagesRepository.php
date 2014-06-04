@@ -83,7 +83,7 @@ class PagesRepository {
             SELECT * FROM pages
             INNER JOIN pagecontents ON pages.id = pagecontents.page_id
             INNER JOIN pagetypes ON pages.page_type = pagetypes.id
-            WHERE pagetypes.name = :pageType AND pagecontents.title = :pageTitle
+            WHERE pagetypes.name = :pageType AND pagecontents.title_clean = :pageTitle
             LIMIT 1;
         ');
         $statement->bindParam(':pageType', $pageType);
