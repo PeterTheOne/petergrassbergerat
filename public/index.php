@@ -58,11 +58,19 @@ $app->get('/', $trackView, function() use($app, $config, $pdo, $mustache) {
 
 $app->get('/:pageTitle(/)', $trackView, function($pageTitle) use($app, $config, $pdo, $mustache) {
     $pagesController = new PagesController($config, $pdo);
-    $page = $pagesController->getOneByTitle('page', $pageTitle);
+    $page = $pagesController->getOneByTypeAndTitle('page', $pageTitle);
 
     $pageTemplate = $mustache->loadTemplate('page');
     $app->response->setBody($pageTemplate->render(array('page' => $page)));
 })->setName('pages');
+
+$app->get('/portfolio(/)', $trackView, function() use($app, $config, $pdo, $mustache) {
+    $pagesController = new PagesController($config, $pdo);
+    $projects = $pagesController->getAllByType('project');
+
+    $projectsTemplate = $mustache->loadTemplate('portfolio');
+    $app->response->setBody($projectsTemplate->render(array('projects' => $projects)));
+})->setName('portfolio');
 
 // ...
 

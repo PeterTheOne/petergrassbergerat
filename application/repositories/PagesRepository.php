@@ -17,11 +17,27 @@ class PagesRepository {
     /**
      * @return mixed
      */
-    public function get() {
+    public function getAll() {
         // todo: this needs more thinking..
         $statement = $this->pdo->prepare('
             SELECT * FROM pagecontents;
         ');
+        $statement->execute();
+        return $statement->fetchAll();
+    }
+
+    /**
+     * @param $pageType
+     * @return mixed
+     */
+    public function getAllByType($pageType) {
+        $statement = $this->pdo->prepare('
+            SELECT * FROM pages
+            INNER JOIN pagecontents ON pages.id = pagecontents.page_id
+            INNER JOIN pagetypes ON pages.page_type = pagetypes.id
+            WHERE pagetypes.name = :pageType;
+        ');
+        $statement->bindParam(':pageType', $pageType);
         $statement->execute();
         return $statement->fetchAll();
     }
