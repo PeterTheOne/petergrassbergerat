@@ -22,16 +22,8 @@ $mustache = new Mustache_Engine(array(
 ));
 
 $app->error(function(\Exception $exception) use ($app) {
-    $status = 400;
-    $result = array(
-        'exception' => array(
-            'status' => $status,
-            'message' => $exception->getMessage()
-        )
-    );
     $app->response->headers->set('X-Status-Reason', $exception->getMessage());
-    $app->response->setStatus($status);
-    $app->response->setBody(json_encode($result, JSON_PRETTY_PRINT));
+    $app->response->setBody($exception->getMessage());
 });
 
 $trackView = function(\Slim\Route $route) {
@@ -66,7 +58,7 @@ $app->get('/', $trackView, function() use($app, $config, $pdo, $mustache) {
 
 $app->get('/:pageTitle(/)', $trackView, function($pageTitle) use($app, $config, $pdo, $mustache) {
     $pagesController = new PagesController($config, $pdo);
-    $page = $pagesController->getOneByTitle($pageTitle);
+    $page = $pagesController->getOneByTitle('page', $pageTitle);
 
     $pageTemplate = $mustache->loadTemplate('page');
     $app->response->setBody($pageTemplate->render(array('page' => $page)));

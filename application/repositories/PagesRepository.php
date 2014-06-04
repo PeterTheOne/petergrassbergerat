@@ -43,12 +43,13 @@ class PagesRepository {
     /**
      * @return mixed
      */
-    public function getOneIndex() {
+    public function getOneIndexPage() {
         // todo: this needs more thinking..
         $statement = $this->pdo->prepare('
             SELECT * FROM pages
             INNER JOIN pagecontents ON pages.id = pagecontents.page_id
-            WHERE pages.index = 1
+            INNER JOIN pagetypes ON pages.page_type = pagetypes.id
+            WHERE pagetypes.name = "page" AND pages.index = 1
             LIMIT 1;
         ');
         $statement->execute();
@@ -56,17 +57,20 @@ class PagesRepository {
     }
 
     /**
+     * @param $pageType
      * @param $pageTitle
      * @return mixed
      */
-    public function getOneByTitle($pageTitle) {
+    public function getOneByTypePageAndTitle($pageType, $pageTitle) {
         // todo: this needs more thinking..
         $statement = $this->pdo->prepare('
             SELECT * FROM pages
             INNER JOIN pagecontents ON pages.id = pagecontents.page_id
-            WHERE pagecontents.title = :pageTitle
+            INNER JOIN pagetypes ON pages.page_type = pagetypes.id
+            WHERE pagetypes.name = :pageType AND pagecontents.title = :pageTitle
             LIMIT 1;
         ');
+        $statement->bindParam(':pageType', $pageType);
         $statement->bindParam(':pageTitle', $pageTitle);
         $statement->execute();
         return $statement->fetch();
