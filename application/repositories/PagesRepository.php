@@ -15,24 +15,16 @@ class PagesRepository {
     }
 
     /**
-     * @return mixed
-     */
-    public function getAll() {
-        // todo: this needs more thinking..
-        $statement = $this->pdo->prepare('
-            SELECT * FROM pagecontents;
-        ');
-        $statement->execute();
-        return $statement->fetchAll();
-    }
-
-    /**
      * @param $pageType
      * @return mixed
      */
     public function getAllByType($pageType) {
         $statement = $this->pdo->prepare('
-            SELECT * FROM pages
+            SELECT pages.id, pages.id AS page_id, pages.created, pages.index,
+            pages.page_type AS page_type_id, pagecontents.updated,
+            pagecontents.title, pagecontents.title_clean, pagecontents.content,
+            pagetypes.name AS page_type
+            FROM pages
             INNER JOIN pagecontents ON pages.id = pagecontents.page_id
             INNER JOIN pagetypes ON pages.page_type = pagetypes.id
             WHERE pagetypes.name = :pageType;
@@ -43,26 +35,15 @@ class PagesRepository {
     }
 
     /**
-     * @param $pageId
-     * @return mixed
-     */
-    public function getOneByPageId($pageId) {
-        // todo: this needs more thinking..
-        $statement = $this->pdo->prepare('
-            SELECT * FROM pagecontents WHERE page_id = :pageId LIMIT 1;
-        ');
-        $statement->bindParam(':pageId', $pageId);
-        $statement->execute();
-        return $statement->fetch();
-    }
-
-    /**
      * @return mixed
      */
     public function getOneIndexPage() {
-        // todo: this needs more thinking..
         $statement = $this->pdo->prepare('
-            SELECT * FROM pages
+            SELECT pages.id, pages.id AS page_id, pages.created, pages.index,
+            pages.page_type AS page_type_id, pagecontents.updated,
+            pagecontents.title, pagecontents.title_clean, pagecontents.content,
+            pagetypes.name AS page_type
+            FROM pages
             INNER JOIN pagecontents ON pages.id = pagecontents.page_id
             INNER JOIN pagetypes ON pages.page_type = pagetypes.id
             WHERE pagetypes.name = "page" AND pages.index = 1
@@ -78,9 +59,12 @@ class PagesRepository {
      * @return mixed
      */
     public function getOneByTypeAndTitle($pageType, $pageTitle) {
-        // todo: this needs more thinking..
         $statement = $this->pdo->prepare('
-            SELECT * FROM pages
+            SELECT pages.id, pages.id AS page_id, pages.created, pages.index,
+            pages.page_type AS page_type_id, pagecontents.updated,
+            pagecontents.title, pagecontents.title_clean, pagecontents.content,
+            pagetypes.name AS page_type
+            FROM pages
             INNER JOIN pagecontents ON pages.id = pagecontents.page_id
             INNER JOIN pagetypes ON pages.page_type = pagetypes.id
             WHERE pagetypes.name = :pageType AND pagecontents.title_clean = :pageTitle
@@ -148,6 +132,34 @@ class PagesRepository {
         $statement->bindParam(':title', $title);
         $statement->bindParam(':title_clean', $title_clean);
         $statement->bindParam(':content', $content);
+        return $statement->execute();
+    }
+
+    /**
+     * @param $pageId
+     * @return bool
+     */
+    public function removePageById($pageId) {
+        $statement = $this->pdo->prepare('
+            DELETE FROM pages
+            WHERE id = :pageId
+            LIMIT 1;
+        ');
+        $statement->bindParam(':pageId', $pageId);
+        return $statement->execute();
+    }
+
+    /**
+     * @param $pageId
+     * @return bool
+     */
+    public function removePageContentsByPageId($pageId) {
+        $statement = $this->pdo->prepare('
+            DELETE FROM pagecontents
+            WHERE page_id = :pageId
+            LIMIT 1;
+        ');
+        $statement->bindParam(':pageId', $pageId);
         return $statement->execute();
     }
 

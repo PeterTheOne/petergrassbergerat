@@ -62,10 +62,10 @@ $app->get('/', $trackView, function() use($app) {
 
 $app->get('/pages(/)', $trackView, function() use($app, $config, $pdo) {
 
-    $pagesController = new PagesController($config, $pdo);
+    /*$pagesController = new PagesController($config, $pdo);
     $pages = $pagesController->getAll();
 
-    $app->response->setBody(json_encode($pages, JSON_PRETTY_PRINT));
+    $app->response->setBody(json_encode($pages, JSON_PRETTY_PRINT));*/
 })->setName('pages');
 
 // ...

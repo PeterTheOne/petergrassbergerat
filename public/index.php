@@ -231,6 +231,10 @@ $app->post('/admin/posts/:postsTitle(/)', $trackView, $authenticate($app, $confi
     $app->redirect('/admin/posts/');
 })->setName('adminPostEditPost');
 
+/**
+ * ADMIN CREATE PAGES, PROJECTS, POSTS
+ */
+
 $app->get('/admin/create/page(/)', $trackView, $authenticate($app, $config), function() use($app, $config, $pdo, $mustache) {
     $app->response->setBody($mustache->loadTemplate('adminCreatePage')->render());
 })->setName('adminCreatePage');
@@ -293,6 +297,43 @@ $app->post('/admin/create/post(/)', $trackView, $authenticate($app, $config), fu
 
     $app->redirect('/admin/posts/');
 })->setName('adminCreatePostPost');
+
+/**
+ * ADMIN REMOVE PAGES, PROJECTS, POSTS
+ */
+
+$app->get('/admin/remove/page/:pageTitle(/)', $trackView, $authenticate($app, $config), function($pageTitle) use($app, $config, $pdo, $mustache) {
+    $app->response->setBody($mustache->loadTemplate('adminRemovePage')->render(array('pageTitle' => $pageTitle)));
+})->setName('adminRemovePage');
+
+$app->post('/admin/remove/page/:pageTitle(/)', $trackView, $authenticate($app, $config), function($pageTitle) use($app, $config, $pdo, $mustache) {
+    $pagesController = new PagesController($config, $pdo);
+    $pagesController->removePage($pageTitle);
+
+    $app->redirect('/admin/pages/');
+})->setName('adminRemovePagePost');
+
+$app->get('/admin/remove/project/:projectTitle(/)', $trackView, $authenticate($app, $config), function($projectTitle) use($app, $config, $pdo, $mustache) {
+    $app->response->setBody($mustache->loadTemplate('adminRemoveProject')->render(array('projectTitle' => $projectTitle)));
+})->setName('adminRemoveProject');
+
+$app->post('/admin/remove/project/:projectTitle(/)', $trackView, $authenticate($app, $config), function($projectTitle) use($app, $config, $pdo, $mustache) {
+    $pagesController = new PagesController($config, $pdo);
+    $pagesController->removeProject($projectTitle);
+
+    $app->redirect('/admin/projects/');
+})->setName('adminRemoveProjectPost');
+
+$app->get('/admin/remove/post/:postTitle(/)', $trackView, $authenticate($app, $config), function($postTitle) use($app, $config, $pdo, $mustache) {
+    $app->response->setBody($mustache->loadTemplate('adminRemovePost')->render(array('postTitle' => $postTitle)));
+})->setName('adminRemovePost');
+
+$app->post('/admin/remove/post/:postTitle(/)', $trackView, $authenticate($app, $config), function($postTitle) use($app, $config, $pdo, $mustache) {
+    $pagesController = new PagesController($config, $pdo);
+    $pagesController->removePost($postTitle);
+
+    $app->redirect('/admin/posts/');
+})->setName('adminRemovePostPost');
 
 /**
  * DISPLAY PAGES, PROJECTS AND POSTS

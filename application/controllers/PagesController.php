@@ -30,13 +30,6 @@ class PagesController {
     /**
      * @return mixed
      */
-    public function getAll() {
-        return $this->repository->getAll();
-    }
-
-    /**
-     * @return mixed
-     */
     public function getOneIndex() {
         return $this->repository->getOneIndexPage();
     }
@@ -99,6 +92,7 @@ class PagesController {
      * @return bool
      */
     public function createPage($title, $title_clean, $content) {
+        //todo: do this with a transaction
         $pageId = $this->repository->createPageByType('page');
         return $this->repository->createPageContentsByPageId($pageId, $title, $title_clean, $content);
     }
@@ -110,6 +104,7 @@ class PagesController {
      * @return bool
      */
     public function createProject($title, $title_clean, $content) {
+        //todo: do this with a transaction
         $pageId = $this->repository->createPageByType('project');
         return $this->repository->createPageContentsByPageId($pageId, $title, $title_clean, $content);
     }
@@ -121,8 +116,45 @@ class PagesController {
      * @return bool
      */
     public function createPost($title, $title_clean, $content) {
+        //todo: do this with a transaction
         $pageId = $this->repository->createPageByType('post');
         return $this->repository->createPageContentsByPageId($pageId, $title, $title_clean, $content);
+    }
+
+    /**
+     * @param $title
+     * @return mixed
+     * @return bool
+     */
+    public function removePage($title) {
+        //todo: do this with a transaction
+        $page = $this->repository->getOneByTypeAndTitle('page', $title);
+        $this->repository->removePageContentsByPageId($page->id);
+        $this->repository->removePageById($page->id);
+    }
+
+    /**
+     * @param $title
+     * @return mixed
+     * @return bool
+     */
+    public function removeProject($title) {
+        //todo: do this with a transaction
+        $project = $this->repository->getOneByTypeAndTitle('project', $title);
+        $this->repository->removePageContentsByPageId($project->id);
+        $this->repository->removePageById($project->id);
+    }
+
+    /**
+     * @param $title
+     * @return mixed
+     * @return bool
+     */
+    public function removePost($title) {
+        //todo: do this with a transaction
+        $post = $this->repository->getOneByTypeAndTitle('post', $title);
+        $this->repository->removePageContentsByPageId($post->id);
+        $this->repository->removePageById($post->id);
     }
 
 }

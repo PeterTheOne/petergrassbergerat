@@ -1,0 +1,11 @@
+{{> head}}
+            <article>
+                <h1><a href="/admin/remove/page/{{pageTitle}}/">Admin Remove Page</a></h1>
+
+                Do you really want to remove the "{{pageTitle}}" Page?
+
+                <form role="form" action="/admin/remove/page/{{pageTitle}}/" method="post">
+                    <button type="submit">Ok</button>
+                </form>
+            </article>
+{{> footer}}
