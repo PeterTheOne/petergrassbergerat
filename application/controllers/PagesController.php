@@ -47,7 +47,7 @@ class PagesController {
      * @return mixed
      */
     public function getOneByTypeAndTitle($pageType, $pageTitle) {
-        return $this->repository->getOneByTypePageAndTitle($pageType, $pageTitle);
+        return $this->repository->getOneByTypeAndTitle($pageType, $pageTitle);
         // todo: redirect to root if is index page
     }
 
@@ -59,5 +59,37 @@ class PagesController {
         return $this->repository->getAllByType($pageType);
     }
 
+    /**
+     * @param $projectTitle
+     * @param $title
+     * @param $title_clean
+     * @param $content
+     * @return bool
+     */
+    public function updatePage($projectTitle, $title, $title_clean, $content) {
+        return $this->repository->updateByTypeAndTitle('page', $projectTitle, $title, $title_clean, $content);
+    }
+
+    /**
+     * @param $projectTitle
+     * @param $title
+     * @param $title_clean
+     * @param $content
+     * @return bool
+     */
+    public function updateProject($projectTitle, $title, $title_clean, $content) {
+        return $this->repository->updateByTypeAndTitle('project', $projectTitle, $title, $title_clean, $content);
+    }
+
+    /**
+     * @param $projectTitle
+     * @param $title
+     * @param $title_clean
+     * @param $content
+     * @return bool
+     */
+    public function updatePost($projectTitle, $title, $title_clean, $content) {
+        return $this->repository->updateByTypeAndTitle('post', $projectTitle, $title, $title_clean, $content);
+    }
 
 }

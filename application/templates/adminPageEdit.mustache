@@ -1,0 +1,32 @@
+{{> head}}
+            <article class="fullWidth">
+                {{#page}}
+                <h1><a href="/admin/pages/{{title_clean}}/">Admin Page: {{title}}</a></h1>
+
+                <div class="editForm">
+                    <form role="form" action="/admin/pages/{{title_clean}}/" method="post">
+                        <div>
+                            <label for="title">Title</label><br />
+                            <input type="text" name="title" id="title" value="{{title}}" placeholder="Title">
+                        </div>
+                        <div>
+                            <label for="title_clean">Title Clean</label><br />
+                            <input type="text" name="title_clean" id="title_clean" value="{{title_clean}}" placeholder="Title Clean">
+                        </div>
+                        <div>
+                            <label for="content">Content</label><br />
+                            <textarea name="content" id="content" placeholder="Content" rows="20">{{content}}</textarea>
+                        </div>
+                        <button type="submit">Submit</button>
+                    </form>
+                </div>
+                <div class="editPreview">
+                    <label>Preview</label>
+                    <h1><a href="/{{title_clean}}/">{{title}}</a></h1>
+                    <div>
+                        {{content}}
+                    </div>
+                </div>
+                {{/page}}
+            </article>
+{{> footer}}

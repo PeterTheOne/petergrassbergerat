@@ -78,3 +78,31 @@ nav#mainnav ul li:hover {
 article {
     clear: both;
 }
+
+article.fullWidth {
+    position: absolute;
+    top: 150px;
+    left: 0;
+    width: 100%;
+}
+
+.editForm {
+    float: left;
+    width: 46%;
+    margin: 0 2%;
+}
+
+.editForm input, .editForm textarea {
+    width: 100%;
+}
+
+.editPreview {
+    float: left;
+    width: 46%;
+    margin: 0 2%;
+}
+
+.editPreview h1 {
+    margin-top: 0;
+}
+

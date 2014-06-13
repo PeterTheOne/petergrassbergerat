@@ -81,6 +81,99 @@ $app->get('/admin(/)', $trackView, $authenticate($app, $config), function() use(
     $app->response->setBody($mustache->loadTemplate('admin')->render());
 })->setName('admin');
 
+$app->get('/admin/pages(/)', $trackView, $authenticate($app, $config), function() use($app, $config, $pdo, $mustache) {
+    $pagesController = new PagesController($config, $pdo);
+    $pages = $pagesController->getAllByType('page');
+
+    $app->response->setBody($mustache->loadTemplate('adminPages')->render(array('pages' => $pages)));
+})->setName('adminPages');
+
+$app->get('/admin/pages/:pageTitle(/)', $trackView, $authenticate($app, $config), function($pageTitle) use($app, $config, $pdo, $mustache) {
+    $pagesController = new PagesController($config, $pdo);
+    $page = $pagesController->getOneByTypeAndTitle('page', $pageTitle);
+
+    $app->response->setBody($mustache->loadTemplate('adminPageEdit')->render(array('page' => $page)));
+})->setName('adminPageEdit');
+
+$app->post('/admin/pages/:pagesTitle(/)', $trackView, $authenticate($app, $config), function($pagesTitle) use($app, $config, $pdo, $mustache) {
+    $title = $app->request()->post('title');
+    $title_clean = $app->request()->post('title_clean');
+    $content = $app->request()->post('content');
+
+    if ($title === null || $title == '' ||
+        $title_clean === null || $title_clean == '' ||
+        $content === null || $content == ''){
+        throw new Exception('Not all params set.');
+    }
+
+    $pagesController = new PagesController($config, $pdo);
+    $pagesController->updatePage($pagesTitle, $title, $title_clean, $content);
+
+    $app->redirect('/admin/pages/');
+})->setName('adminPageEditPost');
+
+$app->get('/admin/projects(/)', $trackView, $authenticate($app, $config), function() use($app, $config, $pdo, $mustache) {
+    $pagesController = new PagesController($config, $pdo);
+    $projects = $pagesController->getAllByType('project');
+
+    $app->response->setBody($mustache->loadTemplate('adminProjects')->render(array('projects' => $projects)));
+})->setName('adminProjects');
+
+$app->get('/admin/projects/:projectTitle(/)', $trackView, $authenticate($app, $config), function($projectTitle) use($app, $config, $pdo, $mustache) {
+    $pagesController = new PagesController($config, $pdo);
+    $project = $pagesController->getOneByTypeAndTitle('project', $projectTitle);
+
+    $app->response->setBody($mustache->loadTemplate('adminProjectEdit')->render(array('project' => $project)));
+})->setName('adminProjectEdit');
+
+$app->post('/admin/projects/:projectsTitle(/)', $trackView, $authenticate($app, $config), function($projectTitle) use($app, $config, $pdo, $mustache) {
+    $title = $app->request()->post('title');
+    $title_clean = $app->request()->post('title_clean');
+    $content = $app->request()->post('content');
+
+    if ($title === null || $title == '' ||
+        $title_clean === null || $title_clean == '' ||
+        $content === null || $content == ''){
+        throw new Exception('Not all params set.');
+    }
+
+    $pagesController = new PagesController($config, $pdo);
+    $pagesController->updateProject($projectTitle, $title, $title_clean, $content);
+
+    $app->redirect('/admin/projects/');
+})->setName('adminProjectEditPost');
+
+$app->get('/admin/posts(/)', $trackView, $authenticate($app, $config), function() use($app, $config, $pdo, $mustache) {
+    $pagesController = new PagesController($config, $pdo);
+    $posts = $pagesController->getAllByType('post');
+
+    $app->response->setBody($mustache->loadTemplate('adminPosts')->render(array('posts' => $posts)));
+})->setName('adminPosts');
+
+$app->get('/admin/posts/:postTitle(/)', $trackView, $authenticate($app, $config), function($postTitle) use($app, $config, $pdo, $mustache) {
+    $pagesController = new PagesController($config, $pdo);
+    $post = $pagesController->getOneByTypeAndTitle('post', $postTitle);
+
+    $app->response->setBody($mustache->loadTemplate('adminPostEdit')->render(array('post' => $post)));
+})->setName('adminPostEdit');
+
+$app->post('/admin/posts/:postsTitle(/)', $trackView, $authenticate($app, $config), function($postsTitle) use($app, $config, $pdo, $mustache) {
+    $title = $app->request()->post('title');
+    $title_clean = $app->request()->post('title_clean');
+    $content = $app->request()->post('content');
+
+    if ($title === null || $title == '' ||
+        $title_clean === null || $title_clean == '' ||
+        $content === null || $content == ''){
+        throw new Exception('Not all params set.');
+    }
+
+    $pagesController = new PagesController($config, $pdo);
+    $pagesController->updatePost($postsTitle, $title, $title_clean, $content);
+
+    $app->redirect('/admin/posts/');
+})->setName('adminPostEditPost');
+
 $app->get('/admin/login(/)', $trackView, function() use($app, $config, $pdo, $mustache) {
     $loginTemplate = $mustache->loadTemplate('login');
     $app->response->setBody($loginTemplate->render());

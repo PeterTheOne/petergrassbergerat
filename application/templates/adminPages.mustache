@@ -1,0 +1,9 @@
+{{> head}}
+            <article>
+                <h1><a href="/admin/pages/">Admin > Pages</a></h1>
+
+                {{#pages}}
+                <h2><a href="/admin/pages/{{title_clean}}/">{{title}}</a></h2>
+                {{/pages}}
+            </article>
+{{> footer}}

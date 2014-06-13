@@ -77,7 +77,7 @@ class PagesRepository {
      * @param $pageTitle
      * @return mixed
      */
-    public function getOneByTypePageAndTitle($pageType, $pageTitle) {
+    public function getOneByTypeAndTitle($pageType, $pageTitle) {
         // todo: this needs more thinking..
         $statement = $this->pdo->prepare('
             SELECT * FROM pages
@@ -90,6 +90,30 @@ class PagesRepository {
         $statement->bindParam(':pageTitle', $pageTitle);
         $statement->execute();
         return $statement->fetch();
+    }
+
+    /**
+     * @param $pageType
+     * @param $projectTitle
+     * @param $title
+     * @param $title_clean
+     * @param $content
+     * @return bool
+     */
+    public function updateByTypeAndTitle($pageType, $projectTitle, $title, $title_clean, $content) {
+        $statement = $this->pdo->prepare('
+            UPDATE pagecontents
+            INNER JOIN pages ON pagecontents.page_id = pages.id
+            INNER JOIN pagetypes ON pages.page_type = pagetypes.id
+            SET title = :title, title_clean = :title_clean, content = :content, updated = NOW()
+            WHERE pagetypes.name = :pageType AND title_clean = :projectTitle;
+        ');
+        $statement->bindParam(':pageType', $pageType);
+        $statement->bindParam(':projectTitle', $projectTitle);
+        $statement->bindParam(':title', $title);
+        $statement->bindParam(':title_clean', $title_clean);
+        $statement->bindParam(':content', $content);
+        return $statement->execute();
     }
 
 }
