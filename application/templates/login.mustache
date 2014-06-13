@@ -2,16 +2,16 @@
             <article>
                 <h1>login</h1>
 
-                <form role="form" class="row col-sm-4" action="/admin/login/" method="post">
-                    <div class="form-group">
+                <form role="form" action="/admin/login/" method="post">
+                    <div>
                         <label for="username">Username</label>
-                        <input type="text" class="form-control" id="username" placeholder="Username">
+                        <input type="text" name="username" id="username" placeholder="Username">
                     </div>
                     <div class="form-group">
                         <label for="password">Password</label>
-                        <input type="password" class="form-control" id="password" placeholder="Password">
+                        <input type="password" name="password" id="password" placeholder="Password">
                     </div>
-                    <button type="submit" class="btn btn-default">Submit</button>
+                    <button type="submit">Login</button>
                 </form>
             </article>
 {{> footer}}

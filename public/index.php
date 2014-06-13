@@ -11,6 +11,7 @@ require_once '../application/controllers/PagesController.php';
 $app = new \Slim\Slim(array(
     'debug' => false
 ));
+$app->add(new \Slim\Middleware\SessionCookie());
 
 $pdo = new PDO('mysql:host=' . $config->databaseHost . ';dbname=' . $config->databaseName,
     $config->databaseUser, $config->databasePassword);
@@ -48,6 +49,18 @@ $trackView = function(\Slim\Route $route) {
     $piwikTracker->doTrackPageView($route->getName());
 };
 
+$authenticate = function ($app, $config) {
+    return function () use ($app, $config) {
+        if (!isset($_SESSION['login']) ||
+                $_SESSION['login'] !== true ||
+                !isset($_SESSION['HTTP_USER_AGENT']) ||
+                $_SESSION['HTTP_USER_AGENT'] !== sha1($config->sessionSalt . $_SERVER['HTTP_USER_AGENT'])) {
+            $_SESSION['urlRedirect'] = $app->request()->getPathInfo();
+            $app->redirect('/admin/login/');
+        }
+    };
+};
+
 $app->get('/', $trackView, function() use($app, $config, $pdo, $mustache) {
     $pagesController = new PagesController($config, $pdo);
     $page = $pagesController->getOneIndex();
@@ -64,40 +77,46 @@ $app->get('/projects(/)', $trackView, function() use($app, $config, $pdo, $musta
     $app->response->setBody($projectsTemplate->render(array('projects' => $projects)));
 })->setName('portfolio');
 
-$app->get('/admin(/)', $trackView, function() use($app, $config, $pdo, $mustache) {
-    $app->add(new \Slim\Middleware\SessionCookie());
-    if (!isset($_SESSION['login']) ||
-            $_SESSION['login'] !== true ||
-            !isset($_SESSION['HTTP_USER_AGENT']) ||
-            $_SESSION['HTTP_USER_AGENT'] !== sha1($config->sessionSalt . $_SERVER['HTTP_USER_AGENT'])) {
-        $app->redirect('/admin/login/');
-    }
-
-    $adminTemplate = $mustache->loadTemplate('admin');
-    $app->response->setBody($adminTemplate->render());
+$app->get('/admin(/)', $trackView, $authenticate($app, $config), function() use($app, $config, $pdo, $mustache) {
+    $app->response->setBody($mustache->loadTemplate('admin')->render());
 })->setName('admin');
 
 $app->get('/admin/login(/)', $trackView, function() use($app, $config, $pdo, $mustache) {
-    $app->add(new \Slim\Middleware\SessionCookie());
     $loginTemplate = $mustache->loadTemplate('login');
     $app->response->setBody($loginTemplate->render());
 })->setName('adminLogin');
 
 $app->post('/admin/login(/)', $trackView, function() use($app, $config, $pdo, $mustache) {
-    $app->add(new \Slim\Middleware\SessionCookie());
-    $params = (array) json_decode($app->request()->getBody());
-    if (!isset($params['username']) || $params['username'] == ''||
-        !isset($params['password']) || $params['password'] == ''){
+    $username = $app->request()->post('username');
+    $password = $app->request()->post('password');
+    if ($username === null || $username == '' ||
+            $password === null || $password == ''){
+        // todo: change exception!!!
         throw new Exception('Not all params set.');
     }
 
+    if ($username !== $config->adminUsername &&
+            $password !== $config->adminPassword) {
+        $app->redirect('/admin/login/');
+    }
 
-    // todo: check if valid, set cookie, redirect.
+    $_SESSION['login'] = true;
+    $_SESSION['HTTP_USER_AGENT'] = sha1($config->sessionSalt . $_SERVER['HTTP_USER_AGENT']);
 
+    if (isset($_SESSION['urlRedirect'])) {
+        $urlRedirect = $_SESSION['urlRedirect'];
+        unset($_SESSION['urlRedirect']);
+        $app->redirect($urlRedirect);
+    }
 
-    $loginTemplate = $mustache->loadTemplate('login');
-    $app->response->setBody($loginTemplate->render());
-})->setName('adminLogin');
+    $app->redirect('/admin/');
+})->setName('adminLoginPost');
+
+$app->get('/admin/logout(/)', $trackView, function() use($app, $config, $pdo, $mustache) {
+    unset($_SESSION['login']);
+    unset($_SESSION['HTTP_USER_AGENT']);
+    $app->redirect('/admin/login/');
+})->setName('adminLogout');
 
 $app->get('/blog(/)', $trackView, function() use($app, $config, $pdo, $mustache) {
     $pagesController = new PagesController($config, $pdo);

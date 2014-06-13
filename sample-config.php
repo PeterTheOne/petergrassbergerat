@@ -8,3 +8,5 @@ $config->databaseUser = '';
 $config->databasePassword = '';
 
 $config->sessionSalt = '';
+$config->adminUsername = '';
+$config->adminPassword = '';
