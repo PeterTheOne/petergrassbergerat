@@ -116,4 +116,39 @@ class PagesRepository {
         return $statement->execute();
     }
 
+    /**
+     * @param $pageType
+     * @return bool
+     */
+    public function createPageByType($pageType) {
+        $statement = $this->pdo->prepare('
+            INSERT INTO pages (page_type, created)
+            SELECT id, NOW()
+            FROM pagetypes
+            WHERE name = :pageType;
+        ');
+        $statement->bindParam(':pageType', $pageType);
+        $statement->execute();
+        return $this->pdo->lastInsertId();
+    }
+
+    /**
+     * @param $pageId
+     * @param $title
+     * @param $title_clean
+     * @param $content
+     * @return bool
+     */
+    public function createPageContentsByPageId($pageId, $title, $title_clean, $content) {
+        $statement = $this->pdo->prepare('
+            INSERT INTO pagecontents (page_id, created, updated, title, title_clean, content)
+            VALUES (:pageId, NOW(), NOW(), :title, :title_clean, :content);
+        ');
+        $statement->bindParam(':pageId', $pageId);
+        $statement->bindParam(':title', $title);
+        $statement->bindParam(':title_clean', $title_clean);
+        $statement->bindParam(':content', $content);
+        return $statement->execute();
+    }
+
 }

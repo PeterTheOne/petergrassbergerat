@@ -92,4 +92,37 @@ class PagesController {
         return $this->repository->updateByTypeAndTitle('post', $projectTitle, $title, $title_clean, $content);
     }
 
+    /**
+     * @param $title
+     * @param $title_clean
+     * @param $content
+     * @return bool
+     */
+    public function createPage($title, $title_clean, $content) {
+        $pageId = $this->repository->createPageByType('page');
+        return $this->repository->createPageContentsByPageId($pageId, $title, $title_clean, $content);
+    }
+
+    /**
+     * @param $title
+     * @param $title_clean
+     * @param $content
+     * @return bool
+     */
+    public function createProject($title, $title_clean, $content) {
+        $pageId = $this->repository->createPageByType('project');
+        return $this->repository->createPageContentsByPageId($pageId, $title, $title_clean, $content);
+    }
+
+    /**
+     * @param $title
+     * @param $title_clean
+     * @param $content
+     * @return bool
+     */
+    public function createPost($title, $title_clean, $content) {
+        $pageId = $this->repository->createPageByType('post');
+        return $this->repository->createPageContentsByPageId($pageId, $title, $title_clean, $content);
+    }
+
 }

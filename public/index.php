@@ -61,6 +61,10 @@ $authenticate = function ($app, $config) {
     };
 };
 
+/**
+ * DISPLAY ROOT, PROJECTS AND BLOG
+ */
+
 $app->get('/', $trackView, function() use($app, $config, $pdo, $mustache) {
     $pagesController = new PagesController($config, $pdo);
     $page = $pagesController->getOneIndex();
@@ -76,6 +80,59 @@ $app->get('/projects(/)', $trackView, function() use($app, $config, $pdo, $musta
     $projectsTemplate = $mustache->loadTemplate('projects');
     $app->response->setBody($projectsTemplate->render(array('projects' => $projects)));
 })->setName('portfolio');
+
+$app->get('/blog(/)', $trackView, function() use($app, $config, $pdo, $mustache) {
+    $pagesController = new PagesController($config, $pdo);
+    $posts = $pagesController->getAllByType('post');
+
+    $blogTemplate = $mustache->loadTemplate('blog');
+    $app->response->setBody($blogTemplate->render(array('posts' => $posts)));
+})->setName('portfolio');
+
+/**
+ * ADMIN LOGIN AND LOGOUT
+ */
+
+$app->get('/admin/login(/)', $trackView, function() use($app, $config, $pdo, $mustache) {
+    $loginTemplate = $mustache->loadTemplate('login');
+    $app->response->setBody($loginTemplate->render());
+})->setName('adminLogin');
+
+$app->post('/admin/login(/)', $trackView, function() use($app, $config, $pdo, $mustache) {
+    $username = $app->request()->post('username');
+    $password = $app->request()->post('password');
+    if ($username === null || $username == '' ||
+        $password === null || $password == ''){
+        // todo: change exception!!!
+        throw new Exception('Not all params set.');
+    }
+
+    if ($username !== $config->adminUsername &&
+        $password !== $config->adminPassword) {
+        $app->redirect('/admin/login/');
+    }
+
+    $_SESSION['login'] = true;
+    $_SESSION['HTTP_USER_AGENT'] = sha1($config->sessionSalt . $_SERVER['HTTP_USER_AGENT']);
+
+    if (isset($_SESSION['urlRedirect'])) {
+        $urlRedirect = $_SESSION['urlRedirect'];
+        unset($_SESSION['urlRedirect']);
+        $app->redirect($urlRedirect);
+    }
+
+    $app->redirect('/admin/');
+})->setName('adminLoginPost');
+
+$app->get('/admin/logout(/)', $trackView, function() use($app, $config, $pdo, $mustache) {
+    unset($_SESSION['login']);
+    unset($_SESSION['HTTP_USER_AGENT']);
+    $app->redirect('/admin/login/');
+})->setName('adminLogout');
+
+/**
+ * ADMIN PAGES
+ */
 
 $app->get('/admin(/)', $trackView, $authenticate($app, $config), function() use($app, $config, $pdo, $mustache) {
     $app->response->setBody($mustache->loadTemplate('admin')->render());
@@ -174,50 +231,72 @@ $app->post('/admin/posts/:postsTitle(/)', $trackView, $authenticate($app, $confi
     $app->redirect('/admin/posts/');
 })->setName('adminPostEditPost');
 
-$app->get('/admin/login(/)', $trackView, function() use($app, $config, $pdo, $mustache) {
-    $loginTemplate = $mustache->loadTemplate('login');
-    $app->response->setBody($loginTemplate->render());
-})->setName('adminLogin');
+$app->get('/admin/create/page(/)', $trackView, $authenticate($app, $config), function() use($app, $config, $pdo, $mustache) {
+    $app->response->setBody($mustache->loadTemplate('adminCreatePage')->render());
+})->setName('adminCreatePage');
 
-$app->post('/admin/login(/)', $trackView, function() use($app, $config, $pdo, $mustache) {
-    $username = $app->request()->post('username');
-    $password = $app->request()->post('password');
-    if ($username === null || $username == '' ||
-            $password === null || $password == ''){
-        // todo: change exception!!!
+$app->post('/admin/create/page(/)', $trackView, $authenticate($app, $config), function() use($app, $config, $pdo, $mustache) {
+    $title = $app->request()->post('title');
+    $title_clean = $app->request()->post('title_clean');
+    $content = $app->request()->post('content');
+
+    if ($title === null || $title == '' ||
+        $title_clean === null || $title_clean == '' ||
+        $content === null || $content == ''){
         throw new Exception('Not all params set.');
     }
 
-    if ($username !== $config->adminUsername &&
-            $password !== $config->adminPassword) {
-        $app->redirect('/admin/login/');
-    }
-
-    $_SESSION['login'] = true;
-    $_SESSION['HTTP_USER_AGENT'] = sha1($config->sessionSalt . $_SERVER['HTTP_USER_AGENT']);
-
-    if (isset($_SESSION['urlRedirect'])) {
-        $urlRedirect = $_SESSION['urlRedirect'];
-        unset($_SESSION['urlRedirect']);
-        $app->redirect($urlRedirect);
-    }
-
-    $app->redirect('/admin/');
-})->setName('adminLoginPost');
-
-$app->get('/admin/logout(/)', $trackView, function() use($app, $config, $pdo, $mustache) {
-    unset($_SESSION['login']);
-    unset($_SESSION['HTTP_USER_AGENT']);
-    $app->redirect('/admin/login/');
-})->setName('adminLogout');
-
-$app->get('/blog(/)', $trackView, function() use($app, $config, $pdo, $mustache) {
     $pagesController = new PagesController($config, $pdo);
-    $posts = $pagesController->getAllByType('post');
+    $pagesController->createPage($title, $title_clean, $content);
 
-    $blogTemplate = $mustache->loadTemplate('blog');
-    $app->response->setBody($blogTemplate->render(array('posts' => $posts)));
-})->setName('portfolio');
+    $app->redirect('/admin/pages/');
+})->setName('adminCreatePagePost');
+
+$app->get('/admin/create/project(/)', $trackView, $authenticate($app, $config), function() use($app, $config, $pdo, $mustache) {
+    $app->response->setBody($mustache->loadTemplate('adminCreateProject')->render());
+})->setName('adminCreateProject');
+
+$app->post('/admin/create/project(/)', $trackView, $authenticate($app, $config), function() use($app, $config, $pdo, $mustache) {
+    $title = $app->request()->post('title');
+    $title_clean = $app->request()->post('title_clean');
+    $content = $app->request()->post('content');
+
+    if ($title === null || $title == '' ||
+        $title_clean === null || $title_clean == '' ||
+        $content === null || $content == ''){
+        throw new Exception('Not all params set.');
+    }
+
+    $pagesController = new PagesController($config, $pdo);
+    $pagesController->createProject($title, $title_clean, $content);
+
+    $app->redirect('/admin/projects/');
+})->setName('adminCreateProjectPost');
+
+$app->get('/admin/create/post(/)', $trackView, $authenticate($app, $config), function() use($app, $config, $pdo, $mustache) {
+    $app->response->setBody($mustache->loadTemplate('adminCreatePost')->render());
+})->setName('adminCreatePost');
+
+$app->post('/admin/create/post(/)', $trackView, $authenticate($app, $config), function() use($app, $config, $pdo, $mustache) {
+    $title = $app->request()->post('title');
+    $title_clean = $app->request()->post('title_clean');
+    $content = $app->request()->post('content');
+
+    if ($title === null || $title == '' ||
+        $title_clean === null || $title_clean == '' ||
+        $content === null || $content == ''){
+        throw new Exception('Not all params set.');
+    }
+
+    $pagesController = new PagesController($config, $pdo);
+    $pagesController->createPost($title, $title_clean, $content);
+
+    $app->redirect('/admin/posts/');
+})->setName('adminCreatePostPost');
+
+/**
+ * DISPLAY PAGES, PROJECTS AND POSTS
+ */
 
 $app->get('/:pageTitle(/)', $trackView, function($pageTitle) use($app, $config, $pdo, $mustache) {
     $pagesController = new PagesController($config, $pdo);
