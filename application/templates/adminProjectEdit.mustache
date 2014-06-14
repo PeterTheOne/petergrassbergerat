@@ -15,7 +15,7 @@
                         </div>
                         <div>
                             <label for="content">Content</label><br />
-                            <textarea name="content" id="content" placeholder="Content" rows="20">{{content}}</textarea>
+                            <textarea name="content" id="content" placeholder="Content" rows="20">{{{content}}}</textarea>
                         </div>
                         <button type="submit">Submit</button>
                     </form>
@@ -24,7 +24,7 @@
                     <label>Preview</label>
                     <h1><a href="/projects/{{title_clean}}/">{{title}}</a></h1>
                     <div>
-                        {{content}}
+                        {{{content}}}
                     </div>
                 </div>
                 {{/project}}
