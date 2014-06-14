@@ -100,6 +100,8 @@ article.fullWidth {
     float: left;
     width: 46%;
     margin: 0 2%;
+    overflow-y: scroll;
+    height: 620px;
 }
 
 .editPreview h1 {
