@@ -62,12 +62,30 @@ $authenticate = function ($app, $config) {
 };
 
 /**
+ * 404
+ */
+
+$app->notFound(function () use ($app, $config, $pdo, $mustache) {
+    $app->redirect('/404/');
+});
+
+$app->get('/404/', $trackView, function() use($app, $config, $pdo, $mustache) {
+
+    $notFound = $mustache->loadTemplate('notFound');
+    $app->response->setBody($notFound->render());
+})->setName('notFound');
+
+/**
  * DISPLAY ROOT, PROJECTS AND BLOG
  */
 
 $app->get('/', $trackView, function() use($app, $config, $pdo, $mustache) {
     $pagesController = new PagesController($config, $pdo);
     $page = $pagesController->getOneIndex();
+
+    if (!$page) {
+        $app->notFound();
+    }
 
     $pageTemplate = $mustache->loadTemplate('page');
     $app->response->setBody($pageTemplate->render(array('page' => $page)));
@@ -77,6 +95,10 @@ $app->get('/projects(/)', $trackView, function() use($app, $config, $pdo, $musta
     $pagesController = new PagesController($config, $pdo);
     $projects = $pagesController->getAllByType('project');
 
+    if (!$projects) {
+        $app->notFound();
+    }
+
     $projectsTemplate = $mustache->loadTemplate('projects');
     $app->response->setBody($projectsTemplate->render(array('projects' => $projects)));
 })->setName('portfolio');
@@ -84,6 +106,10 @@ $app->get('/projects(/)', $trackView, function() use($app, $config, $pdo, $musta
 $app->get('/blog(/)', $trackView, function() use($app, $config, $pdo, $mustache) {
     $pagesController = new PagesController($config, $pdo);
     $posts = $pagesController->getAllByType('post');
+
+    if (!$posts) {
+        $app->notFound();
+    }
 
     $blogTemplate = $mustache->loadTemplate('blog');
     $app->response->setBody($blogTemplate->render(array('posts' => $posts)));
@@ -343,6 +369,10 @@ $app->get('/:pageTitle(/)', $trackView, function($pageTitle) use($app, $config, 
     $pagesController = new PagesController($config, $pdo);
     $page = $pagesController->getOneByTypeAndTitle('page', $pageTitle);
 
+    if (!$page) {
+        $app->notFound();
+    }
+
     $pageTemplate = $mustache->loadTemplate('page');
     $app->response->setBody($pageTemplate->render(array('page' => $page)));
 })->setName('pages');
@@ -351,6 +381,10 @@ $app->get('/projects/:projectTitle(/)', $trackView, function($projectTitle) use(
     $pagesController = new PagesController($config, $pdo);
     $project = $pagesController->getOneByTypeAndTitle('project', $projectTitle);
 
+    if (!$project) {
+        $app->notFound();
+    }
+
     $projectTemplate = $mustache->loadTemplate('project');
     $app->response->setBody($projectTemplate->render(array('project' => $project)));
 })->setName('projects');
@@ -358,6 +392,10 @@ $app->get('/projects/:projectTitle(/)', $trackView, function($projectTitle) use(
 $app->get('/blog/:postTitle(/)', $trackView, function($postTitle) use($app, $config, $pdo, $mustache) {
     $pagesController = new PagesController($config, $pdo);
     $post = $pagesController->getOneByTypeAndTitle('post', $postTitle);
+
+    if (!$post) {
+        $app->notFound();
+    }
 
     $postTemplate = $mustache->loadTemplate('post');
     $app->response->setBody($postTemplate->render(array('post' => $post)));
