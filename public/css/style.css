@@ -7,7 +7,27 @@
 }
 
 a, a:active, a:visited {
-    color: inherit;
+    color: #0077b3;
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+h1 a, h2 a, h3 a, h4 a, h5 a, h6 a,
+h1 a:active, h2 a:active, h3 a:active, h4 a:active, h5 a:active, h6 a:active,
+h1 a:visited, h2 a:visited, h3 a:visited, h4 a:visited, h5 a:visited, h6 a:visited,
+h1 a:hover, h2 a:hover, h3 a:hover, h4 a:hover, h5 a:hover, h6 a:hover {
+    color: #181818;
+    text-decoration: none;
+}
+
+nav#mainnav a,
+nav#mainnav a:active,
+nav#mainnav a:visited,
+nav#mainnav a:hover {
+    color: #000000;
     text-decoration: none;
 }
 
@@ -31,7 +51,6 @@ h1, h2, h3, h4, h5, h6 {
     font-family: 'PoliticsHeadBold', 'Helvetica Neue', 'Arial', Sans-Serif;
     font-weight: 400;
     margin: 1em 0;
-    color: #181818;
 }
 
 header {
