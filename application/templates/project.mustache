@@ -1,7 +1,12 @@
 {{> head}}
             <article>
             {{#project}}
+                {{#index}}
+                <h1><a href="/">{{title}}</a></h1>
+                {{/index}}
+                {{^index}}
                 <h1><a href="/projects/{{title_clean}}/">{{title}}</a></h1>
+                {{/index}}
 {{{content}}}
             {{/project}}
             </article>

@@ -1,8 +1,12 @@
 {{> head}}
             <article>
             {{#page}}
-                <!-- todo: if index, link to root -->
+                {{#index}}
+                <h1><a href="/">{{title}}</a></h1>
+                {{/index}}
+                {{^index}}
                 <h1><a href="/{{title_clean}}/">{{title}}</a></h1>
+                {{/index}}
 {{{content}}}
             {{/page}}
             </article>
