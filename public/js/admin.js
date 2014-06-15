@@ -25,5 +25,6 @@ $(function() {
 
     $('#content').on('keyup change', function() {
         $('.editPreview div').html($(this).val());
+        videoEmbed();
     });
 });

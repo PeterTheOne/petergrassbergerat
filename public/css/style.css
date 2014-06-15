@@ -51,6 +51,10 @@ textarea {
     color: #404040;
 }
 
+article > img, article > a > img {
+    margin: 1em auto;
+}
+
 h1, h2, h3, h4, h5, h6 {
     font-family: 'PoliticsHeadBold', 'Helvetica Neue', 'Arial', Sans-Serif;
     font-weight: 400;
@@ -131,3 +135,21 @@ article.fullWidth {
     margin-top: 0;
 }
 
+div.videoEmbed {
+    width: 100%;
+    height: 0px;
+    padding: 0 0 56.25% 0; /* 9 / 16 */
+}
+
+div.videoEmbed.ratio16to9 {
+    padding: 0 0 56.25% 0; /* 9 / 16 */
+}
+
+div.videoEmbed.ratio4to3 {
+    padding: 0 0 75% 0; /* 3 / 4 */
+}
+
+div.videoEmbed img, div.videoEmbed iframe {
+    width: 100%;
+    height: 100%;
+}
