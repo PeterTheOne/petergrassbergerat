@@ -166,3 +166,21 @@ ul.time > li {
 .time span {
     float: right;
 }
+
+@media (max-width: 832px) {
+    .container {
+        margin: 0 1%;
+        width: auto;
+    }
+}
+
+@media (max-width: 750px) {
+    header {
+        float: none;
+    }
+
+    nav#mainnav {
+        margin-top: 20px;
+        float: none;
+    }
+}
