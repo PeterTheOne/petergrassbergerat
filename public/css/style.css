@@ -104,6 +104,7 @@ nav#mainnav ul li:hover {
 
 article {
     clear: both;
+    padding-bottom: 100px;
 }
 
 article.fullWidth {
@@ -152,4 +153,16 @@ div.videoEmbed.ratio4to3 {
 div.videoEmbed img, div.videoEmbed iframe {
     width: 100%;
     height: 100%;
+}
+
+ul.time > li {
+    margin: 0 0 20px 0;
+}
+
+.time h3, .time h4 {
+    display: inline;
+}
+
+.time span {
+    float: right;
 }
