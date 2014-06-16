@@ -34,22 +34,11 @@ $app->error(function(\Exception $exception) use ($app) {
 });
 
 $trackView = function(\Slim\Route $route) {
+    global $config;
     // todo: get siteId and url from config:
     $piwikTracker = new PiwikTracker(2, 'http://piwik.petergrassberger.com/');
 
-    $ssl = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == 'on') ? true : false;
-    $url = $ssl ? 'https://' : 'http://';
-    $port = $_SERVER['SERVER_PORT'];
-    $port = ((!$ssl && $port == '80') || ($ssl && $port == '443')) ? '' : ':' . $port;
-    $url .= isset($_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : $_SERVER['SERVER_NAME'];
-    $url .= $port . $_SERVER['REQUEST_URI'];
-    $piwikTracker->setUrl($url);
-
-    // don't track when calling from local development
-    if (strpos($url, 'localhost') !== false) {
-        return;
-    }
-
+    $piwikTracker->setTokenAuth($config->piwikAuthToken);
     $piwikTracker->setIp($_SERVER['REMOTE_ADDR']);
 
     $piwikTracker->doTrackPageView($route->getName());
