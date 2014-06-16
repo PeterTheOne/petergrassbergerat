@@ -59,7 +59,6 @@ $app->notFound(function () use ($app, $config, $pdo, $mustache) {
 });
 
 $app->get('/404/', $trackView, function() use($app, $config, $pdo, $mustache) {
-
     $notFound = $mustache->loadTemplate('notFound');
     $app->response->setBody($notFound->render());
 })->setName('notFound');
@@ -80,6 +79,10 @@ $app->get('/', $trackView, function() use($app, $config, $pdo, $mustache) {
     $app->response->setBody($pageTemplate->render(array('page' => $page)));
 })->setName('index');
 
+$app->get('/portfolio(/)', $trackView, function() use($app) {
+    $app->redirect('/projects/', 301);
+})->setName('portfolio');
+
 $app->get('/projects(/)', $trackView, function() use($app, $config, $pdo, $mustache) {
     $pagesController = new PagesController($config, $pdo);
     $projects = $pagesController->getAllByType('project');
@@ -90,7 +93,7 @@ $app->get('/projects(/)', $trackView, function() use($app, $config, $pdo, $musta
 
     $projectsTemplate = $mustache->loadTemplate('projects');
     $app->response->setBody($projectsTemplate->render(array('projects' => $projects)));
-})->setName('portfolio');
+})->setName('projects');
 
 $app->get('/blog(/)', $trackView, function() use($app, $config, $pdo, $mustache) {
     $pagesController = new PagesController($config, $pdo);
@@ -366,6 +369,17 @@ $app->get('/:pageTitle(/)', $trackView, function($pageTitle) use($app, $config, 
     $app->response->setBody($pageTemplate->render(array('page' => $page)));
 })->setName('pages');
 
+$app->get('/portfolio/:projectTitle(/)', $trackView, function($projectTitle) use($app, $config, $pdo) {
+    $pagesController = new PagesController($config, $pdo);
+    $project = $pagesController->getOneByTypeAndTitle('project', $projectTitle);
+
+    if (!$project) {
+        $app->notFound();
+    }
+
+    $app->redirect('/projects/' . $projectTitle . '/', 301);
+})->setName('portfolioProject');
+
 $app->get('/projects/:projectTitle(/)', $trackView, function($projectTitle) use($app, $config, $pdo, $mustache) {
     $pagesController = new PagesController($config, $pdo);
     $project = $pagesController->getOneByTypeAndTitle('project', $projectTitle);
@@ -376,7 +390,7 @@ $app->get('/projects/:projectTitle(/)', $trackView, function($projectTitle) use(
 
     $projectTemplate = $mustache->loadTemplate('project');
     $app->response->setBody($projectTemplate->render(array('project' => $project)));
-})->setName('projects');
+})->setName('project');
 
 $app->get('/blog/:postTitle(/)', $trackView, function($postTitle) use($app, $config, $pdo, $mustache) {
     $pagesController = new PagesController($config, $pdo);
