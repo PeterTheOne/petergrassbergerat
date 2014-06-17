@@ -29,6 +29,12 @@ $app->error(function(\Exception $exception) use ($app) {
 
 $trackView = function(\Slim\Route $route) {
     global $config;
+
+    // don't track localhost (development)
+    if(in_array($_SERVER['REMOTE_ADDR'], array('127.0.0.1', '::1'))) {
+        return;
+    }
+
     // todo: get siteId and url from config:
     $piwikTracker = new PiwikTracker(1, 'http://piwik.petergrassberger.com/');
 
