@@ -81,9 +81,13 @@ $app->get('/', $trackView, function() use($app, $config, $pdo, $mustache) {
 
 $app->get('/portfolio(/)', $trackView, function() use($app) {
     $app->redirect('/projects/', 301);
-})->setName('portfolio');
+})->setName('portfolioRedirect');
 
-$app->get('/projects(/)', $trackView, function() use($app, $config, $pdo, $mustache) {
+$app->get('/projects', $trackView, function() use($app) {
+    $app->redirect('/projects/', 301);
+})->setName('projectsRedirect');
+
+$app->get('/projects/', $trackView, function() use($app, $config, $pdo, $mustache) {
     $pagesController = new PagesController($config, $pdo);
     $projects = $pagesController->getAllByType('project');
 
@@ -95,7 +99,11 @@ $app->get('/projects(/)', $trackView, function() use($app, $config, $pdo, $musta
     $app->response->setBody($projectsTemplate->render(array('projects' => $projects)));
 })->setName('projects');
 
-$app->get('/blog(/)', $trackView, function() use($app, $config, $pdo, $mustache) {
+$app->get('/blog', $trackView, function() use($app) {
+    $app->redirect('/blog/', 301);
+})->setName('blogRedirect');
+
+$app->get('/blog/', $trackView, function() use($app, $config, $pdo, $mustache) {
     $pagesController = new PagesController($config, $pdo);
     $posts = $pagesController->getAllByType('post');
 
@@ -105,7 +113,7 @@ $app->get('/blog(/)', $trackView, function() use($app, $config, $pdo, $mustache)
 
     $blogTemplate = $mustache->loadTemplate('blog');
     $app->response->setBody($blogTemplate->render(array('posts' => $posts)));
-})->setName('portfolio');
+})->setName('blog');
 
 /**
  * ADMIN LOGIN AND LOGOUT
@@ -357,7 +365,11 @@ $app->post('/admin/remove/post/:postTitle(/)', $trackView, $authenticate($app, $
  * DISPLAY PAGES, PROJECTS AND POSTS
  */
 
-$app->get('/:pageTitle(/)', $trackView, function($pageTitle) use($app, $config, $pdo, $mustache) {
+$app->get('/:pageTitle', $trackView, function($pageTitle) use($app) {
+    $app->redirect('/' . $pageTitle . '/', 301);
+})->setName('pagesRedirect');
+
+$app->get('/:pageTitle/', $trackView, function($pageTitle) use($app, $config, $pdo, $mustache) {
     $pagesController = new PagesController($config, $pdo);
     $page = $pagesController->getOneByTypeAndTitle('page', $pageTitle);
 
@@ -378,9 +390,13 @@ $app->get('/portfolio/:projectTitle(/)', $trackView, function($projectTitle) use
     }
 
     $app->redirect('/projects/' . $projectTitle . '/', 301);
-})->setName('portfolioProject');
+})->setName('portfolioProjectRedirect');
 
-$app->get('/projects/:projectTitle(/)', $trackView, function($projectTitle) use($app, $config, $pdo, $mustache) {
+$app->get('/projects/:projectTitle', $trackView, function($projectTitle) use($app) {
+    $app->redirect('/projects/' . $projectTitle . '/', 301);
+})->setName('projectRedirect');
+
+$app->get('/projects/:projectTitle/', $trackView, function($projectTitle) use($app, $config, $pdo, $mustache) {
     $pagesController = new PagesController($config, $pdo);
     $project = $pagesController->getOneByTypeAndTitle('project', $projectTitle);
 
@@ -392,7 +408,11 @@ $app->get('/projects/:projectTitle(/)', $trackView, function($projectTitle) use(
     $app->response->setBody($projectTemplate->render(array('project' => $project)));
 })->setName('project');
 
-$app->get('/blog/:postTitle(/)', $trackView, function($postTitle) use($app, $config, $pdo, $mustache) {
+$app->get('/blog/:postTitle', $trackView, function($postTitle) use($app) {
+    $app->redirect('/blog/' . $postTitle . '/', 301);
+})->setName('projectsRedirect');
+
+$app->get('/blog/:postTitle/', $trackView, function($postTitle) use($app, $config, $pdo, $mustache) {
     $pagesController = new PagesController($config, $pdo);
     $post = $pagesController->getOneByTypeAndTitle('post', $postTitle);
 
