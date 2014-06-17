@@ -54,7 +54,8 @@ $authenticate = function ($app, $config) {
  * 404
  */
 
-$app->notFound(function () use ($app, $config, $pdo, $mustache) {
+$app->notFound(function () use ($app, $trackView) {
+    $trackView($app->router()->getCurrentRoute());
     $app->redirect('/404/');
 });
 
