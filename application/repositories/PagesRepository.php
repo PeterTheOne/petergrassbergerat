@@ -84,6 +84,29 @@ class PagesRepository {
     }
 
     /**
+     * @param $languageTag
+     * @return mixed
+     */
+    public function getOneIndexPageByLanguage($languageTag) {
+        $statement = $this->pdo->prepare('
+            SELECT pages.id, pages.id AS page_id, pages.created, pages.index,
+            pages.page_type AS page_type_id, pagecontents.updated,
+            languages.id AS language, languages.name AS languageName,
+            languages.tag AS languageTag, pagecontents.title, pagecontents.title_clean,
+            pagecontents.content, pagetypes.name AS page_type
+            FROM pages
+            INNER JOIN pagecontents ON pages.id = pagecontents.page_id
+            INNER JOIN pagetypes ON pages.page_type = pagetypes.id
+            INNER JOIN languages ON pagecontents.language = languages.id
+            WHERE pagetypes.name = "page" AND languages.tag = :languageTag AND pages.index = 1
+            LIMIT 1;
+        ');
+        $statement->bindParam(':languageTag', $languageTag);
+        $statement->execute();
+        return $statement->fetch();
+    }
+
+    /**
      * @param $pageType
      * @param $languageTag
      * @param $pageTitle

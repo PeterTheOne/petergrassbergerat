@@ -35,6 +35,14 @@ class PagesController {
     }
 
     /**
+     * @param $languageTag
+     * @return mixed
+     */
+    public function getOneIndexByLanguage($languageTag) {
+        return $this->repository->getOneIndexPageByLanguage($languageTag);
+    }
+
+    /**
      * @param $pageType
      * @param $langageTag
      * @param $pageTitle

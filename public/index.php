@@ -86,9 +86,9 @@ $app->get('/404/', $trackView, function() use($app, $config, $pdo, $mustache) {
  * DISPLAY ROOT, PROJECTS AND BLOG
  */
 
-$app->get('/', $trackView, function() use($app, $config, $pdo, $mustache) {
+$app->get('/', $trackView, function() use($app, $config, $pdo, $mustache, $language) {
     $pagesController = new PagesController($config, $pdo);
-    $page = $pagesController->getOneIndex();
+    $page = $pagesController->getOneIndexByLanguage($language);
 
     if (!$page) {
         $app->notFound();
