@@ -184,3 +184,11 @@ ul.time > li {
         float: none;
     }
 }
+
+table {
+    width: 100%;
+}
+
+th {
+    text-align: left;
+}
