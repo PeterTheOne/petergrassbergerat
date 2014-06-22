@@ -86,6 +86,14 @@ $app->get('/404/', $trackView, function() use($app, $config, $pdo, $mustache, $l
  * DISPLAY ROOT, PROJECTS AND BLOG
  */
 
+$app->get('/bio(/)', $trackView, function() use($app) {
+    $app->redirect('/', 301);
+})->setName('bioRedirect');
+
+$app->get('/vita(/)', $trackView, function() use($app) {
+    $app->redirect('/', 301);
+})->setName('vitaRedirect');
+
 $app->get('/', $trackView, function() use($app, $config, $pdo, $mustache, $language) {
     $pagesController = new PagesController($config, $pdo);
     $page = $pagesController->getOneIndexByLanguage($language);
