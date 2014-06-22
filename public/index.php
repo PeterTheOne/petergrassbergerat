@@ -77,9 +77,9 @@ $app->notFound(function () use ($app, $trackView) {
     $app->redirect('/404/');
 });
 
-$app->get('/404/', $trackView, function() use($app, $config, $pdo, $mustache) {
+$app->get('/404/', $trackView, function() use($app, $config, $pdo, $mustache, $language) {
     $notFound = $mustache->loadTemplate('notFound');
-    $app->response->setBody($notFound->render());
+    $app->response->setBody($notFound->render(array('language' => $language)));
 })->setName('notFound');
 
 /**
@@ -95,7 +95,7 @@ $app->get('/', $trackView, function() use($app, $config, $pdo, $mustache, $langu
     }
 
     $pageTemplate = $mustache->loadTemplate('page');
-    $app->response->setBody($pageTemplate->render(array('page' => $page)));
+    $app->response->setBody($pageTemplate->render(array('language' => $language, 'page' => $page)));
 })->setName('index');
 
 $app->get('/portfolio(/)', $trackView, function() use($app) {
@@ -115,7 +115,7 @@ $app->get('/projects/', $trackView, function() use($app, $config, $pdo, $mustach
     }
 
     $projectsTemplate = $mustache->loadTemplate('projects');
-    $app->response->setBody($projectsTemplate->render(array('projects' => $projects)));
+    $app->response->setBody($projectsTemplate->render(array('language' => $language, 'projects' => $projects)));
 })->setName('projects');
 
 $app->get('/blog', $trackView, function() use($app) {
@@ -131,7 +131,7 @@ $app->get('/blog/', $trackView, function() use($app, $config, $pdo, $mustache, $
     }
 
     $blogTemplate = $mustache->loadTemplate('blog');
-    $app->response->setBody($blogTemplate->render(array('posts' => $posts)));
+    $app->response->setBody($blogTemplate->render(array('language' => $language, 'posts' => $posts)));
 })->setName('blog');
 
 /**
@@ -503,7 +503,7 @@ $app->get('/:pageTitle/', $trackView, function($pageTitle) use($app, $config, $p
     }
 
     $pageTemplate = $mustache->loadTemplate('page');
-    $app->response->setBody($pageTemplate->render(array('page' => $page)));
+    $app->response->setBody($pageTemplate->render(array('language' => $language, 'page' => $page)));
 })->setName('pages');
 
 $app->get('/portfolio/:projectTitle(/)', $trackView, function($projectTitle) use($app, $config, $pdo, $language) {
@@ -530,7 +530,7 @@ $app->get('/projects/:projectTitle/', $trackView, function($projectTitle) use($a
     }
 
     $projectTemplate = $mustache->loadTemplate('project');
-    $app->response->setBody($projectTemplate->render(array('project' => $project)));
+    $app->response->setBody($projectTemplate->render(array('language' => $language, 'project' => $project)));
 })->setName('project');
 
 $app->get('/blog/:postTitle', $trackView, function($postTitle) use($app) {
@@ -546,7 +546,7 @@ $app->get('/blog/:postTitle/', $trackView, function($postTitle) use($app, $confi
     }
 
     $postTemplate = $mustache->loadTemplate('post');
-    $app->response->setBody($postTemplate->render(array('post' => $post)));
+    $app->response->setBody($postTemplate->render(array('language' => $language, 'post' => $post)));
 })->setName('projects');
 
 // ...
