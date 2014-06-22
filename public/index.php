@@ -493,7 +493,7 @@ $app->post('/admin/remove/post/:postTitle(/)', $trackView, $authenticate($app, $
  * FEED
  */
 
-$app->get('/feed(/)', $trackView, function() use($app) {
+$app->get('/feed(/):wildcard+', $trackView, function($wildcard) use($app) {
     $app->redirect('/rss/', 301);
 })->setName('feedRedirect');
 
