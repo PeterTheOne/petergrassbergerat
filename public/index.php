@@ -185,7 +185,8 @@ $app->get('/admin(/)', $trackView, $authenticate($app, $config), function() use(
 
 $app->get('/admin/pages(/)', $trackView, $authenticate($app, $config), function() use($app, $config, $pdo, $mustache) {
     $pagesController = new PagesController($config, $pdo);
-    $pages = $pagesController->getAllByTypeRegroupedById('page');
+    $pages = $pagesController->getAllByType('page');
+    $pages = $pagesController->regroupedById($pages);
 
     $app->response->setBody($mustache->loadTemplate('adminPages')->render(array('pages' => $pages)));
 })->setName('adminPages');
@@ -216,7 +217,8 @@ $app->post('/admin/pages/:language/:pagesTitle(/)', $trackView, $authenticate($a
 
 $app->get('/admin/projects(/)', $trackView, $authenticate($app, $config), function() use($app, $config, $pdo, $mustache) {
     $pagesController = new PagesController($config, $pdo);
-    $projects = $pagesController->getAllByTypeRegroupedById('project');
+    $projects = $pagesController->getAllByType('project');
+    $projects = $pagesController->regroupedById($projects);
 
     $app->response->setBody($mustache->loadTemplate('adminProjects')->render(array('projects' => $projects)));
 })->setName('adminProjects');
@@ -247,7 +249,8 @@ $app->post('/admin/projects/:language/:projectsTitle(/)', $trackView, $authentic
 
 $app->get('/admin/posts(/)', $trackView, $authenticate($app, $config), function() use($app, $config, $pdo, $mustache) {
     $pagesController = new PagesController($config, $pdo);
-    $posts = $pagesController->getAllByTypeRegroupedById('post');
+    $posts = $pagesController->getAllByType('post');
+    $posts = $pagesController->regroupedById($posts);
 
     $app->response->setBody($mustache->loadTemplate('adminPosts')->render(array('posts' => $posts)));
 })->setName('adminPosts');
@@ -485,6 +488,170 @@ $app->post('/admin/remove/post/:postTitle(/)', $trackView, $authenticate($app, $
 
     $app->redirect('/admin/posts/');
 })->setName('adminRemovePostPost');
+
+/**
+ * FEED
+ */
+
+$app->get('/feed(/)', $trackView, function() use($app) {
+    $app->redirect('/rss/', 301);
+})->setName('feedRedirect');
+
+$app->get('/rss.php(/)', $trackView, function() use($app) {
+    $app->redirect('/rss/', 301);
+})->setName('feedRedirect');
+
+$app->get('/rss(/)', $trackView, function() use($app, $config, $pdo, $mustache, $language) {
+    $pagesController = new PagesController($config, $pdo);
+    $pages = $pagesController->getAllByLanguage($language);
+    $pages = $pagesController->addUrls($pages);
+    $pages = $pagesController->addPubDate($pages);
+
+    $pageTemplate = $mustache->loadTemplate('rss');
+    $pageRendered = $pageTemplate->render(array(
+        'rssTitle' => 'Peter Grassberger - RSS feed: everything ' . $language,
+        'rssDescription' => 'RSS feed of pages, projects and posts in ' . $language,
+        'rssUrl' => $language === 'de' ? 'http://petergrassberger.at/rss/' : 'http://petergrassberger.com/rss/',
+        'language' => $language,
+        'pages' => $pages
+    ));
+
+    $app->response->headers->set('Content-Type', 'application/rss+xml');
+    $app->response->setBody($pageRendered);
+})->setName('rssEverythingFlexibleLanguages');
+
+$app->get('/rss/pages(/)', $trackView, function() use($app, $config, $pdo, $mustache, $language) {
+    $pagesController = new PagesController($config, $pdo);
+    $pages = $pagesController->getAllByTypeAndLanguage('page', $language);
+    $pages = $pagesController->addUrls($pages);
+    $pages = $pagesController->addPubDate($pages);
+
+    $pageTemplate = $mustache->loadTemplate('rss');
+    $pageRendered = $pageTemplate->render(array(
+        'rssTitle' => 'Peter Grassberger - RSS feed: pages ' . $language,
+        'rssDescription' => 'RSS feed of pages in ' . $language,
+        'rssUrl' => $language === 'de' ? 'http://petergrassberger.at/rss/pages/' : 'http://petergrassberger.com/rss/pages/',
+        'language' => $language,
+        'pages' => $pages
+    ));
+
+    $app->response->headers->set('Content-Type', 'application/rss+xml');
+    $app->response->setBody($pageRendered);
+})->setName('rssPagesFlexibleLanguages');
+
+$app->get('/rss/projects(/)', $trackView, function() use($app, $config, $pdo, $mustache, $language) {
+    $pagesController = new PagesController($config, $pdo);
+    $pages = $pagesController->getAllByTypeAndLanguage('project', $language);
+    $pages = $pagesController->addUrls($pages);
+    $pages = $pagesController->addPubDate($pages);
+
+    $pageTemplate = $mustache->loadTemplate('rss');
+    $pageRendered = $pageTemplate->render(array(
+        'rssTitle' => 'Peter Grassberger - RSS feed: projects ' . $language,
+        'rssDescription' => 'RSS feed of projects in ' . $language,
+        'rssUrl' => $language === 'de' ? 'http://petergrassberger.at/rss/projects/' : 'http://petergrassberger.com/rss/projects/',
+        'language' => $language,
+        'pages' => $pages
+    ));
+
+    $app->response->headers->set('Content-Type', 'application/rss+xml');
+    $app->response->setBody($pageRendered);
+})->setName('rssProjectsFlexibleLanguages');
+
+$app->get('/rss/blog(/)', $trackView, function() use($app, $config, $pdo, $mustache, $language) {
+    $pagesController = new PagesController($config, $pdo);
+    $pages = $pagesController->getAllByTypeAndLanguage('post', $language);
+    $pages = $pagesController->addUrls($pages);
+    $pages = $pagesController->addPubDate($pages);
+
+    $pageTemplate = $mustache->loadTemplate('rss');
+    $pageRendered = $pageTemplate->render(array(
+        'rssTitle' => 'Peter Grassberger - RSS feed: posts ' . $language,
+        'rssDescription' => 'RSS feed of posts in ' . $language,
+        'rssUrl' => $language === 'de' ? 'http://petergrassberger.at/rss/blog/' : 'http://petergrassberger.com/rss/blog/',
+        'language' => $language,
+        'pages' => $pages
+    ));
+
+    $app->response->headers->set('Content-Type', 'application/rss+xml');
+    $app->response->setBody($pageRendered);
+})->setName('rssBlogFlexibleLanguages');
+
+$app->get('/rss/all(/)', $trackView, function() use($app, $config, $pdo, $mustache, $language) {
+    $pagesController = new PagesController($config, $pdo);
+    $pages = $pagesController->getAll();
+    $pages = $pagesController->addUrls($pages);
+    $pages = $pagesController->addPubDate($pages);
+
+    $pageTemplate = $mustache->loadTemplate('rss');
+    $pageRendered = $pageTemplate->render(array(
+        'rssTitle' => 'Peter Grassberger - RSS feed: everything all languages',
+        'rssDescription' => 'RSS feed of pages, projects and posts in  all languages',
+        'rssUrl' => $language === 'de' ? 'http://petergrassberger.at/rss/all/' : 'http://petergrassberger.com/rss/all/',
+        'language' => 'en,de',
+        'pages' => $pages
+    ));
+
+    $app->response->headers->set('Content-Type', 'application/rss+xml');
+    $app->response->setBody($pageRendered);
+})->setName('rssEverythingAllLanguages');
+
+$app->get('/rss/pages/all(/)', $trackView, function() use($app, $config, $pdo, $mustache, $language) {
+    $pagesController = new PagesController($config, $pdo);
+    $pages = $pagesController->getAllByType('page');
+    $pages = $pagesController->addUrls($pages);
+    $pages = $pagesController->addPubDate($pages);
+
+    $pageTemplate = $mustache->loadTemplate('rss');
+    $pageRendered = $pageTemplate->render(array(
+        'rssTitle' => 'Peter Grassberger - RSS feed: pages all languages',
+        'rssDescription' => 'RSS feed of pages in  all languages',
+        'rssUrl' => $language === 'de' ? 'http://petergrassberger.at/rss/pages/all/' : 'http://petergrassberger.com/rss/pages/all/',
+        'language' => 'en,de',
+        'pages' => $pages
+    ));
+
+    $app->response->headers->set('Content-Type', 'application/rss+xml');
+    $app->response->setBody($pageRendered);
+})->setName('rssPagesAllLanguages');
+
+$app->get('/rss/projects/all(/)', $trackView, function() use($app, $config, $pdo, $mustache, $language) {
+    $pagesController = new PagesController($config, $pdo);
+    $pages = $pagesController->getAllByType('project');
+    $pages = $pagesController->addUrls($pages);
+    $pages = $pagesController->addPubDate($pages);
+
+    $pageTemplate = $mustache->loadTemplate('rss');
+    $pageRendered = $pageTemplate->render(array(
+        'rssTitle' => 'Peter Grassberger - RSS feed: projects all languages',
+        'rssDescription' => 'RSS feed of projects in  all languages',
+        'rssUrl' => $language === 'de' ? 'http://petergrassberger.at/rss/projects/all/' : 'http://petergrassberger.com/rss/projects/all/',
+        'language' => 'en,de',
+        'pages' => $pages
+    ));
+
+    $app->response->headers->set('Content-Type', 'application/rss+xml');
+    $app->response->setBody($pageRendered);
+})->setName('rssProjectsAllLanguages');
+
+$app->get('/rss/blog/all(/)', $trackView, function() use($app, $config, $pdo, $mustache, $language) {
+    $pagesController = new PagesController($config, $pdo);
+    $pages = $pagesController->getAllByType('post');
+    $pages = $pagesController->addUrls($pages);
+    $pages = $pagesController->addPubDate($pages);
+
+    $pageTemplate = $mustache->loadTemplate('rss');
+    $pageRendered = $pageTemplate->render(array(
+        'rssTitle' => 'Peter Grassberger - RSS feed: posts all languages',
+        'rssDescription' => 'RSS feed of posts in  all languages',
+        'rssUrl' => $language === 'de' ? 'http://petergrassberger.at/rss/blog/all/' : 'http://petergrassberger.com/rss/blog/all/',
+        'language' => 'en,de',
+        'pages' => $pages
+    ));
+
+    $app->response->headers->set('Content-Type', 'application/rss+xml');
+    $app->response->setBody($pageRendered);
+})->setName('rssBlogAllLanguages');
 
 /**
  * DISPLAY PAGES, PROJECTS AND POSTS

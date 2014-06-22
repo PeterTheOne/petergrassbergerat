@@ -28,44 +28,32 @@ class PagesController {
     }
 
     /**
+     * @param $pages
      * @return mixed
      */
-    public function getOneIndex() {
-        return $this->repository->getOneIndexPage();
+    public function addUrls($pages) {
+        foreach($pages as $page) {
+            if ($page->languageTag === 'de') {
+                $url = 'http://petergrassberger.at/';
+            } else {
+                $url = 'http://petergrassberger.com/';
+            }
+            if ($page->page_type === 'post') {
+                $url .= 'blog/';
+            } else if ($page->page_type === 'project') {
+                $url .= 'projects/';
+            }
+            $url .= $page->title_clean . '/';
+            $page->url = $url;
+        }
+        return $pages;
     }
 
     /**
-     * @param $languageTag
-     * @return mixed
+     * @param $pages
+     * @return array
      */
-    public function getOneIndexByLanguage($languageTag) {
-        return $this->repository->getOneIndexPageByLanguage($languageTag);
-    }
-
-    /**
-     * @param $pageType
-     * @param $langageTag
-     * @param $pageTitle
-     * @return mixed
-     */
-    public function getOneByTypeAndLanguageAndTitle($pageType, $langageTag, $pageTitle) {
-        return $this->repository->getOneByTypeAndLanguageAndTitle($pageType, $langageTag, $pageTitle);
-    }
-
-    /**
-     * @param $pageType
-     * @return mixed
-     */
-    public function getAllByType($pageType) {
-        return $this->repository->getAllByType($pageType);
-    }
-
-    /**
-     * @param $pageType
-     * @return mixed
-     */
-    public function getAllByTypeRegroupedById($pageType) {
-        $pages = $this->getAllByType($pageType);
+    public function regroupedById($pages) {
         if (!$pages) {
             return $pages;
         }
@@ -91,9 +79,68 @@ class PagesController {
     }
 
     /**
+     * @param $pages
+     * @return mixed
+     */
+    public function addPubDate($pages) {
+        foreach($pages as $page) {
+            $page->pubDate = (new DateTime($page->created))->format(DATETIME::RSS);
+        }
+        return $pages;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getOneIndex() {
+        return $this->repository->getOneIndexPage();
+    }
+
+    /**
+     * @param $languageTag
+     * @return mixed
+     */
+    public function getOneIndexByLanguage($languageTag) {
+        return $this->repository->getOneIndexPageByLanguage($languageTag);
+    }
+
+    /**
+     * @param $pageType
+     * @param $langageTag
+     * @param $pageTitle
+     * @return mixed
+     */
+    public function getOneByTypeAndLanguageAndTitle($pageType, $langageTag, $pageTitle) {
+        return $this->repository->getOneByTypeAndLanguageAndTitle($pageType, $langageTag, $pageTitle);
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getAll() {
+        return $this->repository->getAll();
+    }
+
+    /**
+     * @param $pageType
+     * @return mixed
+     */
+    public function getAllByType($pageType) {
+        return $this->repository->getAllByType($pageType);
+    }
+
+    /**
+     * @param $languageTag
+     * @return mixed
+     */
+    public function getAllByLanguage($languageTag) {
+        return $this->repository->getAllByLanguage($languageTag);
+    }
+
+    /**
      * @param $pageType
      * @param $languageTag
-     * @return array
+     * @return mixed
      */
     public function getAllByTypeAndLanguage($pageType, $languageTag) {
         return $this->repository->getAllByTypeAndLanguage($pageType, $languageTag);

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+    <channel>
+        <title>{{rssTitle}}</title>
+        <link>{{url}}</link>
+        <atom:link href="{{url}}/rss/" rel="self" type="application/rss+xml" />
+        <description>{{rssDescription}}</description>
+        <language>{{language}}</language>
+        <copyright>Creative Commons BY-NC-ND 4.0 http://creativecommons.org/licenses/by-nc-sa/4.0/</copyright>
+        <managingEditor>petergrassberger@gmail.com (Peter Grassberger)</managingEditor>
+        <webMaster>petergrassberger@gmail.com (Peter Grassberger)</webMaster>
+        <docs>http://rssboard.org/rss-specification</docs>
+        {{#pages}}
+        <item>
+            <title>{{title}}</title>
+            <link>{{url}}</link>
+            <guid isPermaLink="true">{{url}}</guid>
+            <author>petergrassberger@gmail.com (Peter Grassberger)</author>
+            <pubDate>{{pubDate}}</pubDate>
+        </item>
+        {{/pages}}
+    </channel>
+</rss>

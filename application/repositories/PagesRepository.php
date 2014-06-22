@@ -15,6 +15,26 @@ class PagesRepository {
     }
 
     /**
+     * @return array
+     */
+    public function getAll() {
+        $statement = $this->pdo->prepare('
+            SELECT pages.id, pages.id AS page_id, pages.created, pages.index,
+            pages.page_type AS page_type_id, pagecontents.updated,
+            languages.id AS language, languages.name AS languageName,
+            languages.tag AS languageTag, pagecontents.title, pagecontents.title_clean,
+            pagecontents.content, pagetypes.name AS page_type
+            FROM pages
+            INNER JOIN pagecontents ON pages.id = pagecontents.page_id
+            INNER JOIN pagetypes ON pages.page_type = pagetypes.id
+            INNER JOIN languages ON pagecontents.language = languages.id
+            ORDER BY pages.id, languages.id;
+        ');
+        $statement->execute();
+        return $statement->fetchAll();
+    }
+
+    /**
      * @param $pageType
      * @return mixed
      */
@@ -33,6 +53,29 @@ class PagesRepository {
             ORDER BY pages.id, languages.id;
         ');
         $statement->bindParam(':pageType', $pageType);
+        $statement->execute();
+        return $statement->fetchAll();
+    }
+
+    /**
+     * @param $languageTag
+     * @return array
+     */
+    public function getAllByLanguage($languageTag) {
+        $statement = $this->pdo->prepare('
+            SELECT pages.id, pages.id AS page_id, pages.created, pages.index,
+            pages.page_type AS page_type_id, pagecontents.updated,
+            languages.id AS language, languages.name AS languageName,
+            languages.tag AS languageTag, pagecontents.title, pagecontents.title_clean,
+            pagecontents.content, pagetypes.name AS page_type
+            FROM pages
+            INNER JOIN pagecontents ON pages.id = pagecontents.page_id
+            INNER JOIN pagetypes ON pages.page_type = pagetypes.id
+            INNER JOIN languages ON pagecontents.language = languages.id
+            WHERE languages.tag = :languageTag
+            ORDER BY pages.id, languages.id;
+        ');
+        $statement->bindParam(':languageTag', $languageTag);
         $statement->execute();
         return $statement->fetchAll();
     }
