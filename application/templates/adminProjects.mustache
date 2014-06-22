@@ -3,9 +3,17 @@
                 <h1><a href="/admin/projects/">Admin > Projects</a></h1>
 
                 {{#projects}}
-                <h2><a href="/admin/projects/{{title_clean}}/">{{title}}</a></h2>
-                <a href="/admin/remove/project/{{title_clean}}/">delete</a><br />
+                <h2>{{id}}: {{title}}</h2>
+                <div>
+                    <ul>
+                        {{#pages}}
+                        <li><a href="/admin/projects/{{languageTag}}/{{title_clean}}/">{{languageTag}}: {{title}}</a></li>
+                        {{/pages}}
+                    </ul>
+                    <a href="/admin/translate/project/{{id}}/">translate</a>
+                </div>
                 {{/projects}}
-                <a href="/admin/create/project/">Create Project</a>
+
+                <br /><a href="/admin/create/project/">Create Project</a>
             </article>
 {{> adminFooter}}

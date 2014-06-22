@@ -22,14 +22,42 @@ class PagesRepository {
         $statement = $this->pdo->prepare('
             SELECT pages.id, pages.id AS page_id, pages.created, pages.index,
             pages.page_type AS page_type_id, pagecontents.updated,
-            pagecontents.title, pagecontents.title_clean, pagecontents.content,
-            pagetypes.name AS page_type
+            languages.id AS language, languages.name AS languageName,
+            languages.tag AS languageTag, pagecontents.title, pagecontents.title_clean,
+            pagecontents.content, pagetypes.name AS page_type
             FROM pages
             INNER JOIN pagecontents ON pages.id = pagecontents.page_id
             INNER JOIN pagetypes ON pages.page_type = pagetypes.id
-            WHERE pagetypes.name = :pageType;
+            INNER JOIN languages ON pagecontents.language = languages.id
+            WHERE pagetypes.name = :pageType
+            ORDER BY pages.id, languages.id;
         ');
         $statement->bindParam(':pageType', $pageType);
+        $statement->execute();
+        return $statement->fetchAll();
+    }
+
+    /**
+     * @param $pageType
+     * @param $languageTag
+     * @return array
+     */
+    public function getAllByTypeAndLanguage($pageType, $languageTag) {
+        $statement = $this->pdo->prepare('
+            SELECT pages.id, pages.id AS page_id, pages.created, pages.index,
+            pages.page_type AS page_type_id, pagecontents.updated,
+            languages.id AS language, languages.name AS languageName,
+            languages.tag AS languageTag, pagecontents.title, pagecontents.title_clean,
+            pagecontents.content, pagetypes.name AS page_type
+            FROM pages
+            INNER JOIN pagecontents ON pages.id = pagecontents.page_id
+            INNER JOIN pagetypes ON pages.page_type = pagetypes.id
+            INNER JOIN languages ON pagecontents.language = languages.id
+            WHERE pagetypes.name = :pageType AND languages.tag = :languageTag
+            ORDER BY pages.id, languages.id;
+        ');
+        $statement->bindParam(':pageType', $pageType);
+        $statement->bindParam(':languageTag', $languageTag);
         $statement->execute();
         return $statement->fetchAll();
     }
@@ -41,11 +69,13 @@ class PagesRepository {
         $statement = $this->pdo->prepare('
             SELECT pages.id, pages.id AS page_id, pages.created, pages.index,
             pages.page_type AS page_type_id, pagecontents.updated,
-            pagecontents.title, pagecontents.title_clean, pagecontents.content,
-            pagetypes.name AS page_type
+            languages.id AS language, languages.name AS languageName,
+            languages.tag AS languageTag, pagecontents.title, pagecontents.title_clean,
+            pagecontents.content, pagetypes.name AS page_type
             FROM pages
             INNER JOIN pagecontents ON pages.id = pagecontents.page_id
             INNER JOIN pagetypes ON pages.page_type = pagetypes.id
+            INNER JOIN languages ON pagecontents.language = languages.id
             WHERE pagetypes.name = "page" AND pages.index = 1
             LIMIT 1;
         ');
@@ -55,22 +85,27 @@ class PagesRepository {
 
     /**
      * @param $pageType
+     * @param $languageTag
      * @param $pageTitle
      * @return mixed
      */
-    public function getOneByTypeAndTitle($pageType, $pageTitle) {
+    public function getOneByTypeAndLanguageAndTitle($pageType, $languageTag, $pageTitle) {
         $statement = $this->pdo->prepare('
             SELECT pages.id, pages.id AS page_id, pages.created, pages.index,
             pages.page_type AS page_type_id, pagecontents.updated,
-            pagecontents.title, pagecontents.title_clean, pagecontents.content,
-            pagetypes.name AS page_type
+            languages.id AS language, languages.name AS languageName,
+            languages.tag AS languageTag, pagecontents.title, pagecontents.title_clean,
+            pagecontents.content, pagetypes.name AS page_type
             FROM pages
             INNER JOIN pagecontents ON pages.id = pagecontents.page_id
             INNER JOIN pagetypes ON pages.page_type = pagetypes.id
-            WHERE pagetypes.name = :pageType AND pagecontents.title_clean = :pageTitle
+            INNER JOIN languages ON pagecontents.language = languages.id
+            WHERE pagetypes.name = :pageType AND languages.tag = :languageTag AND
+            pagecontents.title_clean = :pageTitle
             LIMIT 1;
         ');
         $statement->bindParam(':pageType', $pageType);
+        $statement->bindParam(':languageTag', $languageTag);
         $statement->bindParam(':pageTitle', $pageTitle);
         $statement->execute();
         return $statement->fetch();
@@ -78,21 +113,25 @@ class PagesRepository {
 
     /**
      * @param $pageType
+     * @param $languageTag
      * @param $projectTitle
      * @param $title
      * @param $title_clean
      * @param $content
      * @return bool
      */
-    public function updateByTypeAndTitle($pageType, $projectTitle, $title, $title_clean, $content) {
+    public function updateByTypeAndLanguageAndTitle($pageType, $languageTag, $projectTitle, $title, $title_clean, $content) {
         $statement = $this->pdo->prepare('
             UPDATE pagecontents
             INNER JOIN pages ON pagecontents.page_id = pages.id
             INNER JOIN pagetypes ON pages.page_type = pagetypes.id
+            INNER JOIN languages ON pagecontents.language = languages.id
             SET title = :title, title_clean = :title_clean, content = :content, updated = NOW()
-            WHERE pagetypes.name = :pageType AND title_clean = :projectTitle;
+            WHERE pagetypes.name = :pageType AND languages.tag = :languageTag AND
+            title_clean = :projectTitle;
         ');
         $statement->bindParam(':pageType', $pageType);
+        $statement->bindParam(':languageTag', $languageTag);
         $statement->bindParam(':projectTitle', $projectTitle);
         $statement->bindParam(':title', $title);
         $statement->bindParam(':title_clean', $title_clean);
@@ -118,17 +157,19 @@ class PagesRepository {
 
     /**
      * @param $pageId
+     * @param $language
      * @param $title
      * @param $title_clean
      * @param $content
      * @return bool
      */
-    public function createPageContentsByPageId($pageId, $title, $title_clean, $content) {
+    public function createPageContentsByPageId($pageId, $language, $title, $title_clean, $content) {
         $statement = $this->pdo->prepare('
-            INSERT INTO pagecontents (page_id, created, updated, title, title_clean, content)
-            VALUES (:pageId, NOW(), NOW(), :title, :title_clean, :content);
+            INSERT INTO pagecontents (page_id, created, updated, language, title, title_clean, content)
+            VALUES (:pageId, NOW(), NOW(), :language, :title, :title_clean, :content);
         ');
         $statement->bindParam(':pageId', $pageId);
+        $statement->bindParam(':language', $language);
         $statement->bindParam(':title', $title);
         $statement->bindParam(':title_clean', $title_clean);
         $statement->bindParam(':content', $content);
@@ -162,5 +203,59 @@ class PagesRepository {
         $statement->bindParam(':pageId', $pageId);
         return $statement->execute();
     }
+
+    /**
+     * @return array
+     */
+    public function getAllLanguages() {
+        $statement = $this->pdo->prepare('
+            SELECT * FROM languages;
+        ');
+        $statement->execute();
+        return $statement->fetchAll();
+    }
+
+    /**
+     * @param $id
+     * @return array
+     */
+    public function getAllLanguagesNotUsedByPageId($id) {
+        /*$statement = $this->pdo->prepare('
+          SELECT * FROM languages
+          INNER JOIN pagecontents ON languages.id = pagecontents.language
+          INNER JOIN pages ON pages.id = pagecontents.page_id
+          WHERE pages.id = :id;
+        ');*/
+        $statement = $this->pdo->prepare('
+          SELECT * FROM languages
+          WHERE id NOT IN (
+            SELECT languages.id FROM languages
+              INNER JOIN pagecontents ON languages.id = pagecontents.language
+              INNER JOIN pages ON pages.id = pagecontents.page_id
+              WHERE pages.id = :id
+          );
+        ');
+        $statement->bindParam(':id', $id);
+        $statement->execute();
+        return $statement->fetchAll();
+    }
+
+    /**
+     * @param $pageType
+     * @param $pageTitle
+     */
+    /*public function getMissingLanguagesByTypeAndTitle($pageType, $pageTitle) {
+        $statement = $this->pdo->prepare('
+            SELECT * FROM languages
+            INNER JOIN pagecontents ON languages.id = pagecontents.language
+            INNER JOIN pages ON pages.id = pagecontents.page_id
+            INNER JOIN pagetypes ON pages.page_type = pagetypes.id
+            WHERE pagetypes.name = :pageType;
+        ');
+        $statement->bindParam(':pageType', $pageType);
+        $statement->bindParam(':pageTitle', $pageTitle);
+        $statement->execute();
+        return $statement->fetchAll();
+    }*/
 
 }

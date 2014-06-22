@@ -1,10 +1,14 @@
 {{> head}}
             <article class="fullWidth">
                 {{#page}}
-                <h1><a href="/admin/pages/{{title_clean}}/">Admin Page: {{title}}</a></h1>
+                <h1><a href="/admin/pages/{{languageTag}}/{{title_clean}}/">Admin Page: {{title}}</a></h1>
 
                 <div class="editForm">
-                    <form role="form" action="/admin/pages/{{title_clean}}/" method="post">
+                    <form role="form" action="/admin/pages/{{languageTag}}/{{title_clean}}/" method="post">
+                        <div>
+                            <label for="title">Language</label><br />
+                            <b>{{languageName}}</b>
+                        </div>
                         <div>
                             <label for="title">Title</label><br />
                             <input type="text" name="title" id="title" value="{{title}}" placeholder="Title">

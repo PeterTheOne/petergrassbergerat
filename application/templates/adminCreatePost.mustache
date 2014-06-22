@@ -5,6 +5,14 @@
                 <div class="editForm">
                     <form role="form" action="/admin/create/post/" method="post">
                         <div>
+                            <label for="language">Language</label>
+                            <select name="language">
+                                {{#languages}}
+                                <option value="{{id}}">{{name}}</option>
+                                {{/languages}}
+                            </select>
+                        </div>
+                        <div>
                             <label for="title">Title</label><br />
                             <input type="text" name="title" id="title" placeholder="Title">
                         </div>

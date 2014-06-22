@@ -1,9 +1,10 @@
 {{> head}}
             <article class="fullWidth">
-                <h1><a href="/admin/create/page/">Admin Create Page</a></h1>
+                <h1><a href="/admin/translate/project/{{pageId}}/">Admin Project: {{title}}</a></h1>
 
                 <div class="editForm">
-                    <form role="form" action="/admin/create/page/" method="post">
+                    <form role="form" action="/admin/translate/project/{{pageId}}/" method="post">
+                        <input type="hidden" name="pageId" value="{{pageId}}">
                         <div>
                             <label for="language">Language</label>
                             <select name="language">
@@ -31,7 +32,7 @@
                     <label>Preview</label>
                     <h1><a href="/*title_clean*/">*title*</a></h1>
                     <div>
-                        *content*
+
                     </div>
                 </div>
             </article>
