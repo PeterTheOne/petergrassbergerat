@@ -123,10 +123,11 @@ class PagesController {
 
     /**
      * @param $pageType
+     * @param array $orderBy
      * @return mixed
      */
-    public function getAllByType($pageType) {
-        return $this->repository->getAllByType($pageType);
+    public function getAllByType($pageType, array $orderBy = array('pagecontents.created DESC')) {
+        return $this->repository->getAllByType($pageType, $orderBy);
     }
 
     /**

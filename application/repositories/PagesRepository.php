@@ -28,7 +28,7 @@ class PagesRepository {
             INNER JOIN pagecontents ON pages.id = pagecontents.page_id
             INNER JOIN pagetypes ON pages.page_type = pagetypes.id
             INNER JOIN languages ON pagecontents.language = languages.id
-            ORDER BY pages.id, languages.id;
+            ORDER BY pagecontents.created DESC;
         ');
         $statement->execute();
         return $statement->fetchAll();
@@ -36,9 +36,11 @@ class PagesRepository {
 
     /**
      * @param $pageType
-     * @return mixed
+     * @param array $orderBy
+     * @return array
      */
-    public function getAllByType($pageType) {
+    public function getAllByType($pageType, array $orderBy) {
+        $orderByString = implode(', ', $orderBy);
         $statement = $this->pdo->prepare('
             SELECT pages.id, pages.id AS page_id, pages.created, pages.index,
             pages.page_type AS page_type_id, pagecontents.updated,
@@ -50,7 +52,7 @@ class PagesRepository {
             INNER JOIN pagetypes ON pages.page_type = pagetypes.id
             INNER JOIN languages ON pagecontents.language = languages.id
             WHERE pagetypes.name = :pageType
-            ORDER BY pages.id, languages.id;
+            ORDER BY ' . $orderByString . ';
         ');
         $statement->bindParam(':pageType', $pageType);
         $statement->execute();
@@ -73,7 +75,7 @@ class PagesRepository {
             INNER JOIN pagetypes ON pages.page_type = pagetypes.id
             INNER JOIN languages ON pagecontents.language = languages.id
             WHERE languages.tag = :languageTag
-            ORDER BY pages.id, languages.id;
+            ORDER BY pagecontents.created DESC;
         ');
         $statement->bindParam(':languageTag', $languageTag);
         $statement->execute();
@@ -97,7 +99,7 @@ class PagesRepository {
             INNER JOIN pagetypes ON pages.page_type = pagetypes.id
             INNER JOIN languages ON pagecontents.language = languages.id
             WHERE pagetypes.name = :pageType AND languages.tag = :languageTag
-            ORDER BY pages.id, languages.id;
+            ORDER BY pagecontents.created DESC;
         ');
         $statement->bindParam(':pageType', $pageType);
         $statement->bindParam(':languageTag', $languageTag);

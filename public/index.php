@@ -185,7 +185,7 @@ $app->get('/admin(/)', $trackView, $authenticate($app, $config), function() use(
 
 $app->get('/admin/pages(/)', $trackView, $authenticate($app, $config), function() use($app, $config, $pdo, $mustache) {
     $pagesController = new PagesController($config, $pdo);
-    $pages = $pagesController->getAllByType('page');
+    $pages = $pagesController->getAllByType('page', array('pages.id', 'languages.id'));
     $pages = $pagesController->regroupedById($pages);
 
     $app->response->setBody($mustache->loadTemplate('adminPages')->render(array('pages' => $pages)));
@@ -217,7 +217,7 @@ $app->post('/admin/pages/:language/:pagesTitle(/)', $trackView, $authenticate($a
 
 $app->get('/admin/projects(/)', $trackView, $authenticate($app, $config), function() use($app, $config, $pdo, $mustache) {
     $pagesController = new PagesController($config, $pdo);
-    $projects = $pagesController->getAllByType('project');
+    $projects = $pagesController->getAllByType('project', array('pages.id', 'languages.id'));
     $projects = $pagesController->regroupedById($projects);
 
     $app->response->setBody($mustache->loadTemplate('adminProjects')->render(array('projects' => $projects)));
@@ -249,7 +249,7 @@ $app->post('/admin/projects/:language/:projectsTitle(/)', $trackView, $authentic
 
 $app->get('/admin/posts(/)', $trackView, $authenticate($app, $config), function() use($app, $config, $pdo, $mustache) {
     $pagesController = new PagesController($config, $pdo);
-    $posts = $pagesController->getAllByType('post');
+    $posts = $pagesController->getAllByType('post', array('pages.id', 'languages.id'));
     $posts = $pagesController->regroupedById($posts);
 
     $app->response->setBody($mustache->loadTemplate('adminPosts')->render(array('posts' => $posts)));
@@ -598,7 +598,7 @@ $app->get('/rss/all(/)', $trackView, function() use($app, $config, $pdo, $mustac
 
 $app->get('/rss/pages/all(/)', $trackView, function() use($app, $config, $pdo, $mustache, $language) {
     $pagesController = new PagesController($config, $pdo);
-    $pages = $pagesController->getAllByType('page');
+    $pages = $pagesController->getAllByType('page', array('pagecontents.created DESC'));
     $pages = $pagesController->addUrls($pages);
     $pages = $pagesController->addPubDate($pages);
 
@@ -617,7 +617,7 @@ $app->get('/rss/pages/all(/)', $trackView, function() use($app, $config, $pdo, $
 
 $app->get('/rss/projects/all(/)', $trackView, function() use($app, $config, $pdo, $mustache, $language) {
     $pagesController = new PagesController($config, $pdo);
-    $pages = $pagesController->getAllByType('project');
+    $pages = $pagesController->getAllByType('project', array('pagecontents.created DESC'));
     $pages = $pagesController->addUrls($pages);
     $pages = $pagesController->addPubDate($pages);
 
@@ -636,7 +636,7 @@ $app->get('/rss/projects/all(/)', $trackView, function() use($app, $config, $pdo
 
 $app->get('/rss/blog/all(/)', $trackView, function() use($app, $config, $pdo, $mustache, $language) {
     $pagesController = new PagesController($config, $pdo);
-    $pages = $pagesController->getAllByType('post');
+    $pages = $pagesController->getAllByType('post', array('pagecontents.created DESC'));
     $pages = $pagesController->addUrls($pages);
     $pages = $pagesController->addPubDate($pages);
 
