@@ -140,6 +140,7 @@ div.videoEmbed {
     width: 100%;
     height: 0px;
     padding: 0 0 56.25% 0; /* 9 / 16 */
+    cursor: pointer;
 }
 
 div.videoEmbed.ratio16to9 {
