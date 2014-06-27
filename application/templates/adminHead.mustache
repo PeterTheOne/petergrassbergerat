@@ -1,0 +1,59 @@
+<!doctype html>
+<html {{#language}}lang="{{language}}"{{/language}}{{^language}}lang="en"{{/language}}>
+    <head>
+        <meta charset="utf-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <meta name="google-site-verification" content="F8q0FAvDVXjAwv7N7Xe4N5H5LLA6Hnznw20uoe0Ehqs" />
+        <meta name="google-site-verification" content="c921Y27A8rKcXqF4SX7ezQcQwMtMM0pMQxUJQLL3Se0" />
+
+        <title>{{#title}}{{title}}{{/title}}{{^title}}Peter Grassberger{{/title}}</title>
+
+        {{#translations}}
+        <link rel="alternate" hreflang="{{languageTag}}" href="{{url}}" />
+        {{/translations}}
+
+        <link rel="stylesheet" href="/css/normalize.css">
+        <link rel="stylesheet" href="/css/solarized_dark.css">
+        <link rel="stylesheet" href="/css/style.css">
+
+        <!-- favicon -->
+        <link rel="shortcut icon" href="/favicon/favicon.ico?v=01">
+        <link rel="icon" sizes="16x16 32x32 64x64" href="/favicon/favicon.ico?v=01">
+        <link rel="icon" type="image/png" sizes="196x196" href="/favicon/favicon-196.png?v=01">
+        <link rel="icon" type="image/png" sizes="160x160" href="/favicon/favicon-160.png?v=01">
+        <link rel="icon" type="image/png" sizes="96x96" href="/favicon/favicon-96.png?v=01">
+        <link rel="icon" type="image/png" sizes="64x64" href="/favicon/favicon-64.png?v=01">
+        <link rel="icon" type="image/png" sizes="32x32" href="/favicon/favicon-32.png?v=01">
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon/favicon-16.png?v=01">
+        <link rel="apple-touch-icon" sizes="152x152" href="/favicon/favicon-152.png?v=01">
+        <link rel="apple-touch-icon" sizes="144x144" href="/favicon/favicon-144.png?v=01">
+        <link rel="apple-touch-icon" sizes="120x120" href="/favicon/favicon-120.png?v=01">
+        <link rel="apple-touch-icon" sizes="114x114" href="/favicon/favicon-114.png?v=01">
+        <link rel="apple-touch-icon" sizes="76x76" href="/favicon/favicon-76.png?v=01">
+        <link rel="apple-touch-icon" sizes="72x72" href="/favicon/favicon-72.png?v=01">
+        <link rel="apple-touch-icon" href="/favicon/favicon-57.png?v=01">
+        <meta name="msapplication-TileColor" content="#FFFFFF">
+        <meta name="msapplication-TileImage" content="/favicon/favicon-144.png?v=01">
+        <meta name="msapplication-config" content="/favicon/browserconfig.xml">
+
+        <link rel="alternate" type="application/rss+xml" title="RSS feed: blog, projects and pages" href="/rss/" />
+        <link rel="alternate" type="application/rss+xml" title="RSS feed: blog" href="/rss/blog/" />
+        <link rel="alternate" type="application/rss+xml" title="RSS feed: projects" href="/rss/projects/" />
+        <link rel="alternate" type="application/rss+xml" title="RSS feed: pages" href="/rss/pages/" />
+        <link rel="alternate" type="application/rss+xml" title="RSS feed: blog, projects and pages all languages" href="/rss/all/" />
+        <link rel="alternate" type="application/rss+xml" title="RSS feed: blog all languages" href="/rss/blog/all/" />
+        <link rel="alternate" type="application/rss+xml" title="RSS feed: projects all languages" href="/rss/projects/all/" />
+        <link rel="alternate" type="application/rss+xml" title="RSS feed: pages all languages" href="/rss/pages/all/" />
+
+        <script type="text/javascript" src="/js/lib/jquery-1.11.1.min.js"></script>
+        <script type="text/javascript" src="/js/lib/moment.js"></script>
+        <script type="text/javascript" src="/js/lib/moment-timezone-with-data-2010-2020.min.js"></script>
+        <script type="text/javascript" src="/js/lib/highlight.pack.js"></script>
+    </head>
+    <body>
+        <div class="container fullWidth">
+            {{> header}}
+            {{> languagenav}}
+            {{> mainnav}}

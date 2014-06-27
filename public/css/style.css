@@ -40,6 +40,9 @@ nav#mainnav a:hover {
     width: 800px;
     margin: 0 auto;
 }
+.container.fullWidth {
+    position: inherit;
+}
 
 body,
 input,
