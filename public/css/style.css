@@ -102,6 +102,11 @@ nav#mainnav ul li:hover {
     background-color: lightgray;
 }
 
+section {
+    clear: both;
+    padding-bottom: 100px;
+}
+
 article {
     clear: both;
     padding-bottom: 100px;
@@ -210,4 +215,8 @@ html[lang="en"] :link[hreflang="de"]::after {
 html[lang="de"] :link[hreflang="en"]::after {
     content: " "attr(hreflang);
     font-size: xx-small;
+}
+
+section > h1:first-child {
+    font-size: 1.5em;
 }

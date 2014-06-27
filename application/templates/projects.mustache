@@ -1,10 +1,10 @@
 {{> head}}
-            <article>
+            <section class="projects">
                 <h1><a href="/projects/">Projects</a></h2>
-            {{#projects}}
-                <h2><a href="/projects/{{title_clean}}/">{{title}}</a></h2>
-                <span></span>
-                <p></p>
-            {{/projects}}
-            </article>
+                {{#projects}}
+                    <h1><a href="/projects/{{title_clean}}/">{{title}}</a></h1>
+                    <span></span>
+                    <p></p>
+                {{/projects}}
+            </section>
 {{> footer}}

@@ -1,8 +1,16 @@
 {{> head}}
-            <article>
+            <section>
                 <h1><a href="/blog/">Blog</a></h1>
-            {{#posts}}
-                <h2><a href="/blog/{{title_clean}}/">{{title}}</a></h2>
-            {{/posts}}
-            </article>
+                {{#posts}}
+                <article>
+                    {{#index}}
+                    <h1><a href="/">{{title}}</a></h1>
+                    {{/index}}
+                    {{^index}}
+                    <h1><a href="/blog/{{title_clean}}/">{{title}}</a></h1>
+                    {{/index}}
+{{{content}}}
+                </article>
+                {{/posts}}
+            </section>
 {{> footer}}
