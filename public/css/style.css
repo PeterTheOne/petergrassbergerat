@@ -202,12 +202,12 @@ th {
     text-align: left;
 }
 
-html[lang="en"] a[hreflang="de"]:after {
-    content: " de";
+html[lang="en"] :link[hreflang="de"]::after {
+    content: " "attr(hreflang);
     font-size: xx-small;
 }
 
-html[lang="de"] a[hreflang="en"]:after {
-    content: " en";
+html[lang="de"] :link[hreflang="en"]::after {
+    content: " "attr(hreflang);
     font-size: xx-small;
 }

@@ -1,5 +1,7 @@
 $(function() {
 
+    hljs.initHighlightingOnLoad();
+
     $('#title').on('keyup change', function() {
         $('.editPreview h1 a').html($(this).val());
     });
@@ -26,5 +28,8 @@ $(function() {
     $('#content').on('keyup change', function() {
         $('.editPreview div').html($(this).val());
         videoEmbed();
+        $('pre code').each(function(i, e) {
+            hljs.highlightBlock(e)
+        });
     });
 });

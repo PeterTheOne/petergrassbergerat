@@ -1,4 +1,5 @@
 $(function() {
     videoEmbed();
+    hljs.initHighlightingOnLoad();
 
 });
