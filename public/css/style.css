@@ -201,3 +201,13 @@ table {
 th {
     text-align: left;
 }
+
+html[lang="en"] a[hreflang="de"]:after {
+    content: " de";
+    font-size: xx-small;
+}
+
+html[lang="de"] a[hreflang="en"]:after {
+    content: " en";
+    font-size: xx-small;
+}
