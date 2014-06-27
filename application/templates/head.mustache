@@ -8,11 +8,11 @@
         <meta name="google-site-verification" content="F8q0FAvDVXjAwv7N7Xe4N5H5LLA6Hnznw20uoe0Ehqs" />
         <meta name="google-site-verification" content="c921Y27A8rKcXqF4SX7ezQcQwMtMM0pMQxUJQLL3Se0" />
 
-        <title>{{#siteTitle}}{{siteTitle}}{{/siteTitle}}{{^siteTitle}}Peter Grassberger{{/siteTitle}}</title>
+        <title>{{#title}}{{title}}{{/title}}{{^title}}Peter Grassberger{{/title}}</title>
 
-        {{#siteTranslations}}
-        <link rel="alternate" hreflang="{{tag}}" href="{{url}}" />
-        {{/siteTranslations}}
+        {{#translations}}
+        <link rel="alternate" hreflang="{{languageTag}}" href="{{url}}" />
+        {{/translations}}
 
         <link rel="stylesheet" href="/css/normalize.css">
         <link rel="stylesheet" href="/css/solarized_dark.css">
@@ -55,4 +55,5 @@
     <body>
         <div class="container">
             {{> header}}
+            {{> languagenav}}
             {{> mainnav}}

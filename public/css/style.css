@@ -36,6 +36,7 @@ nav#mainnav a:hover {
 }
 
 .container {
+    position: relative;
     width: 800px;
     margin: 0 auto;
 }
@@ -83,6 +84,7 @@ nav#mainnav {
 
 nav#mainnav a {
     display: block;
+    padding: 8px 10px 5px 10px;
 }
 
 nav#mainnav ul {
@@ -93,13 +95,48 @@ nav#mainnav ul {
 
 nav#mainnav ul li {
     display: inline-block;
-    line-height: 2.5em;
-    padding: 0 10px;
     border-radius: 5px;
 }
 
 nav#mainnav ul li:hover {
     background-color: lightgray;
+}
+
+nav#language {
+    position: absolute;
+    top: 0px;
+    right: 12px;
+    color: lightgray;
+}
+
+nav#language a {
+    color: lightgray;
+}
+
+nav#language ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
+
+nav#language ul li {
+    display: inline-block;
+}
+
+nav#language ul li::after {
+    content: " | ";
+}
+
+nav#language ul li:last-child::after {
+    content: "";
+}
+
+nav#language :link::after {
+    content: none;
+}
+
+nav#language abbr {
+    border: none;
 }
 
 section {
@@ -108,6 +145,7 @@ section {
 }
 
 article {
+    position: relative;
     clear: both;
     padding-bottom: 100px;
 }
@@ -190,12 +228,13 @@ div.videoEmbed img, div.videoEmbed iframe {
 
 @media (max-width: 750px) {
     header {
-        float: none;
+        float: left;
     }
 
     nav#mainnav {
         margin-top: 20px;
         float: none;
+        clear: both;
     }
 }
 

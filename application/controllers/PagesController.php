@@ -32,18 +32,23 @@ class PagesController {
      * @return mixed
      */
     public function addUrls($pages) {
+        if (!$pages) {
+            return $pages;
+        }
         foreach($pages as $page) {
             if ($page->languageTag === 'de') {
                 $url = 'http://petergrassberger.at/';
             } else {
                 $url = 'http://petergrassberger.com/';
             }
-            if ($page->page_type === 'post') {
-                $url .= 'blog/';
-            } else if ($page->page_type === 'project') {
-                $url .= 'projects/';
+            if (!$page->index) {
+                if ($page->page_type === 'post') {
+                    $url .= 'blog/';
+                } else if ($page->page_type === 'project') {
+                    $url .= 'projects/';
+                }
+                $url .= $page->title_clean . '/';
             }
-            $url .= $page->title_clean . '/';
             $page->url = $url;
         }
         return $pages;
@@ -83,6 +88,9 @@ class PagesController {
      * @return mixed
      */
     public function addPubDate($pages) {
+        if (!$pages) {
+            return $pages;
+        }
         foreach($pages as $page) {
             $page->pubDate = (new DateTime($page->created))->format(DATETIME::RSS);
         }
@@ -90,10 +98,29 @@ class PagesController {
     }
 
     /**
+     * @param $translations
+     * @param $languageTag
+     * @return null
+     */
+    public function filterByLanguage($translations, $languageTag) {
+        if(!$translations) {
+            return $translations;
+        }
+        $item = null;
+        foreach($translations as $translation) {
+            if ($languageTag == $translation->languageTag) {
+                $item = $translation;
+                break;
+            }
+        }
+        return $item;
+    }
+
+    /**
      * @return mixed
      */
     public function getOneIndex() {
-        return $this->repository->getOneIndexPage();
+        return $this->repository->getIndexPage();
     }
 
     /**
@@ -102,6 +129,15 @@ class PagesController {
      */
     public function getOneIndexByLanguage($languageTag) {
         return $this->repository->getOneIndexPageByLanguage($languageTag);
+    }
+
+    /**
+     * @param $pageType
+     * @param $pageTitle
+     * @return mixed
+     */
+    public function getByTypeAndTitle($pageType, $pageTitle) {
+        return $this->repository->getByTypeAndTitle($pageType, $pageTitle);
     }
 
     /**

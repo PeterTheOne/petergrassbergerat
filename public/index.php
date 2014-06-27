@@ -80,7 +80,7 @@ $app->notFound(function () use ($app, $trackView) {
 $app->get('/404/', $trackView, function() use($app, $config, $pdo, $mustache, $language) {
     $notFound = $mustache->loadTemplate('notFound');
     $app->response->setBody($notFound->render(array(
-        'siteTitle' => 'Peter Grassberger - 404 Not Found',
+        'title' => 'Peter Grassberger - 404 Not Found',
         'language' => $language
     )));
 })->setName('notFound');
@@ -99,7 +99,9 @@ $app->get('/vita(/)', $trackView, function() use($app) {
 
 $app->get('/', $trackView, function() use($app, $config, $pdo, $mustache, $language) {
     $pagesController = new PagesController($config, $pdo);
-    $page = $pagesController->getOneIndexByLanguage($language);
+    $translations = $pagesController->getOneIndex();
+    $translations = $pagesController->addUrls($translations);
+    $page = $pagesController->filterByLanguage($translations, $language);
 
     if (!$page) {
         $app->notFound();
@@ -107,9 +109,10 @@ $app->get('/', $trackView, function() use($app, $config, $pdo, $mustache, $langu
 
     $pageTemplate = $mustache->loadTemplate('page');
     $app->response->setBody($pageTemplate->render(array(
-        'siteTitle' => 'Peter Grassberger - Index',
+        'title' => 'Peter Grassberger - Index',
         'language' => $language,
-        'page' => $page
+        'page' => $page,
+        'translations' => $translations
     )));
 })->setName('index');
 
@@ -131,9 +134,21 @@ $app->get('/projects/', $trackView, function() use($app, $config, $pdo, $mustach
 
     $projectsTemplate = $mustache->loadTemplate('projects');
     $app->response->setBody($projectsTemplate->render(array(
-        'siteTitle' => 'Peter Grassberger - Projects',
+        'title' => 'Peter Grassberger - Projects',
         'language' => $language,
-        'projects' => $projects
+        'projects' => $projects,
+        'translations' => array(
+            array(
+                'url' => 'http://petergrassberger.com/projects/',
+                'languageTag' => 'en',
+                'languageName' => 'English'
+            ),
+            array(
+                'url' => 'http://petergrassberger.at/projects/',
+                'languageTag' => 'de',
+                'languageName' => 'Deutsch'
+            )
+        )
     )));
 })->setName('projects');
 
@@ -151,9 +166,21 @@ $app->get('/blog/', $trackView, function() use($app, $config, $pdo, $mustache, $
 
     $blogTemplate = $mustache->loadTemplate('blog');
     $app->response->setBody($blogTemplate->render(array(
-        'siteTitle' => 'Peter Grassberger - Blog',
+        'title' => 'Peter Grassberger - Blog',
         'language' => $language,
-        'posts' => $posts
+        'posts' => $posts,
+        'translations' => array(
+            array(
+                'url' => 'http://petergrassberger.com/blog/',
+                'languageTag' => 'en',
+                'languageName' => 'English'
+            ),
+            array(
+                'url' => 'http://petergrassberger.at/blog/',
+                'languageTag' => 'de',
+                'languageName' => 'Deutsch'
+            )
+        )
     )));
 })->setName('blog');
 
@@ -686,7 +713,9 @@ $app->get('/:pageTitle', $trackView, function($pageTitle) use($app) {
 
 $app->get('/:pageTitle/', $trackView, function($pageTitle) use($app, $config, $pdo, $mustache, $language) {
     $pagesController = new PagesController($config, $pdo);
-    $page = $pagesController->getOneByTypeAndLanguageAndTitle('page', $language, $pageTitle);
+    $translations = $pagesController->getByTypeAndTitle('page', $pageTitle);
+    $translations = $pagesController->addUrls($translations);
+    $page = $pagesController->filterByLanguage($translations, $language);
 
     if (!$page) {
         $app->notFound();
@@ -694,9 +723,10 @@ $app->get('/:pageTitle/', $trackView, function($pageTitle) use($app, $config, $p
 
     $pageTemplate = $mustache->loadTemplate('page');
     $app->response->setBody($pageTemplate->render(array(
-        'siteTitle' => 'Peter Grassberger - ' . $page->title,
+        'title' => 'Peter Grassberger - ' . $page->title,
         'language' => $language,
-        'page' => $page
+        'page' => $page,
+        'translations' => $translations
     )));
 })->setName('pages');
 
@@ -717,7 +747,9 @@ $app->get('/projects/:projectTitle', $trackView, function($projectTitle) use($ap
 
 $app->get('/projects/:projectTitle/', $trackView, function($projectTitle) use($app, $config, $pdo, $mustache, $language) {
     $pagesController = new PagesController($config, $pdo);
-    $project = $pagesController->getOneByTypeAndLanguageAndTitle('project', $language, $projectTitle);
+    $translations = $pagesController->getByTypeAndTitle('project', $projectTitle);
+    $translations = $pagesController->addUrls($translations);
+    $project = $pagesController->filterByLanguage($translations, $language);
 
     if (!$project) {
         $app->notFound();
@@ -725,9 +757,10 @@ $app->get('/projects/:projectTitle/', $trackView, function($projectTitle) use($a
 
     $projectTemplate = $mustache->loadTemplate('project');
     $app->response->setBody($projectTemplate->render(array(
-        'siteTitle' => 'Peter Grassberger - ' . $project->title,
+        'title' => 'Peter Grassberger - ' . $project->title,
         'language' => $language,
-        'project' => $project
+        'project' => $project,
+        'translations' => $translations
     )));
 })->setName('project');
 
@@ -737,7 +770,9 @@ $app->get('/blog/:postTitle', $trackView, function($postTitle) use($app) {
 
 $app->get('/blog/:postTitle/', $trackView, function($postTitle) use($app, $config, $pdo, $mustache, $language) {
     $pagesController = new PagesController($config, $pdo);
-    $post = $pagesController->getOneByTypeAndLanguageAndTitle('post', $language, $postTitle);
+    $translations = $pagesController->getByTypeAndTitle('post', $postTitle);
+    $translations = $pagesController->addUrls($translations);
+    $post = $pagesController->filterByLanguage($translations, $language);
 
     if (!$post) {
         $app->notFound();
@@ -745,9 +780,10 @@ $app->get('/blog/:postTitle/', $trackView, function($postTitle) use($app, $confi
 
     $postTemplate = $mustache->loadTemplate('post');
     $app->response->setBody($postTemplate->render(array(
-        'siteTitle' => 'Peter Grassberger - ' . $post->title,
+        'title' => 'Peter Grassberger - ' . $post->title,
         'language' => $language,
-        'post' => $post
+        'post' => $post,
+        'translations' => $translations
     )));
 })->setName('projects');
 
