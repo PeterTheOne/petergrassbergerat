@@ -83,6 +83,7 @@ $app->get('/404/', $trackView, function() use($app, $config, $pdo, $mustache, $l
         'title' => 'Peter Grassberger - 404 Not Found',
         'language' => $language
     )));
+    $app->response()->setStatus(404);
 })->setName('notFound');
 
 /**
