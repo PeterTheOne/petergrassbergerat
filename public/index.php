@@ -548,6 +548,10 @@ $app->get('/feed(/):wildcard+', $trackView, function($wildcard) use($app) {
     $app->redirect('/rss/', 301);
 })->setName('feedRedirect');
 
+$app->get('/:wildcard+/feed(/)', $trackView, function($wildcard) use($app) {
+    $app->redirect('/rss/', 301);
+})->setName('feedRedirect');
+
 $app->get('/rss.php(/)', $trackView, function() use($app) {
     $app->redirect('/rss/', 301);
 })->setName('feedRedirect');
