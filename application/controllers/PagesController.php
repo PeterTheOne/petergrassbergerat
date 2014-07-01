@@ -117,6 +117,21 @@ class PagesController {
     }
 
     /**
+     * @param $pages
+     * @return int
+     */
+    public function findLastModified($pages) {
+        $lastModified = 0;
+        foreach ($pages as $page) {
+            $updated = strtotime($page->updated);
+            if ($updated > $lastModified) {
+                $lastModified = $updated;
+            }
+        }
+        return $lastModified;
+    }
+
+    /**
      * @return mixed
      */
     public function getOneIndex() {

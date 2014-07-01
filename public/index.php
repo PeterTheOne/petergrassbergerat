@@ -136,14 +136,7 @@ $app->get('/projects/', $trackView, function() use($app, $config, $pdo, $mustach
         $app->notFound();
     }
 
-    $lastModified = 0;
-    foreach ($projects as $project) {
-        $updated = strtotime($project->updated);
-        if ($updated > $lastModified) {
-            $lastModified = $updated;
-        }
-    }
-    $app->lastModified($lastModified);
+    $app->lastModified($pagesController->findLastModified($projects));
     $app->expires('+1 week');
 
     $projectsTemplate = $mustache->loadTemplate('projects');
@@ -178,14 +171,7 @@ $app->get('/blog/', $trackView, function() use($app, $config, $pdo, $mustache, $
         $app->notFound();
     }
 
-    $lastModified = 0;
-    foreach ($posts as $post) {
-        $updated = strtotime($post->updated);
-        if ($updated > $lastModified) {
-            $lastModified = $updated;
-        }
-    }
-    $app->lastModified($lastModified);
+    $app->lastModified($pagesController->findLastModified($posts));
     $app->expires('+1 week');
 
     $blogTemplate = $mustache->loadTemplate('blog');
@@ -585,6 +571,9 @@ $app->get('/rss(/)', $trackView, function() use($app, $config, $pdo, $mustache, 
     $pages = $pagesController->addUrls($pages);
     $pages = $pagesController->addPubDate($pages);
 
+    $app->lastModified($pagesController->findLastModified($pages));
+    $app->expires('+1 week');
+
     $pageTemplate = $mustache->loadTemplate('rss');
     $pageRendered = $pageTemplate->render(array(
         'rssTitle' => 'Peter Grassberger - RSS feed: everything ' . $language,
@@ -603,6 +592,9 @@ $app->get('/rss/pages(/)', $trackView, function() use($app, $config, $pdo, $must
     $pages = $pagesController->getAllByTypeAndLanguage('page', $language);
     $pages = $pagesController->addUrls($pages);
     $pages = $pagesController->addPubDate($pages);
+
+    $app->lastModified($pagesController->findLastModified($pages));
+    $app->expires('+1 week');
 
     $pageTemplate = $mustache->loadTemplate('rss');
     $pageRendered = $pageTemplate->render(array(
@@ -623,6 +615,9 @@ $app->get('/rss/projects(/)', $trackView, function() use($app, $config, $pdo, $m
     $pages = $pagesController->addUrls($pages);
     $pages = $pagesController->addPubDate($pages);
 
+    $app->lastModified($pagesController->findLastModified($pages));
+    $app->expires('+1 week');
+
     $pageTemplate = $mustache->loadTemplate('rss');
     $pageRendered = $pageTemplate->render(array(
         'rssTitle' => 'Peter Grassberger - RSS feed: projects ' . $language,
@@ -641,6 +636,9 @@ $app->get('/rss/blog(/)', $trackView, function() use($app, $config, $pdo, $musta
     $pages = $pagesController->getAllByTypeAndLanguage('post', $language);
     $pages = $pagesController->addUrls($pages);
     $pages = $pagesController->addPubDate($pages);
+
+    $app->lastModified($pagesController->findLastModified($pages));
+    $app->expires('+1 week');
 
     $pageTemplate = $mustache->loadTemplate('rss');
     $pageRendered = $pageTemplate->render(array(
@@ -661,6 +659,9 @@ $app->get('/rss/all(/)', $trackView, function() use($app, $config, $pdo, $mustac
     $pages = $pagesController->addUrls($pages);
     $pages = $pagesController->addPubDate($pages);
 
+    $app->lastModified($pagesController->findLastModified($pages));
+    $app->expires('+1 week');
+
     $pageTemplate = $mustache->loadTemplate('rss');
     $pageRendered = $pageTemplate->render(array(
         'rssTitle' => 'Peter Grassberger - RSS feed: everything all languages',
@@ -679,6 +680,9 @@ $app->get('/rss/pages/all(/)', $trackView, function() use($app, $config, $pdo, $
     $pages = $pagesController->getAllByType('page', array('pagecontents.created DESC'));
     $pages = $pagesController->addUrls($pages);
     $pages = $pagesController->addPubDate($pages);
+
+    $app->lastModified($pagesController->findLastModified($pages));
+    $app->expires('+1 week');
 
     $pageTemplate = $mustache->loadTemplate('rss');
     $pageRendered = $pageTemplate->render(array(
@@ -699,6 +703,9 @@ $app->get('/rss/projects/all(/)', $trackView, function() use($app, $config, $pdo
     $pages = $pagesController->addUrls($pages);
     $pages = $pagesController->addPubDate($pages);
 
+    $app->lastModified($pagesController->findLastModified($pages));
+    $app->expires('+1 week');
+
     $pageTemplate = $mustache->loadTemplate('rss');
     $pageRendered = $pageTemplate->render(array(
         'rssTitle' => 'Peter Grassberger - RSS feed: projects all languages',
@@ -717,6 +724,9 @@ $app->get('/rss/blog/all(/)', $trackView, function() use($app, $config, $pdo, $m
     $pages = $pagesController->getAllByType('post', array('pagecontents.created DESC'));
     $pages = $pagesController->addUrls($pages);
     $pages = $pagesController->addPubDate($pages);
+
+    $app->lastModified($pagesController->findLastModified($pages));
+    $app->expires('+1 week');
 
     $pageTemplate = $mustache->loadTemplate('rss');
     $pageRendered = $pageTemplate->render(array(
