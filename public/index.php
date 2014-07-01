@@ -108,6 +108,9 @@ $app->get('/', $trackView, function() use($app, $config, $pdo, $mustache, $langu
         $app->notFound();
     }
 
+    $app->lastModified(strtotime($page->updated));
+    $app->expires('+1 week');
+
     $pageTemplate = $mustache->loadTemplate('page');
     $app->response->setBody($pageTemplate->render(array(
         'title' => 'Peter Grassberger - Index',
@@ -726,6 +729,9 @@ $app->get('/:pageTitle/', $trackView, function($pageTitle) use($app, $config, $p
         $app->notFound();
     }
 
+    $app->lastModified(strtotime($page->updated));
+    $app->expires('+1 week');
+
     $pageTemplate = $mustache->loadTemplate('page');
     $app->response->setBody($pageTemplate->render(array(
         'title' => 'Peter Grassberger - ' . $page->title,
@@ -760,6 +766,9 @@ $app->get('/projects/:projectTitle/', $trackView, function($projectTitle) use($a
         $app->notFound();
     }
 
+    $app->lastModified(strtotime($project->updated));
+    $app->expires('+1 week');
+
     $projectTemplate = $mustache->loadTemplate('project');
     $app->response->setBody($projectTemplate->render(array(
         'title' => 'Peter Grassberger - ' . $project->title,
@@ -782,6 +791,9 @@ $app->get('/blog/:postTitle/', $trackView, function($postTitle) use($app, $confi
     if (!$post) {
         $app->notFound();
     }
+
+    $app->lastModified(strtotime($post->updated));
+    $app->expires('+1 week');
 
     $postTemplate = $mustache->loadTemplate('post');
     $app->response->setBody($postTemplate->render(array(
