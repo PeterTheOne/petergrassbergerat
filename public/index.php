@@ -136,6 +136,16 @@ $app->get('/projects/', $trackView, function() use($app, $config, $pdo, $mustach
         $app->notFound();
     }
 
+    $lastModified = 0;
+    foreach ($projects as $project) {
+        $updated = strtotime($project->updated);
+        if ($updated > $lastModified) {
+            $lastModified = $updated;
+        }
+    }
+    $app->lastModified($lastModified);
+    $app->expires('+1 week');
+
     $projectsTemplate = $mustache->loadTemplate('projects');
     $app->response->setBody($projectsTemplate->render(array(
         'title' => 'Peter Grassberger - Projects',
@@ -167,6 +177,16 @@ $app->get('/blog/', $trackView, function() use($app, $config, $pdo, $mustache, $
     if (!$posts) {
         $app->notFound();
     }
+
+    $lastModified = 0;
+    foreach ($posts as $post) {
+        $updated = strtotime($post->updated);
+        if ($updated > $lastModified) {
+            $lastModified = $updated;
+        }
+    }
+    $app->lastModified($lastModified);
+    $app->expires('+1 week');
 
     $blogTemplate = $mustache->loadTemplate('blog');
     $app->response->setBody($blogTemplate->render(array(
