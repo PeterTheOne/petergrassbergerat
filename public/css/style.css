@@ -249,12 +249,12 @@ th {
     text-align: left;
 }
 
-html[lang="en"] :link:not([hreflang="en"])::after {
+html[lang="en"] :link[hreflang]:not([hreflang="en"])::after {
     content: " "attr(hreflang);
     font-size: xx-small;
 }
 
-html[lang="de"] :link:not([hreflang="de"])::after {
+html[lang="de"] :link[hreflang]:not([hreflang="de"])::after {
     content: " "attr(hreflang);
     font-size: xx-small;
 }
