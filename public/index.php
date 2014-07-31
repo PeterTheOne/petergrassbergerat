@@ -3,7 +3,6 @@
 require_once '../vendor/autoload.php';
 
 // todo: autoload
-require_once '../libraries/piwik/PiwikTracker.php';
 require_once '../config.php';
 require_once '../application/repositories/PagesRepository.php';
 require_once '../application/controllers/PagesController.php';
@@ -35,27 +34,6 @@ $app->error(function(\Exception $exception) use ($app) {
     $app->response->setBody($exception->getMessage());
 });
 
-$trackView = function(\Slim\Route $route = null) {
-    global $config;
-
-    // don't track localhost (development)
-    if(in_array($_SERVER['REMOTE_ADDR'], array('127.0.0.1', '::1'))) {
-        return;
-    }
-
-    // todo: get siteId and url from config:
-    $piwikTracker = new PiwikTracker(1, 'http://piwik.petergrassberger.com/');
-
-    $piwikTracker->setTokenAuth($config->piwikAuthToken);
-    $piwikTracker->setIp($_SERVER['REMOTE_ADDR']);
-
-    if ($route === null) {
-        $piwikTracker->doTrackPageView('');
-    } else {
-        $piwikTracker->doTrackPageView($route->getName());
-    }
-};
-
 $authenticate = function(\SLIM\SLIM $app, $config) {
     return function() use ($app, $config) {
         if (!isset($_SESSION['login']) ||
@@ -72,12 +50,11 @@ $authenticate = function(\SLIM\SLIM $app, $config) {
  * 404
  */
 
-$app->notFound(function () use ($app, $trackView) {
-    $trackView($app->router()->getCurrentRoute());
+$app->notFound(function () use ($app) {
     $app->redirect('/404/');
 });
 
-$app->get('/404/', $trackView, function() use($app, $config, $pdo, $mustache, $language) {
+$app->get('/404/', function() use($app, $config, $pdo, $mustache, $language) {
     $notFound = $mustache->loadTemplate('notFound');
     $app->response->setBody($notFound->render(array(
         'title' => 'Peter Grassberger - 404 Not Found',
@@ -90,15 +67,15 @@ $app->get('/404/', $trackView, function() use($app, $config, $pdo, $mustache, $l
  * DISPLAY ROOT, PROJECTS AND BLOG
  */
 
-$app->get('/bio(/)', $trackView, function() use($app) {
+$app->get('/bio(/)', function() use($app) {
     $app->redirect('/', 301);
 })->setName('bioRedirect');
 
-$app->get('/vita(/)', $trackView, function() use($app) {
+$app->get('/vita(/)', function() use($app) {
     $app->redirect('/', 301);
 })->setName('vitaRedirect');
 
-$app->get('/', $trackView, function() use($app, $config, $pdo, $mustache, $language) {
+$app->get('/', function() use($app, $config, $pdo, $mustache, $language) {
     $pagesController = new PagesController($config, $pdo);
     $translations = $pagesController->getOneIndex();
     $translations = $pagesController->addUrls($translations);
@@ -120,15 +97,15 @@ $app->get('/', $trackView, function() use($app, $config, $pdo, $mustache, $langu
     )));
 })->setName('index');
 
-$app->get('/portfolio(/)', $trackView, function() use($app) {
+$app->get('/portfolio(/)', function() use($app) {
     $app->redirect('/projects/', 301);
 })->setName('portfolioRedirect');
 
-$app->get('/projects', $trackView, function() use($app) {
+$app->get('/projects', function() use($app) {
     $app->redirect('/projects/', 301);
 })->setName('projectsRedirect');
 
-$app->get('/projects/', $trackView, function() use($app, $config, $pdo, $mustache, $language) {
+$app->get('/projects/', function() use($app, $config, $pdo, $mustache, $language) {
     $pagesController = new PagesController($config, $pdo);
     $projects = $pagesController->getAllByTypeAndLanguage('project', $language);
 
@@ -159,11 +136,11 @@ $app->get('/projects/', $trackView, function() use($app, $config, $pdo, $mustach
     )));
 })->setName('projects');
 
-$app->get('/blog', $trackView, function() use($app) {
+$app->get('/blog', function() use($app) {
     $app->redirect('/blog/', 301);
 })->setName('blogRedirect');
 
-$app->get('/blog/', $trackView, function() use($app, $config, $pdo, $mustache, $language) {
+$app->get('/blog/', function() use($app, $config, $pdo, $mustache, $language) {
     $pagesController = new PagesController($config, $pdo);
     $posts = $pagesController->getAllByTypeAndLanguage('post', $language);
 
@@ -198,12 +175,12 @@ $app->get('/blog/', $trackView, function() use($app, $config, $pdo, $mustache, $
  * ADMIN LOGIN AND LOGOUT
  */
 
-$app->get('/admin/login(/)', $trackView, function() use($app, $config, $pdo, $mustache) {
+$app->get('/admin/login(/)', function() use($app, $config, $pdo, $mustache) {
     $loginTemplate = $mustache->loadTemplate('login');
     $app->response->setBody($loginTemplate->render());
 })->setName('adminLogin');
 
-$app->post('/admin/login(/)', $trackView, function() use($app, $config, $pdo, $mustache) {
+$app->post('/admin/login(/)', function() use($app, $config, $pdo, $mustache) {
     $username = $app->request()->post('username');
     $password = $app->request()->post('password');
     if ($username === null || $username == '' ||
@@ -229,7 +206,7 @@ $app->post('/admin/login(/)', $trackView, function() use($app, $config, $pdo, $m
     $app->redirect('/admin/');
 })->setName('adminLoginPost');
 
-$app->get('/admin/logout(/)', $trackView, function() use($app, $config, $pdo, $mustache) {
+$app->get('/admin/logout(/)', function() use($app, $config, $pdo, $mustache) {
     unset($_SESSION['login']);
     unset($_SESSION['HTTP_USER_AGENT']);
     $app->redirect('/admin/login/');
@@ -239,11 +216,11 @@ $app->get('/admin/logout(/)', $trackView, function() use($app, $config, $pdo, $m
  * ADMIN PAGES
  */
 
-$app->get('/admin(/)', $trackView, $authenticate($app, $config), function() use($app, $config, $pdo, $mustache) {
+$app->get('/admin(/)', $authenticate($app, $config), function() use($app, $config, $pdo, $mustache) {
     $app->response->setBody($mustache->loadTemplate('admin')->render());
 })->setName('admin');
 
-$app->get('/admin/pages(/)', $trackView, $authenticate($app, $config), function() use($app, $config, $pdo, $mustache) {
+$app->get('/admin/pages(/)', $authenticate($app, $config), function() use($app, $config, $pdo, $mustache) {
     $pagesController = new PagesController($config, $pdo);
     $pages = $pagesController->getAllByType('page', array('pages.id', 'languages.id'));
     $pages = $pagesController->regroupedById($pages);
@@ -251,14 +228,14 @@ $app->get('/admin/pages(/)', $trackView, $authenticate($app, $config), function(
     $app->response->setBody($mustache->loadTemplate('adminPages')->render(array('pages' => $pages)));
 })->setName('adminPages');
 
-$app->get('/admin/pages/:language/:pageTitle(/)', $trackView, $authenticate($app, $config), function($language, $pageTitle) use($app, $config, $pdo, $mustache) {
+$app->get('/admin/pages/:language/:pageTitle(/)', $authenticate($app, $config), function($language, $pageTitle) use($app, $config, $pdo, $mustache) {
     $pagesController = new PagesController($config, $pdo);
     $page = $pagesController->getOneByTypeAndLanguageAndTitle('page', $language, $pageTitle);
 
     $app->response->setBody($mustache->loadTemplate('adminEditPage')->render(array('page' => $page)));
 })->setName('adminEditPage');
 
-$app->post('/admin/pages/:language/:pagesTitle(/)', $trackView, $authenticate($app, $config), function($language, $pagesTitle) use($app, $config, $pdo, $mustache) {
+$app->post('/admin/pages/:language/:pagesTitle(/)', $authenticate($app, $config), function($language, $pagesTitle) use($app, $config, $pdo, $mustache) {
     $title = $app->request()->post('title');
     $title_clean = $app->request()->post('title_clean');
     $content = $app->request()->post('content');
@@ -275,7 +252,7 @@ $app->post('/admin/pages/:language/:pagesTitle(/)', $trackView, $authenticate($a
     $app->redirect('/admin/pages/');
 })->setName('adminEditPagePost');
 
-$app->get('/admin/projects(/)', $trackView, $authenticate($app, $config), function() use($app, $config, $pdo, $mustache) {
+$app->get('/admin/projects(/)', $authenticate($app, $config), function() use($app, $config, $pdo, $mustache) {
     $pagesController = new PagesController($config, $pdo);
     $projects = $pagesController->getAllByType('project', array('pages.id', 'languages.id'));
     $projects = $pagesController->regroupedById($projects);
@@ -283,14 +260,14 @@ $app->get('/admin/projects(/)', $trackView, $authenticate($app, $config), functi
     $app->response->setBody($mustache->loadTemplate('adminProjects')->render(array('projects' => $projects)));
 })->setName('adminProjects');
 
-$app->get('/admin/projects/:language/:projectTitle(/)', $trackView, $authenticate($app, $config), function($language, $projectTitle) use($app, $config, $pdo, $mustache) {
+$app->get('/admin/projects/:language/:projectTitle(/)', $authenticate($app, $config), function($language, $projectTitle) use($app, $config, $pdo, $mustache) {
     $pagesController = new PagesController($config, $pdo);
     $project = $pagesController->getOneByTypeAndLanguageAndTitle('project', $language, $projectTitle);
 
     $app->response->setBody($mustache->loadTemplate('adminEditProject')->render(array('project' => $project)));
 })->setName('adminEditProject');
 
-$app->post('/admin/projects/:language/:projectsTitle(/)', $trackView, $authenticate($app, $config), function($language, $projectTitle) use($app, $config, $pdo, $mustache) {
+$app->post('/admin/projects/:language/:projectsTitle(/)', $authenticate($app, $config), function($language, $projectTitle) use($app, $config, $pdo, $mustache) {
     $title = $app->request()->post('title');
     $title_clean = $app->request()->post('title_clean');
     $content = $app->request()->post('content');
@@ -307,7 +284,7 @@ $app->post('/admin/projects/:language/:projectsTitle(/)', $trackView, $authentic
     $app->redirect('/admin/projects/');
 })->setName('adminEditProjectPost');
 
-$app->get('/admin/posts(/)', $trackView, $authenticate($app, $config), function() use($app, $config, $pdo, $mustache) {
+$app->get('/admin/posts(/)', $authenticate($app, $config), function() use($app, $config, $pdo, $mustache) {
     $pagesController = new PagesController($config, $pdo);
     $posts = $pagesController->getAllByType('post', array('pages.id', 'languages.id'));
     $posts = $pagesController->regroupedById($posts);
@@ -315,14 +292,14 @@ $app->get('/admin/posts(/)', $trackView, $authenticate($app, $config), function(
     $app->response->setBody($mustache->loadTemplate('adminPosts')->render(array('posts' => $posts)));
 })->setName('adminPosts');
 
-$app->get('/admin/posts/:language/:postTitle(/)', $trackView, $authenticate($app, $config), function($language, $postTitle) use($app, $config, $pdo, $mustache) {
+$app->get('/admin/posts/:language/:postTitle(/)', $authenticate($app, $config), function($language, $postTitle) use($app, $config, $pdo, $mustache) {
     $pagesController = new PagesController($config, $pdo);
     $post = $pagesController->getOneByTypeAndLanguageAndTitle('post', $language, $postTitle);
 
     $app->response->setBody($mustache->loadTemplate('adminEditPost')->render(array('post' => $post)));
 })->setName('adminEditPost');
 
-$app->post('/admin/posts/:language/:postsTitle(/)', $trackView, $authenticate($app, $config), function($language, $postsTitle) use($app, $config, $pdo, $mustache) {
+$app->post('/admin/posts/:language/:postsTitle(/)', $authenticate($app, $config), function($language, $postsTitle) use($app, $config, $pdo, $mustache) {
     $title = $app->request()->post('title');
     $title_clean = $app->request()->post('title_clean');
     $content = $app->request()->post('content');
@@ -343,14 +320,14 @@ $app->post('/admin/posts/:language/:postsTitle(/)', $trackView, $authenticate($a
  * ADMIN CREATE PAGES, PROJECTS, POSTS
  */
 
-$app->get('/admin/create/page(/)', $trackView, $authenticate($app, $config), function() use($app, $config, $pdo, $mustache) {
+$app->get('/admin/create/page(/)', $authenticate($app, $config), function() use($app, $config, $pdo, $mustache) {
     $pagesController = new PagesController($config, $pdo);
     $languages = $pagesController->getAllLanguages();
 
     $app->response->setBody($mustache->loadTemplate('adminCreatePage')->render(array('languages' => $languages)));
 })->setName('adminCreatePage');
 
-$app->post('/admin/create/page(/)', $trackView, $authenticate($app, $config), function() use($app, $config, $pdo, $mustache) {
+$app->post('/admin/create/page(/)', $authenticate($app, $config), function() use($app, $config, $pdo, $mustache) {
     $language = $app->request()->post('language');
     $title = $app->request()->post('title');
     $title_clean = $app->request()->post('title_clean');
@@ -369,14 +346,14 @@ $app->post('/admin/create/page(/)', $trackView, $authenticate($app, $config), fu
     $app->redirect('/admin/pages/');
 })->setName('adminCreatePagePost');
 
-$app->get('/admin/create/project(/)', $trackView, $authenticate($app, $config), function() use($app, $config, $pdo, $mustache) {
+$app->get('/admin/create/project(/)', $authenticate($app, $config), function() use($app, $config, $pdo, $mustache) {
     $pagesController = new PagesController($config, $pdo);
     $languages = $pagesController->getAllLanguages();
 
     $app->response->setBody($mustache->loadTemplate('adminCreateProject')->render(array('languages' => $languages)));
 })->setName('adminCreateProject');
 
-$app->post('/admin/create/project(/)', $trackView, $authenticate($app, $config), function() use($app, $config, $pdo, $mustache) {
+$app->post('/admin/create/project(/)', $authenticate($app, $config), function() use($app, $config, $pdo, $mustache) {
     $language = $app->request()->post('language');
     $title = $app->request()->post('title');
     $title_clean = $app->request()->post('title_clean');
@@ -395,14 +372,14 @@ $app->post('/admin/create/project(/)', $trackView, $authenticate($app, $config),
     $app->redirect('/admin/projects/');
 })->setName('adminCreateProjectPost');
 
-$app->get('/admin/create/post(/)', $trackView, $authenticate($app, $config), function() use($app, $config, $pdo, $mustache) {
+$app->get('/admin/create/post(/)', $authenticate($app, $config), function() use($app, $config, $pdo, $mustache) {
     $pagesController = new PagesController($config, $pdo);
     $languages = $pagesController->getAllLanguages();
 
     $app->response->setBody($mustache->loadTemplate('adminCreatePost')->render(array('languages' => $languages)));
 })->setName('adminCreatePost');
 
-$app->post('/admin/create/post(/)', $trackView, $authenticate($app, $config), function() use($app, $config, $pdo, $mustache) {
+$app->post('/admin/create/post(/)', $authenticate($app, $config), function() use($app, $config, $pdo, $mustache) {
     $language = $app->request()->post('language');
     $title = $app->request()->post('title');
     $title_clean = $app->request()->post('title_clean');
@@ -425,7 +402,7 @@ $app->post('/admin/create/post(/)', $trackView, $authenticate($app, $config), fu
  * CREATE TRANSLATIONS
  */
 
-$app->get('/admin/translate/page/:pageId(/)', $trackView, $authenticate($app, $config), function($pageId) use($app, $config, $pdo, $mustache) {
+$app->get('/admin/translate/page/:pageId(/)', $authenticate($app, $config), function($pageId) use($app, $config, $pdo, $mustache) {
     $pagesController = new PagesController($config, $pdo);
     $languages = $pagesController->getAllLanguagesNotUsedByPageId($pageId);
     if (!$languages) {
@@ -435,7 +412,7 @@ $app->get('/admin/translate/page/:pageId(/)', $trackView, $authenticate($app, $c
     $app->response->setBody($mustache->loadTemplate('adminTranslatePage')->render(array('pageId' => $pageId, 'languages' => $languages)));
 })->setName('adminTranslatePage');
 
-$app->post('/admin/translate/page/:pageId(/)', $trackView, $authenticate($app, $config), function($pageId) use($app, $config, $pdo, $mustache) {
+$app->post('/admin/translate/page/:pageId(/)', $authenticate($app, $config), function($pageId) use($app, $config, $pdo, $mustache) {
     $language = $app->request()->post('language');
     $title = $app->request()->post('title');
     $title_clean = $app->request()->post('title_clean');
@@ -454,7 +431,7 @@ $app->post('/admin/translate/page/:pageId(/)', $trackView, $authenticate($app, $
     $app->redirect('/admin/pages/');
 })->setName('adminTranslatePagePost');
 
-$app->get('/admin/translate/project/:pageId(/)', $trackView, $authenticate($app, $config), function($pageId) use($app, $config, $pdo, $mustache) {
+$app->get('/admin/translate/project/:pageId(/)', $authenticate($app, $config), function($pageId) use($app, $config, $pdo, $mustache) {
     $pagesController = new PagesController($config, $pdo);
     $languages = $pagesController->getAllLanguagesNotUsedByPageId($pageId);
     if (!$languages) {
@@ -464,7 +441,7 @@ $app->get('/admin/translate/project/:pageId(/)', $trackView, $authenticate($app,
     $app->response->setBody($mustache->loadTemplate('adminTranslateProject')->render(array('pageId' => $pageId, 'languages' => $languages)));
 })->setName('adminTranslateProject');
 
-$app->post('/admin/translate/project/:pageId(/)', $trackView, $authenticate($app, $config), function($pageId) use($app, $config, $pdo, $mustache) {
+$app->post('/admin/translate/project/:pageId(/)', $authenticate($app, $config), function($pageId) use($app, $config, $pdo, $mustache) {
     $language = $app->request()->post('language');
     $title = $app->request()->post('title');
     $title_clean = $app->request()->post('title_clean');
@@ -483,7 +460,7 @@ $app->post('/admin/translate/project/:pageId(/)', $trackView, $authenticate($app
     $app->redirect('/admin/projects/');
 })->setName('adminTranslateProjectPost');
 
-$app->get('/admin/translate/post/:pageId(/)', $trackView, $authenticate($app, $config), function($pageId) use($app, $config, $pdo, $mustache) {
+$app->get('/admin/translate/post/:pageId(/)', $authenticate($app, $config), function($pageId) use($app, $config, $pdo, $mustache) {
     $pagesController = new PagesController($config, $pdo);
     $languages = $pagesController->getAllLanguagesNotUsedByPageId($pageId);
     if (!$languages) {
@@ -493,7 +470,7 @@ $app->get('/admin/translate/post/:pageId(/)', $trackView, $authenticate($app, $c
     $app->response->setBody($mustache->loadTemplate('adminTranslatePost')->render(array('pageId' => $pageId, 'languages' => $languages)));
 })->setName('adminTranslatePost');
 
-$app->post('/admin/translate/post/:pageId(/)', $trackView, $authenticate($app, $config), function($pageId) use($app, $config, $pdo, $mustache) {
+$app->post('/admin/translate/post/:pageId(/)', $authenticate($app, $config), function($pageId) use($app, $config, $pdo, $mustache) {
     $language = $app->request()->post('language');
     $title = $app->request()->post('title');
     $title_clean = $app->request()->post('title_clean');
@@ -516,33 +493,33 @@ $app->post('/admin/translate/post/:pageId(/)', $trackView, $authenticate($app, $
  * ADMIN REMOVE PAGES, PROJECTS, POSTS
  */
 
-$app->get('/admin/remove/page/:pageTitle(/)', $trackView, $authenticate($app, $config), function($pageTitle) use($app, $config, $pdo, $mustache) {
+$app->get('/admin/remove/page/:pageTitle(/)', $authenticate($app, $config), function($pageTitle) use($app, $config, $pdo, $mustache) {
     $app->response->setBody($mustache->loadTemplate('adminRemovePage')->render(array('pageTitle' => $pageTitle)));
 })->setName('adminRemovePage');
 
-$app->post('/admin/remove/page/:pageTitle(/)', $trackView, $authenticate($app, $config), function($pageTitle) use($app, $config, $pdo, $mustache) {
+$app->post('/admin/remove/page/:pageTitle(/)', $authenticate($app, $config), function($pageTitle) use($app, $config, $pdo, $mustache) {
     $pagesController = new PagesController($config, $pdo);
     $pagesController->removePage($pageTitle);
 
     $app->redirect('/admin/pages/');
 })->setName('adminRemovePagePost');
 
-$app->get('/admin/remove/project/:projectTitle(/)', $trackView, $authenticate($app, $config), function($projectTitle) use($app, $config, $pdo, $mustache) {
+$app->get('/admin/remove/project/:projectTitle(/)', $authenticate($app, $config), function($projectTitle) use($app, $config, $pdo, $mustache) {
     $app->response->setBody($mustache->loadTemplate('adminRemoveProject')->render(array('projectTitle' => $projectTitle)));
 })->setName('adminRemoveProject');
 
-$app->post('/admin/remove/project/:projectTitle(/)', $trackView, $authenticate($app, $config), function($projectTitle) use($app, $config, $pdo, $mustache) {
+$app->post('/admin/remove/project/:projectTitle(/)', $authenticate($app, $config), function($projectTitle) use($app, $config, $pdo, $mustache) {
     $pagesController = new PagesController($config, $pdo);
     $pagesController->removeProject($projectTitle);
 
     $app->redirect('/admin/projects/');
 })->setName('adminRemoveProjectPost');
 
-$app->get('/admin/remove/post/:postTitle(/)', $trackView, $authenticate($app, $config), function($postTitle) use($app, $config, $pdo, $mustache) {
+$app->get('/admin/remove/post/:postTitle(/)', $authenticate($app, $config), function($postTitle) use($app, $config, $pdo, $mustache) {
     $app->response->setBody($mustache->loadTemplate('adminRemovePost')->render(array('postTitle' => $postTitle)));
 })->setName('adminRemovePost');
 
-$app->post('/admin/remove/post/:postTitle(/)', $trackView, $authenticate($app, $config), function($postTitle) use($app, $config, $pdo, $mustache) {
+$app->post('/admin/remove/post/:postTitle(/)', $authenticate($app, $config), function($postTitle) use($app, $config, $pdo, $mustache) {
     $pagesController = new PagesController($config, $pdo);
     $pagesController->removePost($postTitle);
 
@@ -553,19 +530,19 @@ $app->post('/admin/remove/post/:postTitle(/)', $trackView, $authenticate($app, $
  * FEED
  */
 
-$app->get('/feed(/):wildcard+', $trackView, function($wildcard) use($app) {
+$app->get('/feed(/):wildcard+', function($wildcard) use($app) {
     $app->redirect('/rss/', 301);
 })->setName('feedRedirect');
 
-$app->get('/:wildcard+/feed(/)', $trackView, function($wildcard) use($app) {
+$app->get('/:wildcard+/feed(/)', function($wildcard) use($app) {
     $app->redirect('/rss/', 301);
 })->setName('feedRedirect');
 
-$app->get('/rss.php(/)', $trackView, function() use($app) {
+$app->get('/rss.php(/)', function() use($app) {
     $app->redirect('/rss/', 301);
 })->setName('feedRedirect');
 
-$app->get('/rss(/)', $trackView, function() use($app, $config, $pdo, $mustache, $language) {
+$app->get('/rss(/)', function() use($app, $config, $pdo, $mustache, $language) {
     $pagesController = new PagesController($config, $pdo);
     $pages = $pagesController->getAllByLanguage($language);
     $pages = $pagesController->addUrls($pages);
@@ -587,7 +564,7 @@ $app->get('/rss(/)', $trackView, function() use($app, $config, $pdo, $mustache, 
     $app->response->setBody($pageRendered);
 })->setName('rssEverythingFlexibleLanguages');
 
-$app->get('/rss/pages(/)', $trackView, function() use($app, $config, $pdo, $mustache, $language) {
+$app->get('/rss/pages(/)', function() use($app, $config, $pdo, $mustache, $language) {
     $pagesController = new PagesController($config, $pdo);
     $pages = $pagesController->getAllByTypeAndLanguage('page', $language);
     $pages = $pagesController->addUrls($pages);
@@ -609,7 +586,7 @@ $app->get('/rss/pages(/)', $trackView, function() use($app, $config, $pdo, $must
     $app->response->setBody($pageRendered);
 })->setName('rssPagesFlexibleLanguages');
 
-$app->get('/rss/projects(/)', $trackView, function() use($app, $config, $pdo, $mustache, $language) {
+$app->get('/rss/projects(/)', function() use($app, $config, $pdo, $mustache, $language) {
     $pagesController = new PagesController($config, $pdo);
     $pages = $pagesController->getAllByTypeAndLanguage('project', $language);
     $pages = $pagesController->addUrls($pages);
@@ -631,7 +608,7 @@ $app->get('/rss/projects(/)', $trackView, function() use($app, $config, $pdo, $m
     $app->response->setBody($pageRendered);
 })->setName('rssProjectsFlexibleLanguages');
 
-$app->get('/rss/blog(/)', $trackView, function() use($app, $config, $pdo, $mustache, $language) {
+$app->get('/rss/blog(/)', function() use($app, $config, $pdo, $mustache, $language) {
     $pagesController = new PagesController($config, $pdo);
     $pages = $pagesController->getAllByTypeAndLanguage('post', $language);
     $pages = $pagesController->addUrls($pages);
@@ -653,7 +630,7 @@ $app->get('/rss/blog(/)', $trackView, function() use($app, $config, $pdo, $musta
     $app->response->setBody($pageRendered);
 })->setName('rssBlogFlexibleLanguages');
 
-$app->get('/rss/all(/)', $trackView, function() use($app, $config, $pdo, $mustache, $language) {
+$app->get('/rss/all(/)', function() use($app, $config, $pdo, $mustache, $language) {
     $pagesController = new PagesController($config, $pdo);
     $pages = $pagesController->getAll();
     $pages = $pagesController->addUrls($pages);
@@ -675,7 +652,7 @@ $app->get('/rss/all(/)', $trackView, function() use($app, $config, $pdo, $mustac
     $app->response->setBody($pageRendered);
 })->setName('rssEverythingAllLanguages');
 
-$app->get('/rss/pages/all(/)', $trackView, function() use($app, $config, $pdo, $mustache, $language) {
+$app->get('/rss/pages/all(/)', function() use($app, $config, $pdo, $mustache, $language) {
     $pagesController = new PagesController($config, $pdo);
     $pages = $pagesController->getAllByType('page', array('pagecontents.created DESC'));
     $pages = $pagesController->addUrls($pages);
@@ -697,7 +674,7 @@ $app->get('/rss/pages/all(/)', $trackView, function() use($app, $config, $pdo, $
     $app->response->setBody($pageRendered);
 })->setName('rssPagesAllLanguages');
 
-$app->get('/rss/projects/all(/)', $trackView, function() use($app, $config, $pdo, $mustache, $language) {
+$app->get('/rss/projects/all(/)', function() use($app, $config, $pdo, $mustache, $language) {
     $pagesController = new PagesController($config, $pdo);
     $pages = $pagesController->getAllByType('project', array('pagecontents.created DESC'));
     $pages = $pagesController->addUrls($pages);
@@ -719,7 +696,7 @@ $app->get('/rss/projects/all(/)', $trackView, function() use($app, $config, $pdo
     $app->response->setBody($pageRendered);
 })->setName('rssProjectsAllLanguages');
 
-$app->get('/rss/blog/all(/)', $trackView, function() use($app, $config, $pdo, $mustache, $language) {
+$app->get('/rss/blog/all(/)', function() use($app, $config, $pdo, $mustache, $language) {
     $pagesController = new PagesController($config, $pdo);
     $pages = $pagesController->getAllByType('post', array('pagecontents.created DESC'));
     $pages = $pagesController->addUrls($pages);
@@ -745,11 +722,11 @@ $app->get('/rss/blog/all(/)', $trackView, function() use($app, $config, $pdo, $m
  * DISPLAY PAGES, PROJECTS AND POSTS
  */
 
-$app->get('/:pageTitle', $trackView, function($pageTitle) use($app) {
+$app->get('/:pageTitle', function($pageTitle) use($app) {
     $app->redirect('/' . $pageTitle . '/', 301);
 })->setName('pagesRedirect');
 
-$app->get('/:pageTitle/', $trackView, function($pageTitle) use($app, $config, $pdo, $mustache, $language) {
+$app->get('/:pageTitle/', function($pageTitle) use($app, $config, $pdo, $mustache, $language) {
     $pagesController = new PagesController($config, $pdo);
     $translations = $pagesController->getByTypeAndTitle('page', $pageTitle);
     $translations = $pagesController->addUrls($translations);
@@ -771,7 +748,7 @@ $app->get('/:pageTitle/', $trackView, function($pageTitle) use($app, $config, $p
     )));
 })->setName('pages');
 
-$app->get('/portfolio/:projectTitle(/)', $trackView, function($projectTitle) use($app, $config, $pdo, $language) {
+$app->get('/portfolio/:projectTitle(/)', function($projectTitle) use($app, $config, $pdo, $language) {
     $pagesController = new PagesController($config, $pdo);
     $project = $pagesController->getOneByTypeAndLanguageAndTitle('project', $language, $projectTitle);
 
@@ -782,11 +759,11 @@ $app->get('/portfolio/:projectTitle(/)', $trackView, function($projectTitle) use
     $app->redirect('/projects/' . $projectTitle . '/', 301);
 })->setName('portfolioProjectRedirect');
 
-$app->get('/projects/:projectTitle', $trackView, function($projectTitle) use($app) {
+$app->get('/projects/:projectTitle', function($projectTitle) use($app) {
     $app->redirect('/projects/' . $projectTitle . '/', 301);
 })->setName('projectRedirect');
 
-$app->get('/projects/:projectTitle/', $trackView, function($projectTitle) use($app, $config, $pdo, $mustache, $language) {
+$app->get('/projects/:projectTitle/', function($projectTitle) use($app, $config, $pdo, $mustache, $language) {
     $pagesController = new PagesController($config, $pdo);
     $translations = $pagesController->getByTypeAndTitle('project', $projectTitle);
     $translations = $pagesController->addUrls($translations);
@@ -808,11 +785,11 @@ $app->get('/projects/:projectTitle/', $trackView, function($projectTitle) use($a
     )));
 })->setName('project');
 
-$app->get('/blog/:postTitle', $trackView, function($postTitle) use($app) {
+$app->get('/blog/:postTitle', function($postTitle) use($app) {
     $app->redirect('/blog/' . $postTitle . '/', 301);
 })->setName('projectsRedirect');
 
-$app->get('/blog/:postTitle/', $trackView, function($postTitle) use($app, $config, $pdo, $mustache, $language) {
+$app->get('/blog/:postTitle/', function($postTitle) use($app, $config, $pdo, $mustache, $language) {
     $pagesController = new PagesController($config, $pdo);
     $translations = $pagesController->getByTypeAndTitle('post', $postTitle);
     $translations = $pagesController->addUrls($translations);
