@@ -3,6 +3,7 @@
 require_once '../vendor/autoload.php';
 
 // todo: autoload
+require_once '../libraries/piwik/PiwikTracker.php';
 require_once '../config.php';
 require_once '../application/repositories/PagesRepository.php';
 require_once '../application/controllers/PagesController.php';
@@ -33,6 +34,27 @@ $app->error(function(\Exception $exception) use ($app) {
     $app->response->headers->set('X-Status-Reason', $exception->getMessage());
     $app->response->setBody($exception->getMessage());
 });
+
+$trackView = function(\Slim\Route $route = null) {
+    global $config;
+
+    // don't track localhost (development)
+    if(in_array($_SERVER['REMOTE_ADDR'], array('127.0.0.1', '::1'))) {
+        return;
+    }
+
+    // todo: get siteId and url from config:
+    $piwikTracker = new PiwikTracker(1, 'http://piwik.petergrassberger.com/');
+
+    $piwikTracker->setTokenAuth($config->piwikAuthToken);
+    $piwikTracker->setIp($_SERVER['REMOTE_ADDR']);
+
+    if ($route === null) {
+        $piwikTracker->doTrackPageView('');
+    } else {
+        $piwikTracker->doTrackPageView($route->getName());
+    }
+};
 
 $authenticate = function(\SLIM\SLIM $app, $config) {
     return function() use ($app, $config) {
@@ -530,19 +552,19 @@ $app->post('/admin/remove/post/:postTitle(/)', $authenticate($app, $config), fun
  * FEED
  */
 
-$app->get('/feed(/):wildcard+', function($wildcard) use($app) {
+$app->get('/feed(/):wildcard+', $trackView, function($wildcard) use($app) {
     $app->redirect('/rss/', 301);
 })->setName('feedRedirect');
 
-$app->get('/:wildcard+/feed(/)', function($wildcard) use($app) {
+$app->get('/:wildcard+/feed(/)', $trackView, function($wildcard) use($app) {
     $app->redirect('/rss/', 301);
 })->setName('feedRedirect');
 
-$app->get('/rss.php(/)', function() use($app) {
+$app->get('/rss.php(/)', $trackView, function() use($app) {
     $app->redirect('/rss/', 301);
 })->setName('feedRedirect');
 
-$app->get('/rss(/)', function() use($app, $config, $pdo, $mustache, $language) {
+$app->get('/rss(/)', $trackView, function() use($app, $config, $pdo, $mustache, $language) {
     $pagesController = new PagesController($config, $pdo);
     $pages = $pagesController->getAllByLanguage($language);
     $pages = $pagesController->addUrls($pages);
@@ -564,7 +586,7 @@ $app->get('/rss(/)', function() use($app, $config, $pdo, $mustache, $language) {
     $app->response->setBody($pageRendered);
 })->setName('rssEverythingFlexibleLanguages');
 
-$app->get('/rss/pages(/)', function() use($app, $config, $pdo, $mustache, $language) {
+$app->get('/rss/pages(/)', $trackView, function() use($app, $config, $pdo, $mustache, $language) {
     $pagesController = new PagesController($config, $pdo);
     $pages = $pagesController->getAllByTypeAndLanguage('page', $language);
     $pages = $pagesController->addUrls($pages);
@@ -586,7 +608,7 @@ $app->get('/rss/pages(/)', function() use($app, $config, $pdo, $mustache, $langu
     $app->response->setBody($pageRendered);
 })->setName('rssPagesFlexibleLanguages');
 
-$app->get('/rss/projects(/)', function() use($app, $config, $pdo, $mustache, $language) {
+$app->get('/rss/projects(/)', $trackView, function() use($app, $config, $pdo, $mustache, $language) {
     $pagesController = new PagesController($config, $pdo);
     $pages = $pagesController->getAllByTypeAndLanguage('project', $language);
     $pages = $pagesController->addUrls($pages);
@@ -608,7 +630,7 @@ $app->get('/rss/projects(/)', function() use($app, $config, $pdo, $mustache, $la
     $app->response->setBody($pageRendered);
 })->setName('rssProjectsFlexibleLanguages');
 
-$app->get('/rss/blog(/)', function() use($app, $config, $pdo, $mustache, $language) {
+$app->get('/rss/blog(/)', $trackView, function() use($app, $config, $pdo, $mustache, $language) {
     $pagesController = new PagesController($config, $pdo);
     $pages = $pagesController->getAllByTypeAndLanguage('post', $language);
     $pages = $pagesController->addUrls($pages);
@@ -630,7 +652,7 @@ $app->get('/rss/blog(/)', function() use($app, $config, $pdo, $mustache, $langua
     $app->response->setBody($pageRendered);
 })->setName('rssBlogFlexibleLanguages');
 
-$app->get('/rss/all(/)', function() use($app, $config, $pdo, $mustache, $language) {
+$app->get('/rss/all(/)', $trackView, function() use($app, $config, $pdo, $mustache, $language) {
     $pagesController = new PagesController($config, $pdo);
     $pages = $pagesController->getAll();
     $pages = $pagesController->addUrls($pages);
@@ -652,7 +674,7 @@ $app->get('/rss/all(/)', function() use($app, $config, $pdo, $mustache, $languag
     $app->response->setBody($pageRendered);
 })->setName('rssEverythingAllLanguages');
 
-$app->get('/rss/pages/all(/)', function() use($app, $config, $pdo, $mustache, $language) {
+$app->get('/rss/pages/all(/)', $trackView, function() use($app, $config, $pdo, $mustache, $language) {
     $pagesController = new PagesController($config, $pdo);
     $pages = $pagesController->getAllByType('page', array('pagecontents.created DESC'));
     $pages = $pagesController->addUrls($pages);
@@ -674,7 +696,7 @@ $app->get('/rss/pages/all(/)', function() use($app, $config, $pdo, $mustache, $l
     $app->response->setBody($pageRendered);
 })->setName('rssPagesAllLanguages');
 
-$app->get('/rss/projects/all(/)', function() use($app, $config, $pdo, $mustache, $language) {
+$app->get('/rss/projects/all(/)', $trackView, function() use($app, $config, $pdo, $mustache, $language) {
     $pagesController = new PagesController($config, $pdo);
     $pages = $pagesController->getAllByType('project', array('pagecontents.created DESC'));
     $pages = $pagesController->addUrls($pages);
@@ -696,7 +718,7 @@ $app->get('/rss/projects/all(/)', function() use($app, $config, $pdo, $mustache,
     $app->response->setBody($pageRendered);
 })->setName('rssProjectsAllLanguages');
 
-$app->get('/rss/blog/all(/)', function() use($app, $config, $pdo, $mustache, $language) {
+$app->get('/rss/blog/all(/)', $trackView, function() use($app, $config, $pdo, $mustache, $language) {
     $pagesController = new PagesController($config, $pdo);
     $pages = $pagesController->getAllByType('post', array('pagecontents.created DESC'));
     $pages = $pagesController->addUrls($pages);
