@@ -98,6 +98,21 @@ class PagesController {
     }
 
     /**
+     * @param $pages
+     * @return mixed
+     */
+    public function addDatesDmy($pages) {
+        if (!$pages) {
+            return $pages;
+        }
+        foreach($pages as $page) {
+            $page->createdDmy = (new DateTime($page->created))->format('d.m.Y');
+            $page->modifiedDmy = (new DateTime($page->updated))->format('d.m.Y');
+        }
+        return $pages;
+    }
+
+    /**
      * @param $translations
      * @param $languageTag
      * @return null

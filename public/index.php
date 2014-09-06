@@ -144,6 +144,7 @@ $app->get('/blog', function() use($app) {
 $app->get('/blog/', function() use($app, $config, $pdo, $mustache, $language) {
     $pagesController = new PagesController($config, $pdo);
     $posts = $pagesController->getAllByTypeAndLanguage('post', $language);
+    $posts = $pagesController->addDatesDmy($posts);
 
     if (!$posts) {
         $app->notFound();
@@ -794,6 +795,7 @@ $app->get('/blog/:postTitle/', function($postTitle) use($app, $config, $pdo, $mu
     $pagesController = new PagesController($config, $pdo);
     $translations = $pagesController->getByTypeAndTitle('post', $postTitle);
     $translations = $pagesController->addUrls($translations);
+    $translations = $pagesController->addDatesDmy($posts);
     $post = $pagesController->filterByLanguage($translations, $language);
 
     if (!$post) {

@@ -182,6 +182,11 @@ article.fullWidth {
     margin-top: 0;
 }
 
+span.createdDate {
+    float: right;
+    color: gray;
+}
+
 div.videoEmbed {
     width: 100%;
     height: 0px;
