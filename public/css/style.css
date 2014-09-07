@@ -183,7 +183,9 @@ article.fullWidth {
 }
 
 span.createdDate {
-    float: right;
+    text-align: right;
+    width: 100%;
+    display: inline-block;
     color: gray;
 }
 
