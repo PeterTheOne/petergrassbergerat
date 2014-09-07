@@ -795,7 +795,7 @@ $app->get('/blog/:postTitle/', function($postTitle) use($app, $config, $pdo, $mu
     $pagesController = new PagesController($config, $pdo);
     $translations = $pagesController->getByTypeAndTitle('post', $postTitle);
     $translations = $pagesController->addUrls($translations);
-    $translations = $pagesController->addDatesDmy($posts);
+    $translations = $pagesController->addDatesDmy($translations);
     $post = $pagesController->filterByLanguage($translations, $language);
 
     if (!$post) {
