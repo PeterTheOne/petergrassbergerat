@@ -269,3 +269,20 @@ html[lang="de"] :link[hreflang]:not([hreflang="de"])::after {
 section > h1:first-child {
     font-size: 1.5em;
 }
+
+.tags {
+    margin: 0;
+    padding: 0;
+    list-style-type: none;
+}
+
+.tags li {
+    display: inline;
+}
+
+.tags li a {
+    padding: 6px 10px;
+    border-radius: 4px;
+    text-decoration: none;
+    color: #ffffff;
+}

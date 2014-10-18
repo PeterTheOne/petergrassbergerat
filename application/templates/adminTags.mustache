@@ -1,0 +1,14 @@
+{{> adminHead}}
+            <article>
+                <h1><a href="/admin/tags/">Admin: Tags</a></h1>
+
+                {{#tags}}
+                <h2>{{id}}: {{name}}</h2>
+                <a href="/admin/tags/{{name_clean}}">edit</a>
+                {{/tags}}
+
+                <br />
+                <br />
+                <a href="/admin/create/tag/">Create Tag</a>
+            </article>
+{{> adminFooter}}

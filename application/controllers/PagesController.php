@@ -113,6 +113,20 @@ class PagesController {
     }
 
     /**
+     * @param $pages
+     * @return mixed
+     */
+    public function addTags($pages) {
+        if (!$pages) {
+            return $pages;
+        }
+        foreach($pages as $page) {
+            $page->tags = $this->repository->getTagsPageId($page->id);
+        }
+        return $pages;
+    }
+
+    /**
      * @param $translations
      * @param $languageTag
      * @return null
@@ -382,6 +396,42 @@ class PagesController {
      */
     public function translatePost($postId, $language, $title, $title_clean, $content) {
         return $this->repository->createPageContentsByPageId($postId, $language, $title, $title_clean, $content);
+    }
+
+    /**
+     * @return array
+     */
+    public function getAllTags() {
+        return $this->repository->getAllTags();
+    }
+
+    /**
+     * @param $name
+     * @param $name_clean
+     * @param $color
+     * @return bool
+     */
+    public function createTag($name, $name_clean, $color) {
+        return $this->repository->createTag($name, $name_clean, $color);
+    }
+
+    /**
+     * @param $name
+     * @return mixed
+     */
+    public function getOneByName($name) {
+        return $this->repository->getOneByName($name);
+    }
+
+    /**
+     * @param $tagName
+     * @param $name
+     * @param $name_clean
+     * @param $color
+     * @return bool
+     */
+    public function updateTagByName($tagName, $name, $name_clean, $color) {
+        return $this->repository->updateTagByName($tagName, $name, $name_clean, $color);
     }
 
 }

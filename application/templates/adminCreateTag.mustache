@@ -1,0 +1,29 @@
+{{> adminHead}}
+            <article>
+                <h1><a href="/admin/create/tag/">Admin Create Tag</a></h1>
+
+                <div class="editForm">
+                    <form role="form" action="/admin/create/tag/" method="post">
+                        <div>
+                            <label for="name">Name</label><br />
+                            <input type="text" name="name" id="name" placeholder="Name">
+                        </div>
+                        <div>
+                            <label for="name_clean">Name Clean</label><br />
+                            <input type="text" name="name_clean" id="name_clean" placeholder="Name Clean">
+                        </div>
+                        <div>
+                            <label for="color">Color</label><br />
+                            <input type="text" name="color" id="color" placeholder="#000000">
+                        </div>
+                        <button type="submit">Submit</button>
+                    </form>
+                </div>
+                <div class="editPreview">
+                    <label>Preview</label>
+                    <ul class="tags">
+                        <li><a href="/projects/tags/*name_clean*">*name*</a></li>
+                    </ul>
+                </div>
+            </article>
+{{> adminFooter}}

@@ -350,4 +350,83 @@ class PagesRepository {
         return $statement->fetchAll();
     }*/
 
+    /**
+     * @param $pageId
+     * @return array
+     */
+    public function getTagsPageId($pageId) {
+        $statement = $this->pdo->prepare('
+            SELECT * FROM tags
+            INNER JOIN tagtopage ON tags.id = tagtopage.tag_id
+            WHERE tagtopage.page_id = :pageId;
+        ');
+        $statement->bindParam(':pageId', $pageId);
+        $statement->execute();
+        return $statement->fetchAll();
+    }
+
+    /**
+     * @return array
+     */
+    public function getAllTags() {
+        $statement = $this->pdo->prepare('
+            SELECT * FROM tags;
+        ');
+        $statement->execute();
+        return $statement->fetchAll();
+    }
+
+    /**
+     * @param $name
+     * @param $name_clean
+     * @param $color
+     * @return bool
+     */
+    public function createTag($name, $name_clean, $color) {
+        $statement = $this->pdo->prepare('
+            INSERT INTO tags (name, name_clean, color) VALUES
+            (:name, :name_clean, :color);
+        ');
+        $statement->bindParam(':name', $name);
+        $statement->bindParam(':name_clean', $name_clean);
+        $statement->bindParam(':color', $color);
+        $statement->execute();
+        return $this->pdo->lastInsertId();
+    }
+
+    /**
+     * @param $name
+     * @return mixed
+     */
+    public function getOneByName($name) {
+        $statement = $this->pdo->prepare('
+            SELECT * FROM tags
+            WHERE name_clean = :name_clean
+            LIMIT 1;
+        ');
+        $statement->bindParam(':name_clean', $name);
+        $statement->execute();
+        return $statement->fetch();
+    }
+
+    /**
+     * @param $tagName
+     * @param $name
+     * @param $name_clean
+     * @param $color
+     * @return bool
+     */
+    public function updateTagByName($tagName, $name, $name_clean, $color) {
+        $statement = $this->pdo->prepare('
+            UPDATE tags
+            SET name = :name, name_clean = :name_clean, color = :color
+            WHERE tags.name = :tagName;
+        ');
+        $statement->bindParam(':tagName', $tagName);
+        $statement->bindParam(':name', $name);
+        $statement->bindParam(':name_clean', $name_clean);
+        $statement->bindParam(':color', $color);
+        return $statement->execute();
+    }
+
 }

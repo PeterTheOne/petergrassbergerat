@@ -1,9 +1,13 @@
 {{> head}}
             <section class="projects">
-                <h1><a href="/projects/">Projects</a></h2>
+                <h1><a href="/projects/">Projects</a></h1>
                 {{#projects}}
                     <h1><a href="/projects/{{title_clean}}/">{{title}}</a></h1>
-                    <span></span>
+                    <ul class="tags">
+                        {{#tags}}
+                        <li><a href="/projects/tags/{{name_clean}}" style="background-color: {{color}}">{{name}}</a></li>
+                        {{/tags}}
+                    </ul>
                     <p></p>
                 {{/projects}}
             </section>

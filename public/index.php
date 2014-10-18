@@ -109,6 +109,7 @@ $app->get('/projects', function() use($app) {
 $app->get('/projects/', function() use($app, $config, $pdo, $mustache, $language) {
     $pagesController = new PagesController($config, $pdo);
     $projects = $pagesController->getAllByTypeAndLanguage('project', $language);
+    $projects = $pagesController->addTags($projects);
 
     if (!$projects) {
         $app->notFound();
@@ -318,6 +319,38 @@ $app->post('/admin/posts/:language/:postsTitle(/)', $authenticate($app, $config)
     $app->redirect('/admin/posts/');
 })->setName('adminEditPostPost');
 
+$app->get('/admin/tags(/)', $authenticate($app, $config), function() use($app, $config, $pdo, $mustache) {
+    $pagesController = new PagesController($config, $pdo);
+    $tags = $pagesController->getAllTags();
+
+    $app->response->setBody($mustache->loadTemplate('adminTags')->render(array('tags' => $tags)));
+});
+
+$app->get('/admin/tags/:tagName(/)', $authenticate($app, $config), function($tagName) use($app, $config, $pdo, $mustache) {
+    $pagesController = new PagesController($config, $pdo);
+    $tag = $pagesController->getOneByName($tagName);
+
+    $app->response->setBody($mustache->loadTemplate('adminEditTag')->render(array('tag' => $tag)));
+});
+
+
+$app->post('/admin/tags/:tagName(/)', $authenticate($app, $config), function($tagName) use($app, $config, $pdo, $mustache) {
+    $name = $app->request()->post('name');
+    $name_clean = $app->request()->post('name_clean');
+    $color = $app->request()->post('color');
+
+    if ($name === null || $name == '' ||
+            $name_clean === null || $name_clean == '' ||
+            $color === null || $color == ''){
+        throw new Exception('Not all params set.');
+    }
+
+    $pagesController = new PagesController($config, $pdo);
+    $pagesController->updateTagByName($tagName, $name, $name_clean, $color);
+
+    $app->redirect('/admin/tags/');
+});
+
 /**
  * ADMIN CREATE PAGES, PROJECTS, POSTS
  */
@@ -399,6 +432,27 @@ $app->post('/admin/create/post(/)', $authenticate($app, $config), function() use
 
     $app->redirect('/admin/posts/');
 })->setName('adminCreatePostPost');
+
+$app->get('/admin/create/tag(/)', $authenticate($app, $config), function() use($app, $config, $pdo, $mustache) {
+    $app->response->setBody($mustache->loadTemplate('adminCreateTag')->render());
+});
+
+$app->post('/admin/create/tag(/)', $authenticate($app, $config), function() use($app, $config, $pdo, $mustache) {
+    $name = $app->request()->post('name');
+    $name_clean = $app->request()->post('name_clean');
+    $color = $app->request()->post('color');
+
+    if ($name === null || $name == '' ||
+            $name_clean === null || $name_clean == '' ||
+            $color === null || $color == ''){
+        throw new Exception('Not all params set.');
+    }
+
+    $pagesController = new PagesController($config, $pdo);
+    $pagesController->createTag($name, $name_clean, $color);
+
+    $app->redirect('/admin/tags');
+});
 
 /**
  * CREATE TRANSLATIONS
