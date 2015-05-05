@@ -151,6 +151,18 @@ $app->get('/blog/', function() use($app, $config, $pdo, $mustache, $language) {
         $app->notFound();
     }
 
+    foreach($posts as $post) {
+        if (strlen($post->content) < 301) {
+            continue;
+        }
+        $secondParagraphEnd = strpos($post->content, '</p>', 300);
+        if ($secondParagraphEnd === false) {
+            continue;
+        }
+        $post->content = substr($post->content, 0, $secondParagraphEnd);
+        $post->content .= '<p><a href="/blog/' . $post->title_clean . '">Read more...</a></p>';
+    }
+
     $app->lastModified($pagesController->findLastModified($posts));
     $app->expires('+1 week');
 
