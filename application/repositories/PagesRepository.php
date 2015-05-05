@@ -398,7 +398,7 @@ class PagesRepository {
      * @param $name
      * @return mixed
      */
-    public function getOneByName($name) {
+    public function getOneTagByName($name) {
         $statement = $this->pdo->prepare('
             SELECT * FROM tags
             WHERE name_clean = :name_clean
@@ -427,6 +427,49 @@ class PagesRepository {
         $statement->bindParam(':name_clean', $name_clean);
         $statement->bindParam(':color', $color);
         return $statement->execute();
+    }
+
+    /**
+     * @param $type
+     * @param $projectTitle
+     * @return bool
+     */
+    public function removeAllTagsByTypeAndTitle($type, $projectTitle) {
+        $statement = $this->pdo->prepare('
+            DELETE tagtopage FROM tagtopage
+            INNER JOIN pages ON tagtopage.page_id = pages.id
+            INNER JOIN pagecontents ON tagtopage.page_id = pagecontents.page_id
+            INNER JOIN pagetypes ON pages.page_type = pagetypes.id
+            WHERE pagetypes.name = :pageType AND pagecontents.title_clean = :projectTitle;
+        ');
+        $statement->bindParam(':pageType', $pageType);
+        $statement->bindParam(':projectTitle', $projectTitle);
+        return $statement->execute();
+    }
+
+    /**
+     * @param $pageType
+     * @param $projectTitle
+     * @param $tags
+     * @return bool
+     */
+    public function addTagsByTypeAndTitle($pageType, $projectTitle, $tags) {
+        $statement = $this->pdo->prepare('
+            INSERT INTO tagtopage (tag_id, page_id)
+                SELECT tags.id, pages.id FROM tags, pages
+                INNER JOIN pagecontents ON pages.id = pagecontents.page_id
+                INNER JOIN pagetypes ON pages.page_type = pagetypes.id
+                WHERE tags.name_clean = :tag_name AND
+                pagetypes.name = :pageType AND
+                pagecontents.title_clean = :projectTitle;
+        ');
+        foreach($tags as $tag) {
+          $statement->bindParam(':pageType', $pageType);
+          $statement->bindParam(':projectTitle', $projectTitle);
+          $statement->bindParam(':tag_name', $tag);
+          $statement->execute();
+        }
+        return true;
     }
 
 }

@@ -18,6 +18,12 @@
                             <input type="text" name="title_clean" id="title_clean" value="{{title_clean}}" placeholder="Title Clean">
                         </div>
                         <div>
+                            <label for="tags">Tags</label><br />
+                            {{#tags}}
+                            <label><input type="checkbox" name="tags[]" value="{{name_clean}}" />{{name}}</label>
+                            {{/tags}}
+                        </div>
+                        <div>
                             <label for="content">Content</label><br />
                             <textarea name="content" id="content" placeholder="Content" rows="20">{{content}}</textarea>
                         </div>

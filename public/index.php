@@ -30,9 +30,12 @@ if (strpos($_SERVER['HTTP_HOST'], '.com')) {
     $language = 'de';
 }
 
-$app->error(function(\Exception $exception) use ($app) {
+$app->error(function(\Exception $exception) use ($app, $pdo) {
     $app->response->headers->set('X-Status-Reason', $exception->getMessage());
     $app->response->setBody($exception->getMessage());
+    if ($pdo->inTransaction()) {
+      $pdo->rollBack();
+    }
 });
 
 $authenticate = function(\SLIM\SLIM $app, $config) {
@@ -278,23 +281,25 @@ $app->get('/admin/projects(/)', $authenticate($app, $config), function() use($ap
 $app->get('/admin/projects/:language/:projectTitle(/)', $authenticate($app, $config), function($language, $projectTitle) use($app, $config, $pdo, $mustache) {
     $pagesController = new PagesController($config, $pdo);
     $project = $pagesController->getOneByTypeAndLanguageAndTitle('project', $language, $projectTitle);
+    $tags = $pagesController->getAllTags();
 
-    $app->response->setBody($mustache->loadTemplate('adminEditProject')->render(array('project' => $project)));
+    $app->response->setBody($mustache->loadTemplate('adminEditProject')->render(array('project' => $project, 'tags' => $tags)));
 })->setName('adminEditProject');
 
 $app->post('/admin/projects/:language/:projectsTitle(/)', $authenticate($app, $config), function($language, $projectTitle) use($app, $config, $pdo, $mustache) {
     $title = $app->request()->post('title');
     $title_clean = $app->request()->post('title_clean');
+    $tags = $app->request()->post('tags');
     $content = $app->request()->post('content');
 
     if ($title === null || $title == '' ||
-        $title_clean === null || $title_clean == '' ||
-        $content === null || $content == ''){
+            $title_clean === null || $title_clean == '' ||
+            $content === null || $content == ''){
         throw new Exception('Not all params set.');
     }
 
     $pagesController = new PagesController($config, $pdo);
-    $pagesController->updateProjectByLanguageAndTitle($language, $projectTitle, $title, $title_clean, $content);
+    $pagesController->updateProjectByLanguageAndTitle($language, $projectTitle, $title, $title_clean, $tags, $content);
 
     $app->redirect('/admin/projects/');
 })->setName('adminEditProjectPost');
@@ -340,7 +345,7 @@ $app->get('/admin/tags(/)', $authenticate($app, $config), function() use($app, $
 
 $app->get('/admin/tags/:tagName(/)', $authenticate($app, $config), function($tagName) use($app, $config, $pdo, $mustache) {
     $pagesController = new PagesController($config, $pdo);
-    $tag = $pagesController->getOneByName($tagName);
+    $tag = $pagesController->getOneTagByName($tagName);
 
     $app->response->setBody($mustache->loadTemplate('adminEditTag')->render(array('tag' => $tag)));
 });

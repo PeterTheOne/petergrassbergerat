@@ -120,6 +120,10 @@ class PagesController {
         if (!$pages) {
             return $pages;
         }
+        if (is_object($pages)) {
+            $pages->tags = $this->repository->getTagsPageId($pages->id);
+            return $pages;
+        }
         foreach($pages as $page) {
             $page->tags = $this->repository->getTagsPageId($page->id);
         }
@@ -244,10 +248,15 @@ class PagesController {
      * @param $projectTitle
      * @param $title
      * @param $title_clean
+     * @param $tags
      * @param $content
      * @return bool
      */
-    public function updateProjectByLanguageAndTitle($languageTag, $projectTitle, $title, $title_clean, $content) {
+    public function updateProjectByLanguageAndTitle($languageTag, $projectTitle, $title, $title_clean, $tags, $content) {
+        $this->pdo->beginTransaction();
+        $this->repository->removeAllTagsByTypeAndTitle('project', $projectTitle);
+        $this->repository->addTagsByTypeAndTitle('project', $projectTitle, $tags);
+        $this->pdo->commit();
         return $this->repository->updateByTypeAndLanguageAndTitle('project', $languageTag, $projectTitle, $title, $title_clean, $content);
     }
 
@@ -419,8 +428,8 @@ class PagesController {
      * @param $name
      * @return mixed
      */
-    public function getOneByName($name) {
-        return $this->repository->getOneByName($name);
+    public function getOneTagByName($name) {
+        return $this->repository->getOneTagByName($name);
     }
 
     /**
