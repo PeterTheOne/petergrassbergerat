@@ -875,6 +875,7 @@ $app->get('/blog/:postTitle/', function($postTitle) use($app, $config, $pdo, $mu
     $app->response->setBody($postTemplate->render(array(
         'title' => 'Peter Grassberger - ' . $post->title,
         'language' => $language,
+        'german' => $language === 'de' ? true : false,
         'post' => $post,
         'translations' => $translations
     )));

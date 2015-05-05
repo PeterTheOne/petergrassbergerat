@@ -9,6 +9,25 @@
                 <h1><a href="/blog/{{title_clean}}/">{{title}}</a></h1>
                 {{/index}}
 {{{content}}}
-            {{/post}}
+                {{/post}}
+                <footer>
+                    {{#german}}
+                    <h2>Wie hat dir der Beitrag gefallen?</h2>
+                    <p>
+                        Schreib mir was dir durch den Kopf geht auf
+                        <a href="https://twitter.com/PeterTheOne">Twitter</a> oder per
+                        <a href="mailto:petertheone@gmail.com">E-Mail</a>.
+                    </p>
+                    {{/german}}
+                    {{^german}}
+                    <h2>How did you like this post?</h2>
+                    <p>
+                        Feel free to send your thoughts on
+                        <a href="https://twitter.com/PeterTheOne">Twitter</a> or via
+                        <a href="mailto:petertheone@gmail.com">E-Mail</a>.
+                    </p>
+                    {{/german}}
+                </footer>
             </article>
+
 {{> footer}}
