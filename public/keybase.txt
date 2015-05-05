@@ -1,0 +1,79 @@
+https://keybase.io/petertheone
+--------------------------------------------------------------------
+
+I hereby claim:
+
+  * I am an admin of http://petergrassberger.com
+  * I am petertheone (https://keybase.io/petertheone) on keybase.
+  * I have a public key with fingerprint 1DCC C325 2E43 8859 5288  63B4 4F6A CE90 B5F4 D176
+
+To do so, I am signing this object:
+
+{
+    "body": {
+        "client": {
+            "name": "keybase.io node.js client",
+            "version": "0.7.8"
+        },
+        "key": {
+            "fingerprint": "1dccc3252e438859528863b44f6ace90b5f4d176",
+            "host": "keybase.io",
+            "key_id": "4F6ACE90B5F4D176",
+            "uid": "30f4df20848a3dac322bdca0164fe619",
+            "username": "petertheone"
+        },
+        "merkle_root": {
+            "ctime": 1430681751,
+            "hash": "a1b3b05a9936eb7567469a3a06431af976971805ea00db7ba1f59c0f6559a3634644e477ffb3d222596f80404647a1a563d3528af3009e9cd3180e34c9b873d4",
+            "seqno": 214516
+        },
+        "service": {
+            "hostname": "petergrassberger.com",
+            "protocol": "http:"
+        },
+        "type": "web_service_binding",
+        "version": 1
+    },
+    "ctime": 1430681837,
+    "expire_in": 157680000,
+    "prev": "996ff18eb3957284d2b934775b87b4266d53bd14f9ad307244d4e7a82ea89c28",
+    "seqno": 3,
+    "tag": "signature"
+}
+
+which yields the signature:
+
+-----BEGIN PGP MESSAGE-----
+Version: GnuPG v1
+
+owFVkn9QFVUUx5/8GqHRXg3+CjFdbQzC5+7eu3d3AQEpMZmwCHFiCunu7l3ee8jb
+x771CUNMgZla/oAmLQYNRjNyGH4k4/DCp5WjQw6KWTrqYP7AAcHGMCLSqbRdokn3
+n7v33s/5nvM951ZPCbWFTHrZ3VN9aPSsf1L3kGTLzSi9XU5JmlJGJZZT8loX8RjW
+nwcXEyqRKiJlEvYRh0ub69EU4nD75k4wCZSf6D6X5jEp2sE7BKoiwcKtYNXlKSS6
+V3dZWhSjyLIMWI4lEAgCJ3KsICAgQagiLBORljgVKgyPTEmn5jMeyUqNaxa4FPMU
+ZqClzy8T6XQuA77wL79u/ALQpoDK0gIUMFCwmYuVFBnTDIIqQYxogT6iT1jyEoPo
+hpNoHmKVXEz0orWkQNe0cd+y4bIoBgIaCQzPMWZR2Oc04zAjAYnmsCgCRCSeQzxE
+IgaYRhAwWBV5JPKMQHME07Qi8RJmVE6UaRVxnIkhABGEBPK8qkpAYVmWE5Eq0JA2
+z3nMYA4BBZitwSqgaZGIsgJMNQKgLEoCDxRouvCREo9GJbIM5BhUYe11v0smVt1W
+5x42WKhjn08yV6I7ZK3YDPbqmqHJ2lqTcBqGN9EyHzDKvFbIeiIVTIgVSC6PYs7v
+4QEzJvpoYwTAJ1Ck1OvSSYHLIjgeCbT5WXmI35QUTXsqIxAJiBzPClBhJRGY9jnT
+jQRZhBQOSAoDVRErgOZZCBVIeCywBAuizAr/2wUJlIELTUmfq9CDjXW6ObctIbPD
+bJNCbBHhIdYLtkVF2v971nOu2W0Hl0nfuo1BUL97S03y+UZxZmBrWHF2V3Joj9aT
+euC6Z8mGusyShr+ckUPDF9uLfIz73vaONf6IsujJuQUxKw9XNq7IvNUQ6Yw++9on
+PbHJ7oZTC2rVqKqRhb1n60fibn48rX5b8NDUQJNw8KPW03l7TjRtn0z/8kTdotza
+VbkN0unpU/YHemfN33v3RGXSnMd37My/fKplcfTJFe2RIENc9PPJbGpG8EpW7dWn
+os+sWh7xHN8i2I2Qsq7NsR1tA1WBvjjlpy+uihsuoKNbp5C3wkZvfvrG0vT1f27L
+jqeTvr+80vm+PjZ8+vhnN3Y0P/mSv/ubaWFNJUZWHTrf1uPNOVPf2t/bW7TbPla/
+Nfh3ysxNf9xPHms6MDnp0jtLn7ljV7cNz94X6W/+siv5xyOjVbsYPEeLu3spNeXW
+LC57weErNUGQt+/NNXnBjto1HQP5FfMyNsZv7B1gZPSgf+zOkvPaOT3eXl1Ukzmv
+5to56gf7/rT8tx2VPYsdtj2vn1yd/+odd+cHWc4j15t3pfUvvCLDxpyp7UfD+zYG
+yq6W/9r222OhStLeY52tnZFhD4a6A/eMU+8dd7/ILMi8GFOYUlr6dE74V2OgNq4y
+Z37cheqpqUXLY4Jp734dnvJ7+vRLmYOf38C3o2aNxDY2tGTF9onHqtvPGZue/W4Q
+JX24+v5xZcaZV0bzg/3lI330zn8A
+=kYqk
+-----END PGP MESSAGE-----
+
+And finally, I am proving ownership of this host by posting or
+appending to this document.
+
+View my publicly-auditable identity here: https://keybase.io/petertheone
