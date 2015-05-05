@@ -2,14 +2,14 @@
             <section>
                 <h1><a href="/blog/">Blog</a></h1>
                 {{#posts}}
-                <article>
+                <article class="blog">
+                    <span class="createdDate" title="Last modified: {{modifiedDmy}}">{{createdDmy}}</span>
                     {{#index}}
                     <h1><a href="/">{{title}}</a></h1>
                     {{/index}}
                     {{^index}}
                     <h1><a href="/blog/{{title_clean}}/">{{title}}</a></h1>
                     {{/index}}
-                    <span class="createdDate" title="Last modified: {{modifiedDmy}}">{{createdDmy}}</span>
 {{{content}}}
                 </article>
                 {{/posts}}

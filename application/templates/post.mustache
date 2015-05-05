@@ -1,13 +1,13 @@
 {{> head}}
-            <article>
+            <article class="blog">
             {{#post}}
+                <span class="createdDate" title="Last modified: {{modifiedDmy}}">{{createdDmy}}</span>
                 {{#index}}
                 <h1><a href="/">{{title}}</a></h1>
                 {{/index}}
                 {{^index}}
                 <h1><a href="/blog/{{title_clean}}/">{{title}}</a></h1>
                 {{/index}}
-                <span class="createdDate" title="Last modified: {{modifiedDmy}}">{{createdDmy}}</span>
 {{{content}}}
             {{/post}}
             </article>
