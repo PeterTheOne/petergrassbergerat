@@ -226,6 +226,32 @@ div.videoEmbed iframe {
     left: 0;
     right: 0;
 }
+
+div.videoEmbed div.playbutton {
+    background-image: url('../images/playbutton.png');
+    background-position: 50%;
+    background-repeat: no-repeat;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    -webkit-transition: all 0.1s linear;
+    -o-transition: all 0.1s linear;
+    -moz-transition: all 0.1s linear;
+    -ms-transition: all 0.1s linear;
+    -kthtml-transition: all 0.1s linear;
+    transition: all 0.1s linear;
+    -webkit-box-shadow: inset 0px 0px 100px 20px rgba(0,0,0,0.67);
+    -moz-box-shadow: inset 0px 0px 100px 20px rgba(0,0,0,0.67);
+    box-shadow: inset 0px 0px 100px 20px rgba(0,0,0,0.67);
+}
+
+div.videoEmbed div.playbutton:hover {
+    -webkit-box-shadow: none;
+    -moz-box-shadow: none;
+    box-shadow: none;
+    background-size: 170px 236px;
+}
+
 .time {
     padding: 15px 10px 5px 10px;
 }
