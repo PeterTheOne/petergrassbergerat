@@ -1,4 +1,10 @@
 {{> head}}
+            {{#flashMessage}}
+            <div class="flashMessage">
+                {{{flashMessage}}}
+            </div>
+            {{/flashMessage}}
+
             <article>
             {{#page}}
                 {{#index}}
